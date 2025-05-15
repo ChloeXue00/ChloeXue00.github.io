@@ -150,6 +150,21 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">LKA（车道保持辅助）策略设计与问题集
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>LKA（车道保持辅助）策略设计与问题集 一、功能简介 LKA（Lane Keeping Assist，车道保持辅助）是一种横向控制功能，在自车偏离车道中心趋势时，辅助驾驶员对方向盘进行微调，维持车辆在当前车道内行驶，提升安全性与驾驶舒适度。
+适用于高速公路、城市快速路等结构化道路场景，LKA 需与 LDW（车道偏离预警）、LCC（车道居中控制）等模块协同工作。
+二、功能层级 LDW（车道偏离预警）：仅预警，无控制 LKA-A（车道保持辅助）：轻微转向修正 LCC（Lane Centering Control）：主动控制车辆保持车道中心 三、核心输入信号 信号名 说明 V_ego 自车速度 Lane_Left/Right_Type 车道线类型 Lane_Center_Offset 自车相对于车道中心的横向偏移量 Yaw_Angle 航向角 Steering_Torque_Driver 驾驶员方向盘力矩 Indicator_Status 转向灯状态 四、传感器要求 传感器 用途 前视摄像头 车道线识别 EPS 执行横向控制 IMU 姿态估计 车速传感器 控制激活判断依据 五、核心输出信号 信号 描述 LKA_Torque_Cmd 横向控制力矩输出 LKA_Status 当前状态 DriverDisplay_LKA 显示系统状态 六、核心控制逻辑 激活条件判断 状态机切换 控制器逻辑： $$ T_{cmd} = K_p \cdot y_{off} &#43; K_d \cdot \dot{y}_{off} $$
+七、关键控制参数 参数 描述 K_p 比例增益 K_d 微分增益 T_max 最大输出力矩 Jerk_limit 横向加加速度限制 Cutout_Condition 退出条件 八、典型问题与对策 ✅ Q1：LKA 与驾驶员方向“打架” 原因：输出力矩过大 对策：驾驶员优先 &#43; 限制输出力矩 ✅ Q2：弯道控制失败 原因：曲率大或车道线缺失 对策：失效保护 &#43; 曲率自适应控制 ✅ Q3：过度微调导致车体晃动 原因：控制器参数设置不当 对策：加入死区控制和滤波 ✅ Q4：变道误触发 LKA 原因：未识别转向灯或延迟 对策：识别转向意图 &#43; 添加缓释机制 </p>
+  </div>
+  <footer class="entry-footer"><span title='2025-05-15 00:00:00 +0000 UTC'>May 15, 2025</span></footer>
+  <a class="entry-link" aria-label="post link to LKA（车道保持辅助）策略设计与问题集" href="/posts/lka_strategy/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">基于ResNet&#43;LSTM的端到端自动驾驶转向预测
     </h2>
   </header>

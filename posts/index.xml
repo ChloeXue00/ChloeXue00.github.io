@@ -16,6 +16,13 @@
       <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
     <item>
+      <title>LKA（车道保持辅助）策略设计与问题集</title>
+      <link>/posts/lka_strategy/</link>
+      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/lka_strategy/</guid>
+      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
+    </item>
+    <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
       <link>/posts/e2e-driving-resnet-lstm/</link>
       <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
