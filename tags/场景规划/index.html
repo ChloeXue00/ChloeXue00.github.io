@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>智能驾驶系统 | </title>
+<title>场景规划 | </title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="canonical" href="/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E7%B3%BB%E7%BB%9F/">
+<link rel="canonical" href="/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
 <link rel="icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -18,8 +18,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E7%B3%BB%E7%BB%9F/index.xml">
-<link rel="alternate" hreflang="en" href="/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E7%B3%BB%E7%BB%9F/">
+<link rel="alternate" type="application/rss+xml" href="/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/index.xml">
+<link rel="alternate" hreflang="en" href="/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/">
 <noscript>
     <style>
         #theme-toggle,
@@ -56,12 +56,12 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E7%B3%BB%E7%BB%9F/">
-  <meta property="og:title" content="智能驾驶系统">
+</noscript><meta property="og:url" content="/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/">
+  <meta property="og:title" content="场景规划">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="智能驾驶系统">
+<meta name="twitter:title" content="场景规划">
 <meta name="twitter:description" content="">
 
 </head>
@@ -111,42 +111,9 @@
 <main class="main"> 
 <header class="page-header">
   <h1>
-    智能驾驶系统
+    场景规划
   </h1>
 </header>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">ACC（自适应巡航控制）策略设计与问题集
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>ACC（自适应巡航控制）策略设计与问题集 一、功能简介 ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。
-应用场景涵盖高速公路、城市快速路等，需要与AEB（自动紧急制动）、LKA等模块进行协同。
-功能层级 定速巡航模式（CC）：当前无前车干扰，车辆自动维持设定巡航速度
-支持直道、弯道、上下坡； 控制精度 &#43;-1km/h(平路)， &#43;-2km/h(坡道) 允许巡航速度 0-150km/h; 激活逻辑：初始速度小于30km/h 设为30，否则为当前车速 自适应巡航模式（ACC）：在设定车速范围内，系统基于前方目标车与自车的相对距离、相对速度信息，动态调整纵向加速度，保持安全车距。
-支持识别静态/动态目标车辆（主要使用前向毫米波雷达 &#43; 视觉融合） 根据设定时距（如 1.5s）和当前车速计算期望跟车距离 动态调整加速度，保证相对时距误差收敛 控制加速度/减速度不能超过设定限值（如 ±3 m/s²） 系统状态平滑切换（Cruise → Follow → Brake → Resume） 核心输入信号： V_ego : 自车速度 D_rel : 前车相对距离 V_rel : 前车相对速度 t_gap_set: 设定的时距 ACC_SetSpeed: 驾驶员设定的目标速度 TargetValid: 是否有有效目标车（用于状态判断） 输出信号： ACC_CmdAccel ：期望纵向加速度 ACC_State: 当前ACC子状态（Cruise, Follow, Brake等） DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，前车图标等等
-停走模式（Stop &amp; Go）：低速或拥堵场景下支持自动减速直至完全停止，并在前车起步后自动跟随（部分车型支持） 1） 自车跟停后，开始计时，若跟停时间＜5min，前车起步，自车自动跟随起步； 2） 若跟停时间≥5min，则通过HMI告知驾驶员自车处于Hold状态，需要驾驶员的确认【踩油门踏板】，才能继续自动起步 3） 若0min≤跟停时间＜10min，收到驾驶员的确认【踩油门踏板】，车辆再次恢复到静止后，重新计时 4） 若跟停时间＞10min，ACC功能自动退出，拉起EPB 5） 前车起步，自车跟随起步的延迟不得大于2s【可标定】
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-05-15 00:00:00 +0000 UTC'>May 15, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to ACC（自适应巡航控制）策略设计与问题集" href="/posts/acc-strategy/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">LKA（车道保持辅助）策略设计与问题集
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>LKA（车道保持辅助）策略设计与问题集 一、功能简介 LKA（Lane Keeping Assist，车道保持辅助）是一种横向控制功能，在自车偏离车道中心趋势时，辅助驾驶员对方向盘进行微调，维持车辆在当前车道内行驶，提升安全性与驾驶舒适度。
-适用于高速公路、城市快速路等结构化道路场景，LKA 需与 LDW（车道偏离预警）、LCC（车道居中控制）等模块协同工作。
-二、功能层级 LDW（车道偏离预警）：仅预警，无控制 LKA-A（车道保持辅助）：轻微转向修正 LCC（Lane Centering Control）：主动控制车辆保持车道中心 三、核心输入信号 信号名 说明 V_ego 自车速度 Lane_Left/Right_Type 车道线类型 Lane_Center_Offset 自车相对于车道中心的横向偏移量 Yaw_Angle 航向角 Steering_Torque_Driver 驾驶员方向盘力矩 Indicator_Status 转向灯状态 四、传感器要求 传感器 用途 前视摄像头 车道线识别 EPS 执行横向控制 IMU 姿态估计 车速传感器 控制激活判断依据 五、核心输出信号 信号 描述 LKA_Torque_Cmd 横向控制力矩输出 LKA_Status 当前状态 DriverDisplay_LKA 显示系统状态 六、核心控制逻辑 激活条件判断 状态机切换 控制器逻辑： $$ T_{cmd} = K_p \cdot y_{off} &#43; K_d \cdot \dot{y}_{off} $$
-七、关键控制参数 参数 描述 K_p 比例增益 K_d 微分增益 T_max 最大输出力矩 Jerk_limit 横向加加速度限制 Cutout_Condition 退出条件 八、典型问题与对策 ✅ Q1：LKA 与驾驶员方向“打架” 原因：输出力矩过大 对策：驾驶员优先 &#43; 限制输出力矩 ✅ Q2：弯道控制失败 原因：曲率大或车道线缺失 对策：失效保护 &#43; 曲率自适应控制 ✅ Q3：过度微调导致车体晃动 原因：控制器参数设置不当 对策：加入死区控制和滤波 ✅ Q4：变道误触发 LKA 原因：未识别转向灯或延迟 对策：识别转向意图 &#43; 添加缓释机制 </p>
-  </div>
-  <footer class="entry-footer"><span title='2025-05-15 00:00:00 +0000 UTC'>May 15, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to LKA（车道保持辅助）策略设计与问题集" href="/posts/lka_strategy/"></a>
-</article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">

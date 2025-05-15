@@ -22,5 +22,12 @@
       <guid>/posts/lka_strategy/</guid>
       <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
     </item>
+    <item>
+      <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
+      <link>/posts/nop_strategy/</link>
+      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/nop_strategy/</guid>
+      <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
+    </item>
   </channel>
 </rss>
