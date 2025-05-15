@@ -16,6 +16,13 @@
       <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
     <item>
+      <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
+      <link>/posts/lcc_alc_strategy/</link>
+      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/lcc_alc_strategy/</guid>
+      <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
+    </item>
+    <item>
       <title>LKA（车道保持辅助）策略设计与问题集</title>
       <link>/posts/lka_strategy/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
