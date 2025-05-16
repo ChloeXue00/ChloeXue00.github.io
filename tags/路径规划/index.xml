@@ -13,7 +13,14 @@
       <link>/posts/quadtree_safearea/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/quadtree_safearea/</guid>
-      <description>详解如何从占用图生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
+      <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
+    </item>
+    <item>
+      <title>几何地图与占用地图在路径规划中的应用</title>
+      <link>/posts/map-structure-explained/</link>
+      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/map-structure-explained/</guid>
+      <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
     </item>
   </channel>
 </rss>

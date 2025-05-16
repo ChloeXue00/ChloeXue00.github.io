@@ -121,12 +121,11 @@
     </h2>
   </header>
   <div class="entry-content">
-    <p>从占用图到安全区域：四叉树（QuadTree）构建与凸包生成 在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。我们采用 四叉树结构（QuadTree） 对占用图进行递归划分，再对空闲区域构建 凸包（Convex Hull），从而生成可用于路径规划的安全走廊（Safe Corridor）。
+    <p>在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。我们采用 四叉树结构（QuadTree） 对占用图进行递归划分，再对空闲区域构建 凸包（Convex Hull），从而生成可用于路径规划的安全走廊（Safe Corridor）。
 一、构建思路概览 我们参考了项目中 connective_quadtree.py 和 corridor_algorithm.py 中的实现，思路如下：
-1. 输入原始占用图（Occupancy Grid） 2. 使用 QuadTreeNode 递归划分空间： - 若区域为空（全白）：标记为“自由区域” - 若包含障碍：继续细分（最多分到 min_size） 3. 收集所有自由叶子节点作为 Safe Area 候选 4. 为每个叶子节点生成其凸包边界 5. 输出凸包用于路径规划和约束构建 二、QuadTree 类详解（connective_quadtree.py） Quadtree: Quadtree 是一种树形数据结构，可以用于将二维空间递归划分成更小的矩形区域（占用和空闲区域），从整张地图作为根节点开始分裂出四个子区域，每个子区域判断自己是否被占用
-空闲free的标记 值为1 ， 如果被占用（有障碍物full）标记值为0， 如果是混合区域mix（既有障碍物又有空闲）就被作为下一个根节点继续分裂出四个子区域；一直划分到： 区域足够小到达min_cell_size， 或者树达到最大深度max_depth
-主要变量：root 根节点 leaf_node: 自由区域 叶节点 max_depth: 树的最大深度 values:每个栅格的数值（0或1）的矩阵 value_matrix: 输入矩阵 ru_i, ru_j: 当前节点（也就是子区域）在整张地图的右上角的横坐标、纵坐标，用来记录当前格栅在地图中的绝对位置， 用于后续判断当前位置和全局路径有没有交集；生成凸包要画在真实地图坐标上；把多个子块拼回全图进行可视化；
-初始化： class QuadTree: def __init__(self, value_matrix: np.ndarray, min_cell_size: int, num_splits:int=2): self.root = QuadTreeNode.init_root(value_matrix, self.max_depth, auto_split=True) self.leaf_nodes : list[QuadTreeNode] = [] self._collect_free_leaf_nodes(self.root) value_matrix: 占用图（二维矩阵） min_cell_size: 四叉树划分的最小区域 自动调用 QuadTreeNode.split() 对有障碍的区域递归分割 递归收集自由区域： def _collect_free_leaf_nodes(self, node: &#34;QuadTreeNode&#34;): if node.is_leaf and node.state == TreeNodeState.FREE: self.leaf_nodes.append(node) else: for child in node.children: self._collect_free_leaf_nodes(child) 只收集纯白区域（全为自由）的叶子节点作为路径候选区域。
+1. 输入原始占用图（Occupancy Grid） 2. 使用 QuadTreeNode 递归划分空间, 根据RGB颜色判断： - 若区域为空（全白[255,255,255]或者接近全白）：标记为“自由区域” - 若包含障碍（RGB值大于白色）：继续细分（最多分到 min_size） - 黑色（[0,0,0]）表示障碍物 3. 收集所有自由叶子节点作为 Safe Area 候选 4. 为每个叶子节点生成其凸包边界 5. 输出凸包用于路径规划和约束构建 二、QuadTree 类详解（connective_quadtree.py） Quadtree: Quadtree 是一种树形数据结构，可以用于将二维空间递归划分成更小的矩形区域（占用和空闲区域）， 从整张地图作为根节点开始分裂出四个子区域，每个子区域根据RGB值判断是否有障碍物。 基于原始图像的RGB value来划分 树结构 QuadTree 类
+主要负责管理整个四叉树结构： root: 根节点 leaf_nodes: 所有自由（无障碍物）的叶节点列表 max_depth: 树的最大深度 QuadTreeNode 类
+表示四叉树中的单个节点： values: 节点对应的栅格值(RGB值比如[0,0,0])矩阵 _ru_indices: 节点在原始矩阵中的右上角索引 (i, j) id_sequence: 节点的ID序列，表示从根到该节点的路径 _neighbors: 节点的邻居 (左, 右, 上, 下) _children: 子节点列表 state: 节点状态 (FREE, MIX, FULL) 节点状态：
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2025-05-16 00:00:00 +0000 UTC'>May 16, 2025</span></footer>

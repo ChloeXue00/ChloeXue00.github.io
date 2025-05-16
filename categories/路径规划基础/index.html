@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Categories | </title>
+<title>路径规划基础 | </title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="canonical" href="/categories/">
+<link rel="canonical" href="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
 <link rel="icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -18,8 +18,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="/categories/index.xml">
-<link rel="alternate" hreflang="en" href="/categories/">
+<link rel="alternate" type="application/rss+xml" href="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80/index.xml">
+<link rel="alternate" hreflang="en" href="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80/">
 <noscript>
     <style>
         #theme-toggle,
@@ -56,12 +56,12 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="/categories/">
-  <meta property="og:title" content="Categories">
+</noscript><meta property="og:url" content="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80/">
+  <meta property="og:title" content="路径规划基础">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Categories">
+<meta name="twitter:title" content="路径规划基础">
 <meta name="twitter:description" content="">
 
 </head>
@@ -108,34 +108,28 @@
         </ul>
     </nav>
 </header>
-<main class="main">
+<main class="main"> 
 <header class="page-header">
-    <h1>Categories</h1>
+  <h1>
+    路径规划基础
+  </h1>
 </header>
 
-<ul class="terms-tags">
-    <li>
-        <a href="/categories/project/">Project <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E5%8A%9F%E8%83%BD%E7%AD%96%E7%95%A5%E8%AE%BE%E8%AE%A1/">功能策略设计 <sup><strong><sup>4</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E5%9C%B0%E5%9B%BE%E7%94%9F%E6%88%90%E4%B8%8E%E7%A9%BA%E9%97%B4%E5%88%86%E5%89%B2/">地图生成与空间分割 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E7%B3%BB%E7%BB%9F/">智能驾驶系统 <sup><strong><sup>4</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AF%BC%E8%88%AA/">机器人导航 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E7%A7%BB%E5%8A%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AF%BC%E8%88%AA/">移动机器人导航 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80/">路径规划基础 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-</ul>
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">几何地图与占用地图在路径规划中的应用
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>在移动机器人路径规划项目中，地图的表达形式对规划算法的效率与可行性起着决定性作用。本文将介绍两种核心地图结构 —— GeometricMap 与 OccupancyMap，并结合代码逻辑说明它们与四叉树（QuadTree）在路径规划中的协作方式。
+一、OccupancyMap 占用地图 OccupancyMap 是通过图像（通常是.png地图或实时图像）生成的像素级地图，用于表示每个区域是否可通行。 功能概述 接收一张地图图像 map_image，支持 RGB 或灰度图； 将图像转为灰度图后，基于 occupancy_threshold 生成二值图（黑=障碍，白=可通行）； 可返回背景图、灰度图或二值图； 支持从图像提取边界与障碍的几何信息（返回 boundary_coords 和 obstacle_list）。 典型代码片段 occupancy_map = OccupancyMap(map_image) boundary_coords, obstacle_list = occupancy_map.get_geometric_map() 在项目中的作用 提供最原始的环境表达方式 可以作为输入转为 GeometricMap 支持动态更新：如结合摄像头识别障碍，实时构建地图 二、GeometricMap 几何地图 GeometricMap 用于几何表达方式表示边界和障碍，以便生成高精度的导航地图（用于后续凸包、安全走廊、参考路径的构建）。
+✅ GeometricMap 是“几何表达形式的地图”，用于： 元素 表示内容 示例 boundary 整个地图的边界轮廓 外围矩形 / 不规则多边形 obstacles 障碍物的几何形状 车、箱子、墙，表示为多边形 inflator（可选） 将障碍物形状向外膨胀 提供安全冗余 ✅ 它不是图像地图，而是 多边形表达的结构地图 例如：
+boundary = [(0,0), (10,0), (10,10), (0,10)] obstacle_list = [[(2,2), (3,2), (3,3), (2,3)]] map = GeometricMap(boundary, obstacle_list) 这里就表达了一个 10x10 的区域，里面有一个 1x1 的方形障碍物。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-05-15 00:00:00 +0000 UTC'>May 15, 2025</span></footer>
+  <a class="entry-link" aria-label="post link to 几何地图与占用地图在路径规划中的应用" href="/posts/map-structure-explained/"></a>
+</article>
     </main>
     
 <footer class="footer">
