@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>凸包 on </title>
+    <link>/tags/%E5%87%B8%E5%8C%85/</link>
+    <description>Recent content in 凸包 on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 16 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/%E5%87%B8%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
+      <link>/posts/quadtree_safearea/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/quadtree_safearea/</guid>
+      <description>详解如何从占用图生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
+    </item>
+  </channel>
+</rss>

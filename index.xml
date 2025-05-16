@@ -6,8 +6,15 @@
     <description>Recent content on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 15 May 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 16 May 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
+      <link>/posts/quadtree_safearea/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/quadtree_safearea/</guid>
+      <description>详解如何从占用图生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
+    </item>
     <item>
       <title>ACC（自适应巡航控制）策略设计与问题集</title>
       <link>/posts/acc-strategy/</link>
