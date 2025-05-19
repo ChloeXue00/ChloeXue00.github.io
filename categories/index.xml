@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title></title>
-    <link>//localhost:1313/categories/</link>
+    <link>/categories/</link>
     <description>Recent content on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DRL</title>
-      <link>//localhost:1313/categories/drl/</link>
+      <link>/categories/drl/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/categories/drl/</guid>
+      <guid>/categories/drl/</guid>
       <description></description>
     </item>
     <item>
       <title>Projects</title>
-      <link>//localhost:1313/categories/projects/</link>
+      <link>/categories/projects/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/categories/projects/</guid>
+      <guid>/categories/projects/</guid>
       <description></description>
     </item>
     <item>
       <title>ADAS</title>
-      <link>//localhost:1313/categories/adas/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/categories/adas/</guid>
+      <link>/categories/adas/</link>
+      <pubDate>Sat, 15 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>/categories/adas/</guid>
       <description></description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>ALC on </title>
-    <link>//localhost:1313/tags/alc/</link>
+    <link>/tags/alc/</link>
     <description>Recent content in ALC on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 15 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/alc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 15 Jun 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/alc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
-      <link>//localhost:1313/posts/lcc_alc_strategy/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/lcc_alc_strategy/</guid>
+      <link>/posts/lcc_alc_strategy/</link>
+      <pubDate>Sat, 15 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/lcc_alc_strategy/</guid>
       <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
     </item>
   </channel>

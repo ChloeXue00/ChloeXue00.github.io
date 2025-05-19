@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析 | </title>
 <meta name="keywords" content="L2, LCC, ALC, 横向控制, 自动变道">
 <meta name="description" content="剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/posts/lcc_alc_strategy/">
+<link rel="canonical" href="/posts/lcc_alc_strategy/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/lcc_alc_strategy/">
+<link rel="alternate" hreflang="en" href="/posts/lcc_alc_strategy/">
 <noscript>
     <style>
         #theme-toggle,
@@ -55,7 +55,73 @@
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/posts/lcc_alc_strategy/">
+  <meta property="og:title" content="LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析">
+  <meta property="og:description" content="剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-06-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-06-15T00:00:00+00:00">
+    <meta property="article:tag" content="L2">
+    <meta property="article:tag" content="LCC">
+    <meta property="article:tag" content="ALC">
+    <meta property="article:tag" content="横向控制">
+    <meta property="article:tag" content="自动变道">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析">
+<meta name="twitter:description" content="剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析",
+      "item": "/posts/lcc_alc_strategy/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析",
+  "name": "LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析",
+  "description": "剖析L2+系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑",
+  "keywords": [
+    "L2", "LCC", "ALC", "横向控制", "自动变道"
+  ],
+  "articleBody": "LCC（车道居中控制）与 ALC（自动变道）策略解析 一、功能简介 LCC（Lane Centering Control）车道居中控制是 L2 自动驾驶的基础模块，目标是在双车道线清晰可见的情况下，让车辆持续保持在当前车道中线附近行驶，提升驾驶舒适性与安全性。\nALC（Automatic Lane Change）则是在满足一定安全条件下，自动执行左右变道操作的模块。它通常建立在 LCC 的稳定控制之上，并与感知、HMI、策略等系统联动。\n二、功能层级与结构 模块 描述 LCC 状态机管理 判断是否满足激活条件（双车道线清晰、速度范围、驾驶员授权） 车道线提取与预测 基于前向摄像头识别左/右车道线，预测中线轨迹 横向控制器（如 PID / LQR） 根据当前与目标车道中心偏差（Lateral Error）与航向误差调整方向盘角 ALC 触发策略管理 接收导航路径或驾驶员变道指令，判断是否触发变道行为 变道可行性判断模块 基于侧后感知结果判断变道是否安全 变道轨迹生成与跟踪 生成曲率平滑、jerk 限制的变道轨迹并跟踪执行 三、核心输入信号与感知要求 信号 来源 描述 左/右车道线位置 前向摄像头 用于车道中线拟合与目标轨迹生成 自车航向角与位置 IMU + 高精地图 用于航向误差与位置误差计算 周围车辆信息 摄像头 + 雷达融合 判断变道可行性，监测盲区目标 驾驶员授权状态 HMI、转向灯 判断是否允许变道或保持自动控制 路段可变道标签 高精地图 禁止变道区识别（如施工路段、实线） 四、核心输出信号 信号 描述 SteeringCmd 横向控制指令（方向盘角或期望曲率） LCC_State 当前车道保持状态（Active / Fault / Override） ALC_Request 自动变道请求信号 ALC_State 当前变道状态（准备中 / 执行中 / 成功 / 中断） 五、控制策略与流程 ✅ LCC 控制流程（简化） 识别左右车道线 → 中线拟合 计算横向偏差、航向偏差 使用 LQR/PID 控制器输出 SteeringCmd 在偏差过大或车道线失效时退出控制 ✅ ALC 控制流程 - 接收导航或驾驶员变道指令 - 查询高精地图判断是否允许变道 - 检查目标车道是否存在车辆，计算相对距离/速度 - 满足安全条件后 → 下发变道轨迹 → 控制横向指令 - 变道完成后重新激活 LCC - 若过程中存在异常（驾驶员接管、前方车辆切入等） → 中断变道 六、典型问题与对策 问题 原因 对策 车道保持“左右漂移” 中线预测不稳 / 控制参数未调优 优化车道线融合算法，提升控制器带宽 弯道控制不足 曲率模型过于简单 引入道路曲率预测 + 增加航向误差项 自动变道失败率高 感知误判侧后目标 or 控制不连贯 增强盲区感知 + 使用平滑轨迹生成器 驾驶员频繁接管 控制反应滞后 or 不舒适 限制控制jerk，加快响应速度 七、模块协同与扩展方向 与 ACC 协同控制曲率+速度联动，保障跟车时的横向安全 与 HMI 联动展示变道状态、提示变道意图确认 城市场景扩展：支持红绿灯感知下的变道判断、实线/虚线车道语义识别 与导航系统集成：基于路径执行自动变道至目标车道 八、总结 LCC 与 ALC 是 NOP 领航辅助系统的重要基础模块。它们共同构成了 L2+ 系统的横向控制骨架，对控制器调校、感知策略准确性与地图标签一致性都提出了较高要求。\n",
+  "wordCount" : "158",
+  "inLanguage": "en",
+  "datePublished": "2024-06-15T00:00:00Z",
+  "dateModified": "2024-06-15T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/lcc_alc_strategy/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -287,11 +353,11 @@
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="//localhost:1313/tags/l2/">L2</a></li>
-      <li><a href="//localhost:1313/tags/lcc/">LCC</a></li>
-      <li><a href="//localhost:1313/tags/alc/">ALC</a></li>
-      <li><a href="//localhost:1313/tags/%E6%A8%AA%E5%90%91%E6%8E%A7%E5%88%B6/">横向控制</a></li>
-      <li><a href="//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E5%8F%98%E9%81%93/">自动变道</a></li>
+      <li><a href="/tags/l2/">L2</a></li>
+      <li><a href="/tags/lcc/">LCC</a></li>
+      <li><a href="/tags/alc/">ALC</a></li>
+      <li><a href="/tags/%E6%A8%AA%E5%90%91%E6%8E%A7%E5%88%B6/">横向控制</a></li>
+      <li><a href="/tags/%E8%87%AA%E5%8A%A8%E5%8F%98%E9%81%93/">自动变道</a></li>
     </ul>
   </footer>
 </article>

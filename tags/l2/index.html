@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>L2 | </title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/tags/l2/">
+<link rel="canonical" href="/tags/l2/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="//localhost:1313/tags/l2/index.xml">
-<link rel="alternate" hreflang="en" href="//localhost:1313/tags/l2/">
+<link rel="alternate" type="application/rss+xml" href="/tags/l2/index.xml">
+<link rel="alternate" hreflang="en" href="/tags/l2/">
 <noscript>
     <style>
         #theme-toggle,
@@ -56,7 +56,14 @@
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/tags/l2/">
+  <meta property="og:title" content="L2">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="L2">
+<meta name="twitter:description" content="">
+
 </head>
 
 <body class="list" id="top">
@@ -475,6 +482,62 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
+      <a href="/posts/e2e-driving-resnet-lstm/">基于ResNet&#43;LSTM的端到端自动驾驶转向预测</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h2 id="项目背景">项目背景</h2>
+<p>本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。</p>
+<p>此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。</p>
+<h2 id="模型结构概览">模型结构概览</h2>
+<p>整体结构采用两阶段：</p>
+<ol>
+<li><strong>ResNet 特征提取</strong>：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。</li>
+<li><strong>LSTM 序列建模</strong>：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度</li>
+</ol>
+<h2 id="模型结构图">模型结构图</h2>
+<p><img alt="模型结构" loading="lazy" src="/images/model_diagram_v2.png"></p>
+<h2 id="数据与预处理">数据与预处理</h2>
+<p>数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。</p>
+<ul>
+<li>输入帧尺寸统一为 224x224</li>
+<li>标签为每帧角度（可选包含扭矩、车速）</li>
+<li>图像预处理：resize → normalize → batch</li>
+<li>标签标准化：使用均值/方差归一化角度值</li>
+<li>损失函数：MSE 均方误差损失</li>
+<li>优化器：Adam, 学习率 = 1e-4</li>
+<li>序列长度：T = 5（即每个样本为连续5帧）</li>
+</ul>
+<h2 id="实验结果">实验结果</h2>
+<p>在测试集上，MSE 误差为 <strong>0.06</strong>，对应角度误差约为 <strong>7°</strong>。<br>
+模型在直线段表现稳定，在连续转弯段有一定预测延迟</p>
+<p><img alt="loss_curve" loading="lazy" src="/images/loss_curve.png"></p>
+<h2 id="关键代码片段">关键代码片段：</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ResNetLSTMModel</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>resnet <span style="color:#f92672">=</span> resnet18(pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>lstm <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LSTM(input_size<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>, hidden_size<span style="color:#f92672">=</span><span style="color:#ae81ff">128</span>, batch_first<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x_seq):
+</span></span><span style="display:flex;"><span>        batch, seq_len, C, H, W <span style="color:#f92672">=</span> x_seq<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> [self<span style="color:#f92672">.</span>resnet(x_seq[:, i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(seq_len)]
+</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>stack(feats, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># [B, T, D]</span>
+</span></span><span style="display:flex;"><span>        out, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(feats)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>fc(out[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</span></span></code></pre></div><h2 id="模型选择与对比分析">模型选择与对比分析</h2>
+<p>为什么选择 ResNet 而不是简单 CNN：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 14, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
       <a href="/posts/map-structure-explained/">路径规划（一）几何地图与占用地图在路径规划中的应用</a>
     </h2>
   </header>
@@ -547,63 +610,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 </span></span></code></pre></div><p>这里就表达了一个 10x10 的区域，里面有一个 1x1 的方形障碍物。</p></p>
   </section>
   <footer class="entry-footer">
-    <span class="entry-date">May 15, 2025</span>
-  </footer>
-</article>
-
-        
-          <article class="post-entry">
-  <header class="entry-header">
-    <h2 class="entry-title">
-      <a href="/posts/e2e-driving-resnet-lstm/">基于ResNet&#43;LSTM的端到端自动驾驶转向预测</a>
-    </h2>
-  </header>
-  <section class="entry-content">
-    <p><h2 id="项目背景">项目背景</h2>
-<p>本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。</p>
-<p>此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。</p>
-<h2 id="模型结构概览">模型结构概览</h2>
-<p>整体结构采用两阶段：</p>
-<ol>
-<li><strong>ResNet 特征提取</strong>：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。</li>
-<li><strong>LSTM 序列建模</strong>：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度</li>
-</ol>
-<h2 id="模型结构图">模型结构图</h2>
-<p><img alt="模型结构" loading="lazy" src="/images/model_diagram_v2.png"></p>
-<h2 id="数据与预处理">数据与预处理</h2>
-<p>数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。</p>
-<ul>
-<li>输入帧尺寸统一为 224x224</li>
-<li>标签为每帧角度（可选包含扭矩、车速）</li>
-<li>图像预处理：resize → normalize → batch</li>
-<li>标签标准化：使用均值/方差归一化角度值</li>
-<li>损失函数：MSE 均方误差损失</li>
-<li>优化器：Adam, 学习率 = 1e-4</li>
-<li>序列长度：T = 5（即每个样本为连续5帧）</li>
-</ul>
-<h2 id="实验结果">实验结果</h2>
-<p>在测试集上，MSE 误差为 <strong>0.06</strong>，对应角度误差约为 <strong>7°</strong>。<br>
-模型在直线段表现稳定，在连续转弯段有一定预测延迟</p>
-<p><img alt="loss_curve" loading="lazy" src="/images/loss_curve.png"></p>
-<h2 id="关键代码片段">关键代码片段：</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ResNetLSTMModel</span>(nn<span style="color:#f92672">.</span>Module):
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>resnet <span style="color:#f92672">=</span> resnet18(pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>lstm <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LSTM(input_size<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>, hidden_size<span style="color:#f92672">=</span><span style="color:#ae81ff">128</span>, batch_first<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x_seq):
-</span></span><span style="display:flex;"><span>        batch, seq_len, C, H, W <span style="color:#f92672">=</span> x_seq<span style="color:#f92672">.</span>shape
-</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> [self<span style="color:#f92672">.</span>resnet(x_seq[:, i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(seq_len)]
-</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>stack(feats, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># [B, T, D]</span>
-</span></span><span style="display:flex;"><span>        out, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(feats)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>fc(out[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-</span></span></code></pre></div><h2 id="模型选择与对比分析">模型选择与对比分析</h2>
-<p>为什么选择 ResNet 而不是简单 CNN：</p></p>
-  </section>
-  <footer class="entry-footer">
-    <span class="entry-date">May 14, 2025</span>
+    <span class="entry-date">Dec 15, 2024</span>
   </footer>
 </article>
 
@@ -612,63 +619,6 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     
       <h2 style="margin-top: 2rem;">ADAS</h2>
       <div class="post-list">
-        
-          <article class="post-entry">
-  <header class="entry-header">
-    <h2 class="entry-title">
-      <a href="/posts/acc-strategy/">ACC（自适应巡航控制）策略设计与问题集</a>
-    </h2>
-  </header>
-  <section class="entry-content">
-    <p><h1 id="acc自适应巡航控制策略设计与问题集">ACC（自适应巡航控制）策略设计与问题集</h1>
-<h2 id="一功能简介">一、功能简介</h2>
-<p>ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。</p>
-<p>应用场景涵盖高速公路、城市快速路等，需要与AEB（自动紧急制动）、LKA等模块进行协同。</p>
-<h2 id="功能层级">功能层级</h2>
-<ul>
-<li>
-<p><strong>定速巡航模式（CC）</strong>：当前无前车干扰，车辆自动维持设定巡航速度</p>
-<ul>
-<li>支持直道、弯道、上下坡；</li>
-<li>控制精度 +-1km/h(平路)， +-2km/h(坡道)</li>
-<li>允许巡航速度 0-150km/h;</li>
-<li>激活逻辑：初始速度小于30km/h 设为30，否则为当前车速</li>
-</ul>
-</li>
-<li>
-<p><strong>自适应巡航模式（ACC）</strong>：在设定车速范围内，系统基于前方目标车与自车的相对距离、相对速度信息，动态调整纵向加速度，保持安全车距。</p>
-<ul>
-<li>支持识别静态/动态目标车辆（主要使用前向毫米波雷达 + 视觉融合）</li>
-<li>根据设定时距（如 1.5s）和当前车速计算期望跟车距离</li>
-<li>动态调整加速度，保证相对时距误差收敛</li>
-<li>控制加速度/减速度不能超过设定限值（如 ±3 m/s²）</li>
-<li>系统状态平滑切换（Cruise → Follow → Brake → Resume）
-核心输入信号：
-V_ego : 自车速度
-D_rel : 前车相对距离
-V_rel : 前车相对速度
-t_gap_set: 设定的时距
-ACC_SetSpeed: 驾驶员设定的目标速度
-TargetValid: 是否有有效目标车（用于状态判断）</li>
-</ul>
-<p>输出信号：
-ACC_CmdAccel ：期望纵向加速度
-ACC_State: 当前ACC子状态（Cruise, Follow, Brake等）
-DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，前车图标等等</p>
-</li>
-<li>
-<p><strong>停走模式（Stop &amp; Go）</strong>：低速或拥堵场景下支持自动减速直至完全停止，并在前车起步后自动跟随（部分车型支持）
-1） 自车跟停后，开始计时，若跟停时间＜5min，前车起步，自车自动跟随起步；
-2） 若跟停时间≥5min，则通过HMI告知驾驶员自车处于Hold状态，需要驾驶员的确认【踩油门踏板】，才能继续自动起步
-3） 若0min≤跟停时间＜10min，收到驾驶员的确认【踩油门踏板】，车辆再次恢复到静止后，重新计时
-4） 若跟停时间＞10min，ACC功能自动退出，拉起EPB
-5） 前车起步，自车跟随起步的延迟不得大于2s【可标定】</p></p>
-  </section>
-  <footer class="entry-footer">
-    <span class="entry-date">May 15, 2025</span>
-  </footer>
-</article>
-
         
           <article class="post-entry">
   <header class="entry-header">
@@ -845,7 +795,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 <p>LCC 与 ALC 是 NOP 领航辅助系统的重要基础模块。它们共同构成了 L2+ 系统的横向控制骨架，对控制器调校、感知策略准确性与地图标签一致性都提出了较高要求。</p></p>
   </section>
   <footer class="entry-footer">
-    <span class="entry-date">May 15, 2025</span>
+    <span class="entry-date">Jun 15, 2024</span>
   </footer>
 </article>
 
@@ -1015,7 +965,7 @@ $$</p>
 </ul></p>
   </section>
   <footer class="entry-footer">
-    <span class="entry-date">May 15, 2025</span>
+    <span class="entry-date">May 29, 2024</span>
   </footer>
 </article>
 
@@ -1169,7 +1119,64 @@ $$</p>
 <p><strong>功能节奏节点示例</strong>（SOP前3个月内需完成）：</p></p>
   </section>
   <footer class="entry-footer">
-    <span class="entry-date">May 15, 2025</span>
+    <span class="entry-date">May 15, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/acc-strategy/">ACC（自适应巡航控制）策略设计与问题集</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="acc自适应巡航控制策略设计与问题集">ACC（自适应巡航控制）策略设计与问题集</h1>
+<h2 id="一功能简介">一、功能简介</h2>
+<p>ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。</p>
+<p>应用场景涵盖高速公路、城市快速路等，需要与AEB（自动紧急制动）、LKA等模块进行协同。</p>
+<h2 id="功能层级">功能层级</h2>
+<ul>
+<li>
+<p><strong>定速巡航模式（CC）</strong>：当前无前车干扰，车辆自动维持设定巡航速度</p>
+<ul>
+<li>支持直道、弯道、上下坡；</li>
+<li>控制精度 +-1km/h(平路)， +-2km/h(坡道)</li>
+<li>允许巡航速度 0-150km/h;</li>
+<li>激活逻辑：初始速度小于30km/h 设为30，否则为当前车速</li>
+</ul>
+</li>
+<li>
+<p><strong>自适应巡航模式（ACC）</strong>：在设定车速范围内，系统基于前方目标车与自车的相对距离、相对速度信息，动态调整纵向加速度，保持安全车距。</p>
+<ul>
+<li>支持识别静态/动态目标车辆（主要使用前向毫米波雷达 + 视觉融合）</li>
+<li>根据设定时距（如 1.5s）和当前车速计算期望跟车距离</li>
+<li>动态调整加速度，保证相对时距误差收敛</li>
+<li>控制加速度/减速度不能超过设定限值（如 ±3 m/s²）</li>
+<li>系统状态平滑切换（Cruise → Follow → Brake → Resume）
+核心输入信号：
+V_ego : 自车速度
+D_rel : 前车相对距离
+V_rel : 前车相对速度
+t_gap_set: 设定的时距
+ACC_SetSpeed: 驾驶员设定的目标速度
+TargetValid: 是否有有效目标车（用于状态判断）</li>
+</ul>
+<p>输出信号：
+ACC_CmdAccel ：期望纵向加速度
+ACC_State: 当前ACC子状态（Cruise, Follow, Brake等）
+DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，前车图标等等</p>
+</li>
+<li>
+<p><strong>停走模式（Stop &amp; Go）</strong>：低速或拥堵场景下支持自动减速直至完全停止，并在前车起步后自动跟随（部分车型支持）
+1） 自车跟停后，开始计时，若跟停时间＜5min，前车起步，自车自动跟随起步；
+2） 若跟停时间≥5min，则通过HMI告知驾驶员自车处于Hold状态，需要驾驶员的确认【踩油门踏板】，才能继续自动起步
+3） 若0min≤跟停时间＜10min，收到驾驶员的确认【踩油门踏板】，车辆再次恢复到静止后，重新计时
+4） 若跟停时间＞10min，ACC功能自动退出，拉起EPB
+5） 前车起步，自车跟随起步的延迟不得大于2s【可标定】</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Apr 15, 2024</span>
   </footer>
 </article>
 
@@ -1238,51 +1245,6 @@ $$</p>
 <li>使用贪婪策略选择 <code>a′ = argmax Q(s′, a′)</code></li>
 </ul>
 <p><strong>优化器</strong>：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。</p></p>
-  </section>
-  <footer class="entry-footer">
-    <span class="entry-date">May 17, 2025</span>
-  </footer>
-</article>
-
-        
-          <article class="post-entry">
-  <header class="entry-header">
-    <h2 class="entry-title">
-      <a href="/posts/what-is-gymnasium/">什么是 Gymnasium？强化学习中的环境是怎么定义的？</a>
-    </h2>
-  </header>
-  <section class="entry-content">
-    <p><p><code>Gymnasium</code> 是 Python 中一个标准化的强化学习环境库（它是原始 <code>OpenAI Gym</code> 的升级版）。它的作用是：</p>
-<blockquote>
-<p>把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。</p></blockquote>
-<p>换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。</p>
-<hr>
-<h2 id="-如何安装-gymnasium">🔧 如何安装 Gymnasium？</h2>
-<p>在终端输入以下命令安装（建议使用虚拟环境）：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium<span style="color:#f92672">[</span>all<span style="color:#f92672">]</span>
-</span></span></code></pre></div><p>如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium
-</span></span></code></pre></div><hr>
-<h2 id="-在代码中如何导入并使用">📥 在代码中如何导入并使用</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;CartPole-v1&#34;</span>)
-</span></span><span style="display:flex;"><span>obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
-</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>sample()  <span style="color:#75715e"># 随机动作（一般训练中由模型决定）</span>
-</span></span><span style="display:flex;"><span>    obs, reward, terminated, truncated, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> terminated <span style="color:#f92672">or</span> truncated:
-</span></span><span style="display:flex;"><span>        obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
-</span></span></code></pre></div><p>这段代码展示了标准的强化学习交互流程：</p>
-<ol>
-<li>初始化环境（<code>reset()</code>）</li>
-<li>持续循环：选择动作 → 执行动作 → 接收反馈</li>
-</ol>
-<hr>
-<h2 id="-环境的输入与输出env-接口结构">🧱 环境的输入与输出：Env 接口结构</h2>
-<h3 id="-输入action">✅ 输入：action</h3>
-<p>你给环境的输入是一个“动作”，比如：</p></p>
   </section>
   <footer class="entry-footer">
     <span class="entry-date">May 17, 2025</span>
@@ -1381,6 +1343,51 @@ $$</p>
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
+      <a href="/posts/what-is-gymnasium/">什么是 Gymnasium？强化学习中的环境是怎么定义的？</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p><code>Gymnasium</code> 是 Python 中一个标准化的强化学习环境库（它是原始 <code>OpenAI Gym</code> 的升级版）。它的作用是：</p>
+<blockquote>
+<p>把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。</p></blockquote>
+<p>换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。</p>
+<hr>
+<h2 id="-如何安装-gymnasium">🔧 如何安装 Gymnasium？</h2>
+<p>在终端输入以下命令安装（建议使用虚拟环境）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium<span style="color:#f92672">[</span>all<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium
+</span></span></code></pre></div><hr>
+<h2 id="-在代码中如何导入并使用">📥 在代码中如何导入并使用</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;CartPole-v1&#34;</span>)
+</span></span><span style="display:flex;"><span>obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>sample()  <span style="color:#75715e"># 随机动作（一般训练中由模型决定）</span>
+</span></span><span style="display:flex;"><span>    obs, reward, terminated, truncated, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> terminated <span style="color:#f92672">or</span> truncated:
+</span></span><span style="display:flex;"><span>        obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span></code></pre></div><p>这段代码展示了标准的强化学习交互流程：</p>
+<ol>
+<li>初始化环境（<code>reset()</code>）</li>
+<li>持续循环：选择动作 → 执行动作 → 接收反馈</li>
+</ol>
+<hr>
+<h2 id="-环境的输入与输出env-接口结构">🧱 环境的输入与输出：Env 接口结构</h2>
+<h3 id="-输入action">✅ 输入：action</h3>
+<p>你给环境的输入是一个“动作”，比如：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Dec 17, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
       <a href="/posts/state-action-space/">状态空间和动作空间是什么？</a>
     </h2>
   </header>
@@ -1465,7 +1472,7 @@ $$</p>
 <p>我们通常使用连续动作空间来控制机器人，例如：</p></p>
   </section>
   <footer class="entry-footer">
-    <span class="entry-date">May 17, 2025</span>
+    <span class="entry-date">Nov 17, 2024</span>
   </footer>
 </article>
 

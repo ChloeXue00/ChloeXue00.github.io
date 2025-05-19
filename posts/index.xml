@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on </title>
-    <link>//localhost:1313/posts/</link>
+    <link>/posts/</link>
     <description>Recent content in Posts on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？</title>
-      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
+      <link>/posts/drl-algorithm-comparison/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
+      <guid>/posts/drl-algorithm-comparison/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;为什么了解不同的-drl-算法非常重要&#34;&gt;为什么了解不同的 DRL 算法非常重要？&lt;/h2&gt;
 &lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
@@ -68,11 +68,11 @@
     </item>
     <item>
       <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
-      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
+      <link>/posts/hybrid-planner-integration/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
+      <guid>/posts/hybrid-planner-integration/</guid>
       <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
-&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
 &lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
 &lt;ul&gt;
@@ -128,47 +128,10 @@
 &lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
-      <link>//localhost:1313/posts/what-is-gymnasium/</link>
-      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
-      <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
-&lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;action_space&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sample()  &lt;span style=&#34;color:#75715e&#34;&gt;# 随机动作（一般训练中由模型决定）&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    obs, reward, terminated, truncated, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step(action)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; terminated &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; truncated:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码展示了标准的强化学习交互流程：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;初始化环境（&lt;code&gt;reset()&lt;/code&gt;）&lt;/li&gt;
-&lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
-&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
-&lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>四叉树与 MPC 集成在机器人导航中的应用</title>
-      <link>//localhost:1313/posts/quadtree_integrate_mpc/</link>
+      <link>/posts/quadtree_integrate_mpc/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/quadtree_integrate_mpc/</guid>
+      <guid>/posts/quadtree_integrate_mpc/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;总览&#34;&gt;总览&lt;/h2&gt;
 &lt;p&gt;本篇文档介绍了如何将&lt;strong&gt;四叉树（QuadTree）空间表示法&lt;/strong&gt;与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。&lt;/p&gt;
@@ -209,7 +172,7 @@
 &lt;li&gt;为每个叶子节点生成一个凸包（Convex Hull）&lt;/li&gt;
 &lt;li&gt;这些凸包表示机器人可以安全通行的区域&lt;/li&gt;
 &lt;li&gt;邻接凸包间连接形成路径图
-&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
+&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;mpc-所需的约束生成方式&#34;&gt;MPC 所需的约束生成方式&lt;/h2&gt;
@@ -227,9 +190,9 @@
     </item>
     <item>
       <title>如何合并多个 Safe Area 以简化规划图结构？</title>
-      <link>//localhost:1313/posts/merge_safe_areas/</link>
+      <link>/posts/merge_safe_areas/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/merge_safe_areas/</guid>
+      <guid>/posts/merge_safe_areas/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;背景为什么要合并-safe-area&#34;&gt;背景：为什么要合并 Safe Area？&lt;/h2&gt;
 &lt;p&gt;在使用 QuadTree 构建环境分区时，每一个 &lt;code&gt;FREE&lt;/code&gt; 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：&lt;/p&gt;
@@ -281,12 +244,12 @@
     </item>
     <item>
       <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
-      <link>//localhost:1313/posts/narrow_exploration/</link>
+      <link>/posts/narrow_exploration/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/narrow_exploration/</guid>
+      <guid>/posts/narrow_exploration/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
-&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
 &lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
 &lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
 &lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
@@ -324,7 +287,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;
 &lt;p&gt;第一：目标策略平滑
 用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
-&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;/images/td3_target_action.png&#34;&gt;
 目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
 它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
 这种情况可以通过平滑类似动作的Q函数来避免，
@@ -332,9 +295,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>怎么训练一个 DRL 模型？需要准备哪些模块？</title>
-      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
+      <link>/posts/how-to-train-drl-model/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
+      <guid>/posts/how-to-train-drl-model/</guid>
       <description>&lt;h2 id=&#34;为什么训练-drl-模型是一个系统性工作&#34;&gt;为什么训练 DRL 模型是一个系统性工作？&lt;/h2&gt;
 &lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
 &lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
@@ -411,10 +374,143 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：&lt;/p&gt;</description>
     </item>
     <item>
+      <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
+      <link>/posts/quadtree_to_mpc/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/quadtree_to_mpc/</guid>
+      <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
+&lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;规划模块&lt;/strong&gt;：找到一条从起点到目标的无碰路径&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制模块&lt;/strong&gt;：跟随这条路径，使机器人平稳、可控地到达目标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
+&lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
+&lt;li&gt;快速查询从 &lt;code&gt;start_pos&lt;/code&gt; 到 &lt;code&gt;goal_pos&lt;/code&gt; 的路径节点&lt;/li&gt;
+&lt;li&gt;每个叶子节点有 &lt;code&gt;center()&lt;/code&gt;，表示其几何中心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_nodes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quadtree&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_path(start_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], goal_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
+&lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
+&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
+      <link>/posts/quadtree_safearea/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/quadtree_safearea/</guid>
+      <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
+    </item>
+    <item>
+      <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
+      <link>/posts/e2e-driving-resnet-lstm/</link>
+      <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/e2e-driving-resnet-lstm/</guid>
+      <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
+&lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
+&lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
+&lt;h2 id=&#34;模型结构概览&#34;&gt;模型结构概览&lt;/h2&gt;
+&lt;p&gt;整体结构采用两阶段：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;ResNet 特征提取&lt;/strong&gt;：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
+&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
+&lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;输入帧尺寸统一为 224x224&lt;/li&gt;
+&lt;li&gt;标签为每帧角度（可选包含扭矩、车速）&lt;/li&gt;
+&lt;li&gt;图像预处理：resize → normalize → batch&lt;/li&gt;
+&lt;li&gt;标签标准化：使用均值/方差归一化角度值&lt;/li&gt;
+&lt;li&gt;损失函数：MSE 均方误差损失&lt;/li&gt;
+&lt;li&gt;优化器：Adam, 学习率 = 1e-4&lt;/li&gt;
+&lt;li&gt;序列长度：T = 5（即每个样本为连续5帧）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
+&lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
+模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;/images/loss_curve.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;resnet &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resnet18(pretrained&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lstm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;LSTM(input_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;, hidden_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt;, batch_first&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(&lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x_seq):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        batch, seq_len, C, H, W &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x_seq&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        feats &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;resnet(x_seq[:, i]) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(seq_len)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        feats &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stack(feats, dim&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# [B, T, D]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        out, _ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lstm(feats)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc(out[:, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;模型选择与对比分析&#34;&gt;模型选择与对比分析&lt;/h2&gt;
+&lt;p&gt;为什么选择 ResNet 而不是简单 CNN：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
+      <link>/posts/what-is-gymnasium/</link>
+      <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/what-is-gymnasium/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
+&lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;action_space&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sample()  &lt;span style=&#34;color:#75715e&#34;&gt;# 随机动作（一般训练中由模型决定）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    obs, reward, terminated, truncated, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step(action)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; terminated &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; truncated:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码展示了标准的强化学习交互流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化环境（&lt;code&gt;reset()&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
+&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
+&lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（一）几何地图与占用地图在路径规划中的应用</title>
+      <link>/posts/map-structure-explained/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/map-structure-explained/</guid>
+      <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
+    </item>
+    <item>
       <title>状态空间和动作空间是什么？</title>
-      <link>//localhost:1313/posts/state-action-space/</link>
-      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/state-action-space/</guid>
+      <link>/posts/state-action-space/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/state-action-space/</guid>
       <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
 &lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
 &lt;hr&gt;
@@ -495,127 +591,31 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;我们通常使用连续动作空间来控制机器人，例如：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
-      <link>//localhost:1313/posts/quadtree_to_mpc/</link>
-      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/quadtree_to_mpc/</guid>
-      <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
-&lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;规划模块&lt;/strong&gt;：找到一条从起点到目标的无碰路径&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;控制模块&lt;/strong&gt;：跟随这条路径，使机器人平稳、可控地到达目标&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
-&lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
-&lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
-&lt;li&gt;快速查询从 &lt;code&gt;start_pos&lt;/code&gt; 到 &lt;code&gt;goal_pos&lt;/code&gt; 的路径节点&lt;/li&gt;
-&lt;li&gt;每个叶子节点有 &lt;code&gt;center()&lt;/code&gt;，表示其几何中心&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_nodes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quadtree&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_path(start_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], goal_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;])
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
-&lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
-&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
-      <link>//localhost:1313/posts/quadtree_safearea/</link>
-      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/quadtree_safearea/</guid>
-      <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
-    </item>
-    <item>
-      <title>路径规划（一）几何地图与占用地图在路径规划中的应用</title>
-      <link>//localhost:1313/posts/map-structure-explained/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/map-structure-explained/</guid>
-      <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
-    </item>
-    <item>
-      <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
-      <link>//localhost:1313/posts/e2e-driving-resnet-lstm/</link>
-      <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/e2e-driving-resnet-lstm/</guid>
-      <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
-&lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
-&lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
-&lt;h2 id=&#34;模型结构概览&#34;&gt;模型结构概览&lt;/h2&gt;
-&lt;p&gt;整体结构采用两阶段：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;ResNet 特征提取&lt;/strong&gt;：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
-&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
-&lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;输入帧尺寸统一为 224x224&lt;/li&gt;
-&lt;li&gt;标签为每帧角度（可选包含扭矩、车速）&lt;/li&gt;
-&lt;li&gt;图像预处理：resize → normalize → batch&lt;/li&gt;
-&lt;li&gt;标签标准化：使用均值/方差归一化角度值&lt;/li&gt;
-&lt;li&gt;损失函数：MSE 均方误差损失&lt;/li&gt;
-&lt;li&gt;优化器：Adam, 学习率 = 1e-4&lt;/li&gt;
-&lt;li&gt;序列长度：T = 5（即每个样本为连续5帧）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
-&lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
-模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/loss_curve.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;resnet &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resnet18(pretrained&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lstm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;LSTM(input_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;, hidden_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt;, batch_first&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(&lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x_seq):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        batch, seq_len, C, H, W &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x_seq&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        feats &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;resnet(x_seq[:, i]) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(seq_len)]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        feats &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stack(feats, dim&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# [B, T, D]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        out, _ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lstm(feats)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc(out[:, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;模型选择与对比分析&#34;&gt;模型选择与对比分析&lt;/h2&gt;
-&lt;p&gt;为什么选择 ResNet 而不是简单 CNN：&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
-      <link>//localhost:1313/posts/lcc_alc_strategy/</link>
+      <link>/posts/lcc_alc_strategy/</link>
       <pubDate>Sat, 15 Jun 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/lcc_alc_strategy/</guid>
+      <guid>/posts/lcc_alc_strategy/</guid>
       <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
     </item>
     <item>
       <title>LKA（车道保持辅助）策略设计与问题集</title>
-      <link>//localhost:1313/posts/lka_strategy/</link>
+      <link>/posts/lka_strategy/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/lka_strategy/</guid>
+      <guid>/posts/lka_strategy/</guid>
       <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
     </item>
     <item>
       <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
-      <link>//localhost:1313/posts/nop_strategy/</link>
+      <link>/posts/nop_strategy/</link>
       <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/nop_strategy/</guid>
+      <guid>/posts/nop_strategy/</guid>
       <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
     </item>
     <item>
       <title>ACC（自适应巡航控制）策略设计与问题集</title>
-      <link>//localhost:1313/posts/acc-strategy/</link>
+      <link>/posts/acc-strategy/</link>
       <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/acc-strategy/</guid>
+      <guid>/posts/acc-strategy/</guid>
       <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
   </channel>
