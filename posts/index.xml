@@ -2,59 +2,551 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on </title>
-    <link>/posts/</link>
+    <link>//localhost:1313/posts/</link>
     <description>Recent content in Posts on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 16 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
-      <link>/posts/quadtree_safearea/</link>
+      <title>DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？</title>
+      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;为什么了解不同的-drl-算法非常重要&#34;&gt;为什么了解不同的 DRL 算法非常重要？&lt;/h2&gt;
+&lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;三大算法流派对比&#34;&gt;三大算法流派对比&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;算法类型&lt;/th&gt;
+          &lt;th&gt;特点&lt;/th&gt;
+          &lt;th&gt;优点&lt;/th&gt;
+          &lt;th&gt;局限&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Value-based&lt;/td&gt;
+          &lt;td&gt;学习 Q(s, a) 并通过贪婪策略选动作&lt;/td&gt;
+          &lt;td&gt;样本利用率高，适合离散动作空间&lt;/td&gt;
+          &lt;td&gt;不适用于连续/高维动作&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Policy-based&lt;/td&gt;
+          &lt;td&gt;直接建模并优化策略 π(a&lt;/td&gt;
+          &lt;td&gt;s)&lt;/td&gt;
+          &lt;td&gt;适合连续动作，训练稳定&lt;/td&gt;
+          &lt;td&gt;样本效率低，梯度方差大&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Actor-Critic&lt;/td&gt;
+          &lt;td&gt;同时训练策略和价值函数&lt;/td&gt;
+          &lt;td&gt;综合两者优势，适用于复杂控制问题&lt;/td&gt;
+          &lt;td&gt;架构复杂，对超参数敏感&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一dqndeep-q-network&#34;&gt;一、DQN（Deep Q-Network）&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;类型&lt;/strong&gt;：Value-based&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;损失函数（均方 TD 误差）&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;L(θ) = 𝔼ₜ [(rₜ + γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;θ 是 Q 网络参数&lt;/li&gt;
+&lt;li&gt;θ⁻ 是目标网络参数（定期同步）&lt;/li&gt;
+&lt;li&gt;使用贪婪策略选择 &lt;code&gt;a′ = argmax Q(s′, a′)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;优化器&lt;/strong&gt;：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
+      <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
+&lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;generate_map()&lt;/code&gt;：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;get_geometric_map()&lt;/code&gt;：将地图对象转换为可用于膨胀和路径推理的几何结构。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Inflator&lt;/code&gt; 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-四叉树路径规划模块&#34;&gt;2. 四叉树路径规划模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由外部函数 &lt;code&gt;create_quadtree_from_occupancy_map()&lt;/code&gt; 从栅格占用地图创建四叉树划分空间&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;quadtree_to_mpc_constraints()&lt;/code&gt;（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-mpc-控制器接口&#34;&gt;3. MPC 控制器接口&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;InterfaceMpc&lt;/code&gt;（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;integrate_quadtree_with_mpc()&lt;/code&gt;：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-drl-策略控制&#34;&gt;4. DRL 策略控制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。&lt;/li&gt;
+&lt;li&gt;动作 smoothness 与可行性在 &lt;code&gt;Metrics&lt;/code&gt; 中有单独评估指标。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-智能切换模块&#34;&gt;5. 智能切换模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HintSwitcher&lt;/code&gt;：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。&lt;/li&gt;
+&lt;li&gt;切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二系统整体工作流程&#34;&gt;二、系统整体工作流程&lt;/h2&gt;
+&lt;p&gt;以下代码片段概括了系统的主要运行步骤：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 1: 创建地图对象&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;map_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; generate_map()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; InterfaceMpc(map_data)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Configurator()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 2: 四叉树路径规划&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quadtree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_quadtree_from_occupancy_map(occupancy_map)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;constraints &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 3: MPC 轨迹生成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update_static_constraints(constraints)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate_trajectory(current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 4: 智能控制切换（DRL or MPC）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;switcher &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; HintSwitcher(max_switch_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.0&lt;/span&gt;, min_detach_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8.0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; switcher&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;switch(current_position, original_traj, new_traj, obstacle_list):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; drl_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(observation)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_control_action()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三关键函数解读&#34;&gt;三、关键函数解读&lt;/h2&gt;
+&lt;h3 id=&#34;quadtree_to_mpc_constraints&#34;&gt;&lt;code&gt;quadtree_to_mpc_constraints&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
+      <link>//localhost:1313/posts/what-is-gymnasium/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
+&lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;action_space&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sample()  &lt;span style=&#34;color:#75715e&#34;&gt;# 随机动作（一般训练中由模型决定）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    obs, reward, terminated, truncated, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step(action)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; terminated &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; truncated:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码展示了标准的强化学习交互流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化环境（&lt;code&gt;reset()&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
+&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
+&lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>四叉树与 MPC 集成在机器人导航中的应用</title>
+      <link>//localhost:1313/posts/quadtree_integrate_mpc/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/quadtree_integrate_mpc/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;总览&#34;&gt;总览&lt;/h2&gt;
+&lt;p&gt;本篇文档介绍了如何将&lt;strong&gt;四叉树（QuadTree）空间表示法&lt;/strong&gt;与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。&lt;/p&gt;
+&lt;p&gt;该架构的优势在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;四叉树&lt;/strong&gt; 提供了适应环境复杂度的空间划分与凸包区域&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MPC&lt;/strong&gt; 可在动态、带约束的前瞻性框架下生成最优控制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心思想是：将四叉树节点生成的&lt;strong&gt;凸包区域&lt;/strong&gt;转化为&lt;strong&gt;线性不等式约束&lt;/strong&gt;，供 MPC 在轨迹优化中使用，完成避障与路径限制。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;架构图&#34;&gt;架构图&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;   
+环境地图 ────► 四叉树分解 ────►凸包生成 
+
+                                            │
+                                            ▼
+
+机器人控制 ◄──── MPC优化器 ◄────线性几何约束
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&#34;四叉树地图表示&#34;&gt;四叉树地图表示&lt;/h2&gt;
+&lt;p&gt;四叉树将环境划分为不同分辨率的空间单元：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;开放区域使用较大的节点&lt;/li&gt;
+&lt;li&gt;障碍物附近使用更小的细节节点&lt;/li&gt;
+&lt;li&gt;仅保留表示自由区域的叶子节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优势&#34;&gt;优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;凸包区域构建&#34;&gt;凸包区域构建&lt;/h2&gt;
+&lt;p&gt;四叉树分解完成后：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将每个自由叶子节点看作不规则区域&lt;/li&gt;
+&lt;li&gt;为每个叶子节点生成一个凸包（Convex Hull）&lt;/li&gt;
+&lt;li&gt;这些凸包表示机器人可以安全通行的区域&lt;/li&gt;
+&lt;li&gt;邻接凸包间连接形成路径图
+&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;mpc-所需的约束生成方式&#34;&gt;MPC 所需的约束生成方式&lt;/h2&gt;
+&lt;p&gt;对于路径经过的每个凸包区域：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;凸包每条边转化为半空间线性约束 &lt;code&gt;ax + by + c ≤ 0&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;约束的法向量需朝向&lt;strong&gt;凸包外部&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;保证 MPC 优化轨迹始终在凸包（安全区）内&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数学上，对于边 &lt;code&gt;(x₁,y₁)&lt;/code&gt; → &lt;code&gt;(x₂,y₂)&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;a = -(y₂ - y₁)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b =  (x₂ - x₁)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;c = -ax₁ - by₁
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;约束形式为：&lt;code&gt;ax + by + c ≤ 0&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>如何合并多个 Safe Area 以简化规划图结构？</title>
+      <link>//localhost:1313/posts/merge_safe_areas/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/merge_safe_areas/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;背景为什么要合并-safe-area&#34;&gt;背景：为什么要合并 Safe Area？&lt;/h2&gt;
+&lt;p&gt;在使用 QuadTree 构建环境分区时，每一个 &lt;code&gt;FREE&lt;/code&gt; 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;路径图节点数量过多，导致 A* 搜索复杂度提升&lt;/li&gt;
+&lt;li&gt;MPC 控制器的参考轨迹中断多，规划不平滑&lt;/li&gt;
+&lt;li&gt;可视化和维护困难&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因此，&lt;strong&gt;将临近的 Safe Area 合并为更大的安全区域&lt;/strong&gt; 是简化规划图结构、提高控制性能的重要手段。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;合并判据设计&#34;&gt;合并判据设计&lt;/h2&gt;
+&lt;p&gt;在 &lt;code&gt;connective_quadtree.py&lt;/code&gt; 和 &lt;code&gt;utils_geo.py&lt;/code&gt; 中，我们可以基于以下原则实现 Safe Area 合并：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;邻接性&lt;/strong&gt;：两个凸包边界是否接近或重合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;几何相容性&lt;/strong&gt;：合并后的点集是否仍然可以构成一个有效凸包&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;面积提升评估&lt;/strong&gt;：合并后凸包面积未显著膨胀，避免引入死角区域&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;利用 &lt;code&gt;shapely&lt;/code&gt; 和 &lt;code&gt;scipy.spatial.ConvexHull&lt;/code&gt;，可以进行合并模拟与几何判断。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;合并过程实现思路&#34;&gt;合并过程实现思路&lt;/h2&gt;
+&lt;p&gt;合并逻辑可以封装为 &lt;code&gt;merge_safe_areas()&lt;/code&gt; 函数，并添加到 &lt;code&gt;QuadTree&lt;/code&gt; 类中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;merge_safe_areas&lt;/span&gt;(self, distance_threshold&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    merged &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    used &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; set()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    keys &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;keys())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(keys)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        id1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; keys[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; id1 &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; used: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        hull1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls[id1]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        points1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hull1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;points[hull1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vertices]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, len(keys)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            id2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; keys[j]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; id2 &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; used: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            hull2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls[id2]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            points2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hull2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;points[hull2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vertices]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 判断是否可合并（如边界相近、联合后仍凸）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; can_merge(points1, points2, distance_threshold):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                combined &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vstack((points1, points2))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                new_hull &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ConvexHull(combined)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                merged&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(new_hull)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                used&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update([id1, id2])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;merged_&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;: hull &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, hull &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(merged)}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 &lt;code&gt;can_merge()&lt;/code&gt; 可以使用 &lt;code&gt;shapely.Polygon&lt;/code&gt; 判断是否相交或几何接近。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
+      <link>//localhost:1313/posts/narrow_exploration/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/narrow_exploration/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
+&lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
+&lt;p&gt;DDPG 有时能够实现出色的性能，但它在超参数和其他类型的调优方面往往很脆弱。DDPG 的一个常见故障模式是，学习到的 Q 函数开始大幅高估 Q 值，从而导致策略破坏，因为它利用了 Q 函数中的误差。&lt;/p&gt;
+&lt;h3 id=&#34;td3&#34;&gt;TD3&lt;/h3&gt;
+&lt;p&gt;td3 在DDPG基础上做到了三个技巧的更新，解决DDPG Q值过高的问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;技巧1： 裁剪双Q学习
+TD3学习两个Q函数 而不是一个（因此称为twin），并使用两个Q值比较小的一个作为bellman误差损失函数中的目标&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;技巧2： “延迟”策略更新
+TD3 更新策略和目标网络的频率低于Q函数，本文建议没更新两次Q函数就进行依次策略更新&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;技巧2： 目标策略平滑
+TD3为目标动作添加了噪声，通过平滑动作中的Q的变化，使策略更难利用Q函数误差
+这三个技巧可以显著提高baseline DDPG 的性能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 是一种off-policy algorithm&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 只能用于具有连续动作空间的环境&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 的Spinning up实现不支持并行化&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关键方程式：
+TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_phi_2， 其方式于DDPG学习单个Q函数的方式几乎相同，
+为了准确展示TD3的实现方式， 以及它与普通DDPG的区别，我们将从损失函数的最内层向外进行讲解。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;第一：目标策略平滑
+用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
+目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
+它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
+这种情况可以通过平滑类似动作的Q函数来避免，
+而这正是目标策略平滑的设计初衷。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>怎么训练一个 DRL 模型？需要准备哪些模块？</title>
+      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
+      <description>&lt;h2 id=&#34;为什么训练-drl-模型是一个系统性工作&#34;&gt;为什么训练 DRL 模型是一个系统性工作？&lt;/h2&gt;
+&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
+&lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;drl-训练流程的核心结构&#34;&gt;DRL 训练流程的核心结构&lt;/h2&gt;
+&lt;p&gt;一个标准的 DRL 系统至少包括以下几个部分：&lt;/p&gt;
+&lt;h3 id=&#34;1-环境environment&#34;&gt;1. 环境（Environment）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;提供 &lt;code&gt;reset()&lt;/code&gt; 和 &lt;code&gt;step(action)&lt;/code&gt; 接口&lt;/li&gt;
+&lt;li&gt;返回状态、奖励、终止信号和调试信息&lt;/li&gt;
+&lt;li&gt;通常使用 Gymnasium 编写，也可以是仿真器（如 PyBullet、AirSim）或实际系统接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-策略网络policy-network&#34;&gt;2. 策略网络（Policy Network）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;输入当前状态，输出一个动作（或动作分布）&lt;/li&gt;
+&lt;li&gt;对于离散动作空间，常见输出为 softmax 分布；连续动作空间则直接输出浮点数&lt;/li&gt;
+&lt;li&gt;通常是 MLP（结构化输入）或 CNN（图像输入）网络&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-值函数网络critic-可选&#34;&gt;3. 值函数网络（Critic, 可选）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用于评估当前策略下某状态的“好坏”，即状态值 V(s) 或动作值 Q(s,a)&lt;/li&gt;
+&lt;li&gt;在 Actor-Critic 架构中，Actor 提出动作，Critic 提供反馈&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-回放缓存replay-buffer&#34;&gt;4. 回放缓存（Replay Buffer）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;保存经验 &lt;code&gt;(state, action, reward, next_state, done)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;支持随机采样，避免训练中数据高度相关&lt;/li&gt;
+&lt;li&gt;对于 off-policy 算法（如 DDPG、TD3）是必要组件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-优化器与更新规则optimizer&#34;&gt;5. 优化器与更新规则（Optimizer）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;根据策略梯度、TD 误差、KL 散度等损失函数对网络参数进行更新&lt;/li&gt;
+&lt;li&gt;通常使用 Adam 优化器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;强化学习算法的三种主流架构&#34;&gt;强化学习算法的三种主流架构&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;方法类别&lt;/th&gt;
+          &lt;th&gt;特点&lt;/th&gt;
+          &lt;th&gt;代表算法&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Policy-based&lt;/td&gt;
+          &lt;td&gt;直接建模并优化策略 π(a,s)，通过最大化期望回报更新策略&lt;/td&gt;
+          &lt;td&gt;REINFORCE, PPO, TRPO&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Value-based&lt;/td&gt;
+          &lt;td&gt;学习动作价值函数 Q(s,a)，通过贪婪策略导出动作选择&lt;/td&gt;
+          &lt;td&gt;DQN, Double DQN, Dueling DQN&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Actor-Critic&lt;/td&gt;
+          &lt;td&gt;同时学习策略和价值函数，策略用于决策，价值函数用于评估&lt;/td&gt;
+          &lt;td&gt;A2C, A3C, DDPG, TD3, SAC, PPO&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Policy-based&lt;/strong&gt; 方法训练稳定性强、适合高维动作空间，但样本效率较低。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Value-based&lt;/strong&gt; 方法样本效率较高，适用于离散动作任务，但连续控制较困难。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Actor-Critic&lt;/strong&gt; 综合两者优势，是当前主流算法的主干框架。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一个完整训练循环的结构&#34;&gt;一个完整训练循环的结构&lt;/h2&gt;
+&lt;p&gt;以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>状态空间和动作空间是什么？</title>
+      <link>//localhost:1313/posts/state-action-space/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/state-action-space/</guid>
+      <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
+&lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;状态空间observation-space&#34;&gt;状态空间（Observation Space）&lt;/h2&gt;
+&lt;p&gt;状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。&lt;/p&gt;
+&lt;h3 id=&#34;常见类型&#34;&gt;常见类型：&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;示例&lt;/th&gt;
+          &lt;th&gt;含义说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(4,)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;[-4.8, 4.8]&lt;/code&gt; × 4&lt;/td&gt;
+          &lt;td&gt;连续变量向量，如位置、速度等&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(84, 84, 3)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;图像输入&lt;/td&gt;
+          &lt;td&gt;视觉输入，常用于端到端控制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Dict(...)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;多通道输入&lt;/td&gt;
+          &lt;td&gt;图像 + 雷达 + IMU 组合观测&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;本项目中的状态空间定义&#34;&gt;本项目中的状态空间定义：&lt;/h3&gt;
+&lt;p&gt;在本项目中，我们的状态空间通常包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;图像帧&lt;/strong&gt;：从机器人前置摄像头获取的 RGB 图像（如 &lt;code&gt;(224, 224, 3)&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;附加状态向量&lt;/strong&gt;（可选）：如上一帧速度、转角、航向角等传感器读数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;状态空间结构可能是：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Box(low&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, high&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;255&lt;/span&gt;, shape&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;), dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uint8)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Dict({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;image&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;speed&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;yaw&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;动作空间action-space&#34;&gt;动作空间（Action Space）&lt;/h2&gt;
+&lt;p&gt;动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。&lt;/p&gt;
+&lt;h3 id=&#34;常见类型-1&#34;&gt;常见类型：&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;示例&lt;/th&gt;
+          &lt;th&gt;用途说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Discrete(n)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;Discrete(3)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;离散控制，如左、右、直行&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(...)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;Box(-1, 1, (2,), float32)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;连续动作，如转角和加速度控制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;MultiBinary(n)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;MultiBinary(5)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;多位二进制开关组合&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;本项目中的动作空间定义&#34;&gt;本项目中的动作空间定义：&lt;/h3&gt;
+&lt;p&gt;我们通常使用连续动作空间来控制机器人，例如：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
+      <link>//localhost:1313/posts/quadtree_to_mpc/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_safearea/</guid>
+      <guid>//localhost:1313/posts/quadtree_to_mpc/</guid>
+      <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
+&lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;规划模块&lt;/strong&gt;：找到一条从起点到目标的无碰路径&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制模块&lt;/strong&gt;：跟随这条路径，使机器人平稳、可控地到达目标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
+&lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
+&lt;li&gt;快速查询从 &lt;code&gt;start_pos&lt;/code&gt; 到 &lt;code&gt;goal_pos&lt;/code&gt; 的路径节点&lt;/li&gt;
+&lt;li&gt;每个叶子节点有 &lt;code&gt;center()&lt;/code&gt;，表示其几何中心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_nodes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quadtree&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_path(start_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], goal_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
+&lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
+&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
+      <link>//localhost:1313/posts/quadtree_safearea/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/quadtree_safearea/</guid>
       <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
     </item>
     <item>
-      <title>ACC（自适应巡航控制）策略设计与问题集</title>
-      <link>/posts/acc-strategy/</link>
+      <title>路径规划（一）几何地图与占用地图在路径规划中的应用</title>
+      <link>//localhost:1313/posts/map-structure-explained/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/acc-strategy/</guid>
-      <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
-    </item>
-    <item>
-      <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
-      <link>/posts/lcc_alc_strategy/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/lcc_alc_strategy/</guid>
-      <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
-    </item>
-    <item>
-      <title>LKA（车道保持辅助）策略设计与问题集</title>
-      <link>/posts/lka_strategy/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/lka_strategy/</guid>
-      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
-    </item>
-    <item>
-      <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
-      <link>/posts/nop_strategy/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/nop_strategy/</guid>
-      <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
-    </item>
-    <item>
-      <title>几何地图与占用地图在路径规划中的应用</title>
-      <link>/posts/map-structure-explained/</link>
-      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/map-structure-explained/</guid>
+      <guid>//localhost:1313/posts/map-structure-explained/</guid>
       <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
     </item>
     <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
-      <link>/posts/e2e-driving-resnet-lstm/</link>
+      <link>//localhost:1313/posts/e2e-driving-resnet-lstm/</link>
       <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/e2e-driving-resnet-lstm/</guid>
+      <guid>//localhost:1313/posts/e2e-driving-resnet-lstm/</guid>
       <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
 &lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
@@ -65,7 +557,7 @@
 &lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
-&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
 &lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
 &lt;ul&gt;
@@ -80,7 +572,7 @@
 &lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
 &lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
 模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;/images/loss_curve.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/loss_curve.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
@@ -97,6 +589,34 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc(out[:, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;模型选择与对比分析&#34;&gt;模型选择与对比分析&lt;/h2&gt;
 &lt;p&gt;为什么选择 ResNet 而不是简单 CNN：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
+      <link>//localhost:1313/posts/lcc_alc_strategy/</link>
+      <pubDate>Sat, 15 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/lcc_alc_strategy/</guid>
+      <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
+    </item>
+    <item>
+      <title>LKA（车道保持辅助）策略设计与问题集</title>
+      <link>//localhost:1313/posts/lka_strategy/</link>
+      <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/lka_strategy/</guid>
+      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
+    </item>
+    <item>
+      <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
+      <link>//localhost:1313/posts/nop_strategy/</link>
+      <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/nop_strategy/</guid>
+      <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
+    </item>
+    <item>
+      <title>ACC（自适应巡航控制）策略设计与问题集</title>
+      <link>//localhost:1313/posts/acc-strategy/</link>
+      <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/acc-strategy/</guid>
+      <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
   </channel>
 </rss>

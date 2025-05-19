@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？ | </title>
+<meta name="keywords" content="Hybrid Planning, QuadTree, MPC, DRL, 轨迹规划">
+<meta name="description" content="在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）&#43; 模型预测控制（MPC）&#43; 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。
+
+一、模块概览
+1. 地图生成与表示
+
+generate_map()：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。
+get_geometric_map()：将地图对象转换为可用于膨胀和路径推理的几何结构。
+Inflator 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。
+
+2. 四叉树路径规划模块
+
+由外部函数 create_quadtree_from_occupancy_map() 从栅格占用地图创建四叉树划分空间
+quadtree_to_mpc_constraints()（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。
+
+3. MPC 控制器接口
+
+InterfaceMpc（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。
+integrate_quadtree_with_mpc()：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。
+
+4. DRL 策略控制
+
+控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。
+动作 smoothness 与可行性在 Metrics 中有单独评估指标。
+
+5. 智能切换模块
+
+HintSwitcher：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。
+切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。
+
+
+二、系统整体工作流程
+以下代码片段概括了系统的主要运行步骤：
+# Step 1: 创建地图对象
+map_data = generate_map()
+mpc_controller = InterfaceMpc(map_data)
+config = Configurator()
+
+# Step 2: 四叉树路径规划
+quadtree = create_quadtree_from_occupancy_map(occupancy_map)
+constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+
+# Step 3: MPC 轨迹生成
+mpc_controller.update_static_constraints(constraints)
+trajectory = mpc_controller.generate_trajectory(current_state, goal_state)
+
+# Step 4: 智能控制切换（DRL or MPC）
+switcher = HintSwitcher(max_switch_distance=5.0, min_detach_distance=8.0)
+if switcher.switch(current_position, original_traj, new_traj, obstacle_list):
+    action = drl_model.predict(observation)
+else:
+    action = mpc_controller.get_control_action()
+
+三、关键函数解读
+quadtree_to_mpc_constraints
+将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/hybrid-planner-integration/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/hybrid-planner-integration/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 <strong>四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）</strong> 的混合轨迹规划框架，该方案的主模块集中在 <code>helper_main_continous.py</code> 文件中，具备良好的模块化与通用性。
+<img alt="机器人DRL轨迹图" loading="lazy" src="/images/hybrid_control_result.png"></p>
+<h2 id="一模块概览">一、模块概览<a hidden class="anchor" aria-hidden="true" href="#一模块概览">#</a></h2>
+<h3 id="1-地图生成与表示">1. 地图生成与表示<a hidden class="anchor" aria-hidden="true" href="#1-地图生成与表示">#</a></h3>
+<ul>
+<li><code>generate_map()</code>：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。</li>
+<li><code>get_geometric_map()</code>：将地图对象转换为可用于膨胀和路径推理的几何结构。</li>
+<li><code>Inflator</code> 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。</li>
+</ul>
+<h3 id="2-四叉树路径规划模块">2. 四叉树路径规划模块<a hidden class="anchor" aria-hidden="true" href="#2-四叉树路径规划模块">#</a></h3>
+<ul>
+<li>由外部函数 <code>create_quadtree_from_occupancy_map()</code> 从栅格占用地图创建四叉树划分空间</li>
+<li><code>quadtree_to_mpc_constraints()</code>（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。</li>
+</ul>
+<h3 id="3-mpc-控制器接口">3. MPC 控制器接口<a hidden class="anchor" aria-hidden="true" href="#3-mpc-控制器接口">#</a></h3>
+<ul>
+<li><code>InterfaceMpc</code>（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。</li>
+<li><code>integrate_quadtree_with_mpc()</code>：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。</li>
+</ul>
+<h3 id="4-drl-策略控制">4. DRL 策略控制<a hidden class="anchor" aria-hidden="true" href="#4-drl-策略控制">#</a></h3>
+<ul>
+<li>控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。</li>
+<li>动作 smoothness 与可行性在 <code>Metrics</code> 中有单独评估指标。</li>
+</ul>
+<h3 id="5-智能切换模块">5. 智能切换模块<a hidden class="anchor" aria-hidden="true" href="#5-智能切换模块">#</a></h3>
+<ul>
+<li><code>HintSwitcher</code>：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。</li>
+<li>切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。</li>
+</ul>
+<hr>
+<h2 id="二系统整体工作流程">二、系统整体工作流程<a hidden class="anchor" aria-hidden="true" href="#二系统整体工作流程">#</a></h2>
+<p>以下代码片段概括了系统的主要运行步骤：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Step 1: 创建地图对象</span>
+</span></span><span style="display:flex;"><span>map_data <span style="color:#f92672">=</span> generate_map()
+</span></span><span style="display:flex;"><span>mpc_controller <span style="color:#f92672">=</span> InterfaceMpc(map_data)
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> Configurator()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 2: 四叉树路径规划</span>
+</span></span><span style="display:flex;"><span>quadtree <span style="color:#f92672">=</span> create_quadtree_from_occupancy_map(occupancy_map)
+</span></span><span style="display:flex;"><span>constraints <span style="color:#f92672">=</span> quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 3: MPC 轨迹生成</span>
+</span></span><span style="display:flex;"><span>mpc_controller<span style="color:#f92672">.</span>update_static_constraints(constraints)
+</span></span><span style="display:flex;"><span>trajectory <span style="color:#f92672">=</span> mpc_controller<span style="color:#f92672">.</span>generate_trajectory(current_state, goal_state)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 4: 智能控制切换（DRL or MPC）</span>
+</span></span><span style="display:flex;"><span>switcher <span style="color:#f92672">=</span> HintSwitcher(max_switch_distance<span style="color:#f92672">=</span><span style="color:#ae81ff">5.0</span>, min_detach_distance<span style="color:#f92672">=</span><span style="color:#ae81ff">8.0</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> switcher<span style="color:#f92672">.</span>switch(current_position, original_traj, new_traj, obstacle_list):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> drl_model<span style="color:#f92672">.</span>predict(observation)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> mpc_controller<span style="color:#f92672">.</span>get_control_action()
+</span></span></code></pre></div><hr>
+<h2 id="三关键函数解读">三、关键函数解读<a hidden class="anchor" aria-hidden="true" href="#三关键函数解读">#</a></h2>
+<h3 id="quadtree_to_mpc_constraints"><code>quadtree_to_mpc_constraints</code><a hidden class="anchor" aria-hidden="true" href="#quadtree_to_mpc_constraints">#</a></h3>
+<p>将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">quadtree_to_mpc_constraints</span>(quadtree, state, goal):
+</span></span><span style="display:flex;"><span>    path_nodes <span style="color:#f92672">=</span> quadtree<span style="color:#f92672">.</span>find_path((state[<span style="color:#ae81ff">0</span>], state[<span style="color:#ae81ff">1</span>]), (goal[<span style="color:#ae81ff">0</span>], goal[<span style="color:#ae81ff">1</span>]))
+</span></span><span style="display:flex;"><span>    free_space_polygons <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> node_id <span style="color:#f92672">in</span> path_nodes:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> node_id <span style="color:#f92672">in</span> quadtree<span style="color:#f92672">.</span>convex_hulls:
+</span></span><span style="display:flex;"><span>            hull <span style="color:#f92672">=</span> quadtree<span style="color:#f92672">.</span>convex_hulls[node_id]
+</span></span><span style="display:flex;"><span>            vertices <span style="color:#f92672">=</span> hull<span style="color:#f92672">.</span>vertices<span style="color:#f92672">.</span>tolist()
+</span></span><span style="display:flex;"><span>            free_space_polygons<span style="color:#f92672">.</span>append(vertices)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> free_space_polygons
+</span></span></code></pre></div><h3 id="integrate_quadtree_with_mpc"> <code>integrate_quadtree_with_mpc</code><a hidden class="anchor" aria-hidden="true" href="#integrate_quadtree_with_mpc">#</a></h3>
+<p>动态将静态与预测动态障碍加入 MPC 控制器，生成最优控制轨迹：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">integrate_quadtree_with_mpc</span>(map, mpc_controller, current_state, goal_state, dynamic_obstacles):
+</span></span><span style="display:flex;"><span>    static_constraints <span style="color:#f92672">=</span> quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+</span></span><span style="display:flex;"><span>    mpc_controller<span style="color:#f92672">.</span>update_static_constraints(static_constraints)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 转换动态障碍物为多边形约束</span>
+</span></span><span style="display:flex;"><span>    dyn_obstacles_for_mpc <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> obs <span style="color:#f92672">in</span> dynamic_obstacles:
+</span></span><span style="display:flex;"><span>        polygon <span style="color:#f92672">=</span> [(x <span style="color:#f92672">+</span> radius <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(a), y <span style="color:#f92672">+</span> radius <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sin(a)) <span style="color:#66d9ef">for</span> a <span style="color:#f92672">in</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>pi, <span style="color:#ae81ff">8</span>)]
+</span></span><span style="display:flex;"><span>        dyn_obstacles_for_mpc<span style="color:#f92672">.</span>append(polygon)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    mpc_controller<span style="color:#f92672">.</span>update_dynamic_constraints(dyn_obstacles_for_mpc)
+</span></span></code></pre></div><h3 id="hintswitcherswitch"> <code>HintSwitcher.switch()</code><a hidden class="anchor" aria-hidden="true" href="#hintswitcherswitch">#</a></h3>
+<p>使用 shapely 几何计算机器人与障碍物距离，当靠近障碍时切换到 DRL，远离时回归 MPC：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">switch</span>(self, current_position, original_traj, new_traj, obstacle_list):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> obstacle <span style="color:#f92672">in</span> obstacle_list:
+</span></span><span style="display:flex;"><span>        dist <span style="color:#f92672">=</span> Polygon(obstacle)<span style="color:#f92672">.</span>distance(Point(current_position))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> dist <span style="color:#f92672">&lt;</span> self<span style="color:#f92672">.</span>switch_distance <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>switch_on:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>switch_on <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> dist <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>detach_distance <span style="color:#f92672">and</span> self<span style="color:#f92672">.</span>switch_on:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>detach_cnt <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>detach_steps:
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>switch_on <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>detach_cnt <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>switch_on
+</span></span></code></pre></div><hr>
+<h2 id="四性能评估模块-metrics">四、性能评估模块 <code>Metrics</code><a hidden class="anchor" aria-hidden="true" href="#四性能评估模块-metrics">#</a></h2>
+<p>提供多个维度的轨迹质量指标：</p>
+<ul>
+<li><strong>computation_time</strong>：平均/最大/方差</li>
+<li><strong>deviation_distance</strong>：跟踪轨迹的平均/最大偏移</li>
+<li><strong>smoothness</strong>：控制输入的二阶导数平滑度</li>
+<li><strong>clearance</strong>：离最近障碍物的最小距离</li>
+<li><strong>success_rate</strong>：任务完成率</li>
+</ul>
+<p>可输出为 LaTeX 表格格式。</p>
+<hr>
+<h2 id="五小结">五、小结<a hidden class="anchor" aria-hidden="true" href="#五小结">#</a></h2>
+<p>这个系统通过模块化的方式将地图理解、自由空间分割（QuadTree）、优化控制（MPC）与策略控制（DRL）无缝整合在一起，在保持轨迹平滑和可控的前提下，具备应对复杂障碍结构与动态环境的能力。</p>
+<p>在实际部署中，可以根据任务复杂度、动态性与推理速度，灵活地配置切换阈值、优化步长与 DRL 策略细节。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/hybrid-planning/">Hybrid Planning</a></li>
+      <li><a href="//localhost:1313/tags/quadtree/">QuadTree</a></li>
+      <li><a href="//localhost:1313/tags/mpc/">MPC</a></li>
+      <li><a href="//localhost:1313/tags/drl/">DRL</a></li>
+      <li><a href="//localhost:1313/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/">轨迹规划</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

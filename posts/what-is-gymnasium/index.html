@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>什么是 Gymnasium？强化学习中的环境是怎么定义的？ | </title>
+<meta name="keywords" content="gymnasium, 强化学习, 环境定义, 观察空间">
+<meta name="description" content="Gymnasium 是 Python 中一个标准化的强化学习环境库（它是原始 OpenAI Gym 的升级版）。它的作用是：
+
+把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。
+换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。
+
+🔧 如何安装 Gymnasium？
+在终端输入以下命令安装（建议使用虚拟环境）：
+pip install gymnasium[all]
+如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：
+pip install gymnasium
+
+📥 在代码中如何导入并使用
+import gymnasium as gym
+
+env = gym.make(&#34;CartPole-v1&#34;)
+obs, info = env.reset()
+
+for _ in range(100):
+    action = env.action_space.sample()  # 随机动作（一般训练中由模型决定）
+    obs, reward, terminated, truncated, info = env.step(action)
+    if terminated or truncated:
+        obs, info = env.reset()
+这段代码展示了标准的强化学习交互流程：
+
+初始化环境（reset()）
+持续循环：选择动作 → 执行动作 → 接收反馈
+
+
+🧱 环境的输入与输出：Env 接口结构
+✅ 输入：action
+你给环境的输入是一个“动作”，比如：">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/what-is-gymnasium/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/what-is-gymnasium/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      什么是 Gymnasium？强化学习中的环境是怎么定义的？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p><code>Gymnasium</code> 是 Python 中一个标准化的强化学习环境库（它是原始 <code>OpenAI Gym</code> 的升级版）。它的作用是：</p>
+<blockquote>
+<p>把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。</p></blockquote>
+<p>换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。</p>
+<hr>
+<h2 id="-如何安装-gymnasium">🔧 如何安装 Gymnasium？<a hidden class="anchor" aria-hidden="true" href="#-如何安装-gymnasium">#</a></h2>
+<p>在终端输入以下命令安装（建议使用虚拟环境）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium<span style="color:#f92672">[</span>all<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium
+</span></span></code></pre></div><hr>
+<h2 id="-在代码中如何导入并使用">📥 在代码中如何导入并使用<a hidden class="anchor" aria-hidden="true" href="#-在代码中如何导入并使用">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;CartPole-v1&#34;</span>)
+</span></span><span style="display:flex;"><span>obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>sample()  <span style="color:#75715e"># 随机动作（一般训练中由模型决定）</span>
+</span></span><span style="display:flex;"><span>    obs, reward, terminated, truncated, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> terminated <span style="color:#f92672">or</span> truncated:
+</span></span><span style="display:flex;"><span>        obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span></code></pre></div><p>这段代码展示了标准的强化学习交互流程：</p>
+<ol>
+<li>初始化环境（<code>reset()</code>）</li>
+<li>持续循环：选择动作 → 执行动作 → 接收反馈</li>
+</ol>
+<hr>
+<h2 id="-环境的输入与输出env-接口结构">🧱 环境的输入与输出：Env 接口结构<a hidden class="anchor" aria-hidden="true" href="#-环境的输入与输出env-接口结构">#</a></h2>
+<h3 id="-输入action">✅ 输入：action<a hidden class="anchor" aria-hidden="true" href="#-输入action">#</a></h3>
+<p>你给环境的输入是一个“动作”，比如：</p>
+<ul>
+<li>对于离散环境（如控制小车前进/后退），动作是整数（0、1、2）</li>
+<li>对于连续环境（如控制无人机的速度），动作是一个浮点向量</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>action <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>  <span style="color:#75715e"># 或 action = np.array([0.2, -0.3])</span>
+</span></span></code></pre></div><p>动作必须来自 <code>env.action_space</code> 所描述的范围。</p>
+<hr>
+<h3 id="-输出obs-reward-terminated-truncated-info">✅ 输出：obs, reward, terminated, truncated, info<a hidden class="anchor" aria-hidden="true" href="#-输出obs-reward-terminated-truncated-info">#</a></h3>
+<p>环境每执行一步，会返回 5 个值：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>obs, reward, terminated, truncated, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span></code></pre></div><table>
+  <thead>
+      <tr>
+          <th>项目</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>obs</code></td>
+          <td>当前状态（通常是向量或图像）</td>
+      </tr>
+      <tr>
+          <td><code>reward</code></td>
+          <td>当前步的奖励值（float）</td>
+      </tr>
+      <tr>
+          <td><code>terminated</code></td>
+          <td>是否成功结束（例如到达目标、杆子倒了）</td>
+      </tr>
+      <tr>
+          <td><code>truncated</code></td>
+          <td>是否因步数过多等原因被强制结束</td>
+      </tr>
+      <tr>
+          <td><code>info</code></td>
+          <td>附加信息，如调试数据（一般不用来训练）</td>
+      </tr>
+  </tbody>
+</table>
+<p>你每次给环境一个动作，它就“走一步”，并返回反馈。</p>
+<hr>
+<h2 id="-observation_space-一般是什么信号">🔍 observation_space 一般是什么信号？<a hidden class="anchor" aria-hidden="true" href="#-observation_space-一般是什么信号">#</a></h2>
+<p><code>observation_space</code> 描述的是智能体从环境中“看到”的状态信号。它可以有多种形式：</p>
+<ul>
+<li><strong>低维向量</strong>（最常见）：例如 <code>CartPole</code> 中的状态是 4 个连续数值：杆子角度、位置、速度等 → <code>Box(-inf, inf, (4,), float32)</code></li>
+<li><strong>图像输入</strong>：在 Atari 游戏或视觉导航中，obs 是一张灰度图或彩色图 → <code>Box(0, 255, (84, 84, 3), uint8)</code></li>
+<li><strong>字典结构（Dict）</strong>：多模态输入，如同时包含图像和速度等 → <code>Dict({&quot;image&quot;: ..., &quot;speed&quot;: ...})</code></li>
+<li><strong>多离散变量（MultiDiscrete）</strong>：状态中包含多个离散变量组合，比如棋盘类任务</li>
+</ul>
+<p><strong>总结一句话：obs 反映的是你希望模型“感知”的信息</strong>，越重要、越相关越要包含在 obs 里。</p>
+<hr>
+<h2 id="-总结">✅ 总结<a hidden class="anchor" aria-hidden="true" href="#-总结">#</a></h2>
+<p>Gymnasium 是强化学习的桥梁，它帮我们统一了环境和算法之间的交互方式。</p>
+<p>只需要记住两件事：</p>
+<ul>
+<li>环境的输入是一个动作（action）</li>
+<li>环境的输出是一组反馈（obs, reward, done, info）</li>
+</ul>
+<p>而 <code>observation_space</code> 描述的是模型“眼睛看到”的状态信号，它可能是向量、图像，甚至是组合结构。</p>
+<hr>
+<p><a href="/posts/State-action-space">下一篇：状态空间和动作空间是什么?</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/gymnasium/">Gymnasium</a></li>
+      <li><a href="//localhost:1313/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">强化学习</a></li>
+      <li><a href="//localhost:1313/tags/%E7%8E%AF%E5%A2%83%E5%AE%9A%E4%B9%89/">环境定义</a></li>
+      <li><a href="//localhost:1313/tags/%E8%A7%82%E5%AF%9F%E7%A9%BA%E9%97%B4/">观察空间</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

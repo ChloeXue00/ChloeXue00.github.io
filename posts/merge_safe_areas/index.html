@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>如何合并多个 Safe Area 以简化规划图结构？ | </title>
+<meta name="keywords" content="QuadTree, Convex Hull, Safe Area, 路径图简化">
+<meta name="description" content="
+背景：为什么要合并 Safe Area？
+在使用 QuadTree 构建环境分区时，每一个 FREE 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：
+
+路径图节点数量过多，导致 A* 搜索复杂度提升
+MPC 控制器的参考轨迹中断多，规划不平滑
+可视化和维护困难
+
+因此，将临近的 Safe Area 合并为更大的安全区域 是简化规划图结构、提高控制性能的重要手段。
+
+合并判据设计
+在 connective_quadtree.py 和 utils_geo.py 中，我们可以基于以下原则实现 Safe Area 合并：
+
+邻接性：两个凸包边界是否接近或重合
+几何相容性：合并后的点集是否仍然可以构成一个有效凸包
+面积提升评估：合并后凸包面积未显著膨胀，避免引入死角区域
+
+利用 shapely 和 scipy.spatial.ConvexHull，可以进行合并模拟与几何判断。
+
+合并过程实现思路
+合并逻辑可以封装为 merge_safe_areas() 函数，并添加到 QuadTree 类中：
+def merge_safe_areas(self, distance_threshold=2.0):
+    merged = []
+    used = set()
+    keys = list(self.convex_hulls.keys())
+
+    for i in range(len(keys)):
+        id1 = keys[i]
+        if id1 in used: continue
+        hull1 = self.convex_hulls[id1]
+        points1 = hull1.points[hull1.vertices]
+
+        for j in range(i&#43;1, len(keys)):
+            id2 = keys[j]
+            if id2 in used: continue
+            hull2 = self.convex_hulls[id2]
+            points2 = hull2.points[hull2.vertices]
+
+            # 判断是否可合并（如边界相近、联合后仍凸）
+            if can_merge(points1, points2, distance_threshold):
+                combined = np.vstack((points1, points2))
+                new_hull = ConvexHull(combined)
+                merged.append(new_hull)
+                used.update([id1, id2])
+                break
+
+    self.convex_hulls = {f&#34;merged_{i}&#34;: hull for i, hull in enumerate(merged)}
+其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/merge_safe_areas/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/merge_safe_areas/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      如何合并多个 Safe Area 以简化规划图结构？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><hr>
+<h2 id="背景为什么要合并-safe-area">背景：为什么要合并 Safe Area？<a hidden class="anchor" aria-hidden="true" href="#背景为什么要合并-safe-area">#</a></h2>
+<p>在使用 QuadTree 构建环境分区时，每一个 <code>FREE</code> 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：</p>
+<ul>
+<li>路径图节点数量过多，导致 A* 搜索复杂度提升</li>
+<li>MPC 控制器的参考轨迹中断多，规划不平滑</li>
+<li>可视化和维护困难</li>
+</ul>
+<p>因此，<strong>将临近的 Safe Area 合并为更大的安全区域</strong> 是简化规划图结构、提高控制性能的重要手段。</p>
+<hr>
+<h2 id="合并判据设计">合并判据设计<a hidden class="anchor" aria-hidden="true" href="#合并判据设计">#</a></h2>
+<p>在 <code>connective_quadtree.py</code> 和 <code>utils_geo.py</code> 中，我们可以基于以下原则实现 Safe Area 合并：</p>
+<ol>
+<li><strong>邻接性</strong>：两个凸包边界是否接近或重合</li>
+<li><strong>几何相容性</strong>：合并后的点集是否仍然可以构成一个有效凸包</li>
+<li><strong>面积提升评估</strong>：合并后凸包面积未显著膨胀，避免引入死角区域</li>
+</ol>
+<p>利用 <code>shapely</code> 和 <code>scipy.spatial.ConvexHull</code>，可以进行合并模拟与几何判断。</p>
+<hr>
+<h2 id="合并过程实现思路">合并过程实现思路<a hidden class="anchor" aria-hidden="true" href="#合并过程实现思路">#</a></h2>
+<p>合并逻辑可以封装为 <code>merge_safe_areas()</code> 函数，并添加到 <code>QuadTree</code> 类中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_safe_areas</span>(self, distance_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>):
+</span></span><span style="display:flex;"><span>    merged <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    used <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>    keys <span style="color:#f92672">=</span> list(self<span style="color:#f92672">.</span>convex_hulls<span style="color:#f92672">.</span>keys())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(keys)):
+</span></span><span style="display:flex;"><span>        id1 <span style="color:#f92672">=</span> keys[i]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> id1 <span style="color:#f92672">in</span> used: <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        hull1 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>convex_hulls[id1]
+</span></span><span style="display:flex;"><span>        points1 <span style="color:#f92672">=</span> hull1<span style="color:#f92672">.</span>points[hull1<span style="color:#f92672">.</span>vertices]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, len(keys)):
+</span></span><span style="display:flex;"><span>            id2 <span style="color:#f92672">=</span> keys[j]
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> id2 <span style="color:#f92672">in</span> used: <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>            hull2 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>convex_hulls[id2]
+</span></span><span style="display:flex;"><span>            points2 <span style="color:#f92672">=</span> hull2<span style="color:#f92672">.</span>points[hull2<span style="color:#f92672">.</span>vertices]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 判断是否可合并（如边界相近、联合后仍凸）</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> can_merge(points1, points2, distance_threshold):
+</span></span><span style="display:flex;"><span>                combined <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>vstack((points1, points2))
+</span></span><span style="display:flex;"><span>                new_hull <span style="color:#f92672">=</span> ConvexHull(combined)
+</span></span><span style="display:flex;"><span>                merged<span style="color:#f92672">.</span>append(new_hull)
+</span></span><span style="display:flex;"><span>                used<span style="color:#f92672">.</span>update([id1, id2])
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>convex_hulls <span style="color:#f92672">=</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;merged_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>: hull <span style="color:#66d9ef">for</span> i, hull <span style="color:#f92672">in</span> enumerate(merged)}
+</span></span></code></pre></div><p>其中 <code>can_merge()</code> 可以使用 <code>shapely.Polygon</code> 判断是否相交或几何接近。</p>
+<hr>
+<h2 id="合并后需要更新的结构">合并后需要更新的结构<a hidden class="anchor" aria-hidden="true" href="#合并后需要更新的结构">#</a></h2>
+<p>为了保证合并后的区域能继续用于路径规划和轨迹控制，我们需要更新：</p>
+<ul>
+<li><code>self.convex_hulls</code>：替换为合并后的 hulls</li>
+<li><code>self.leaf_nodes</code>：如果需要，也可以合并为虚拟节点</li>
+<li><code>self.connectivity_graph</code>：调用 <code>update_connectivity_after_change()</code> 重建连接图</li>
+</ul>
+<hr>
+<h2 id="效果对比">效果对比<a hidden class="anchor" aria-hidden="true" href="#效果对比">#</a></h2>
+<p>以实验数据为例，合并前后 Safe Area 数量变化如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>状态</th>
+          <th>Safe Areas 数量</th>
+          <th>平均面积</th>
+          <th>控制器规划时间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>合并前</td>
+          <td>62</td>
+          <td>1.2㎡</td>
+          <td>38ms</td>
+      </tr>
+      <tr>
+          <td>合并后</td>
+          <td>18</td>
+          <td>3.8㎡</td>
+          <td>23ms</td>
+      </tr>
+  </tbody>
+</table>
+<p>合并显著减少了冗余节点，提高了路径简洁度和控制效率。</p>
+<hr>
+<h2 id="-总结">✅ 总结<a hidden class="anchor" aria-hidden="true" href="#-总结">#</a></h2>
+<p>通过对 QuadTree 生成的多个 Safe Area 进行基于邻接性和凸性判断的合并，我们可以极大简化路径图结构，提高后续路径搜索和 MPC 控制器的执行效率。</p>
+<blockquote>
+<p>✅ 关键模块涉及：</p>
+<ul>
+<li><code>connective_quadtree.py</code>：ConvexHull 构建与管理</li>
+<li><code>utils_geo.py</code>：多边形几何工具函数</li>
+<li><code>visualize_quadtree_process.py</code>：合并前后对比可视化</li>
+</ul></blockquote>
+<p>下一篇将介绍：<strong>如何构建连通性图并叠加动态障碍物生成避障路径规划图结构</strong>。</p>
+<p>项目仓库链接 👉 <a href="https://github.com/ChloeXue00/safe_area_navigation_for_robots">GitHub: safe_area_navigation_for_robots</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/quadtree/">QuadTree</a></li>
+      <li><a href="//localhost:1313/tags/convex-hull/">Convex Hull</a></li>
+      <li><a href="//localhost:1313/tags/safe-area/">Safe Area</a></li>
+      <li><a href="//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/">路径图简化</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

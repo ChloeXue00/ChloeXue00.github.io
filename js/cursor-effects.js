@@ -1,0 +1,1 @@
+Couldn't find the requested file /dist/cursor-effects.min.js in cursor-effects.

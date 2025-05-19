@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>怎么训练一个 DRL 模型？需要准备哪些模块？ | </title>
+<meta name="keywords" content="强化学习, 训练流程, policy, replay buffer, actor-critic">
+<meta name="description" content="为什么训练 DRL 模型是一个系统性工作？
+在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。
+整个训练流程不是一行 .fit() 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。
+
+DRL 训练流程的核心结构
+一个标准的 DRL 系统至少包括以下几个部分：
+1. 环境（Environment）
+
+提供 reset() 和 step(action) 接口
+返回状态、奖励、终止信号和调试信息
+通常使用 Gymnasium 编写，也可以是仿真器（如 PyBullet、AirSim）或实际系统接口
+
+2. 策略网络（Policy Network）
+
+输入当前状态，输出一个动作（或动作分布）
+对于离散动作空间，常见输出为 softmax 分布；连续动作空间则直接输出浮点数
+通常是 MLP（结构化输入）或 CNN（图像输入）网络
+
+3. 值函数网络（Critic, 可选）
+
+用于评估当前策略下某状态的“好坏”，即状态值 V(s) 或动作值 Q(s,a)
+在 Actor-Critic 架构中，Actor 提出动作，Critic 提供反馈
+
+4. 回放缓存（Replay Buffer）
+
+保存经验 (state, action, reward, next_state, done)
+支持随机采样，避免训练中数据高度相关
+对于 off-policy 算法（如 DDPG、TD3）是必要组件
+
+5. 优化器与更新规则（Optimizer）
+
+根据策略梯度、TD 误差、KL 散度等损失函数对网络参数进行更新
+通常使用 Adam 优化器
+
+
+强化学习算法的三种主流架构
+
+  
+      
+          方法类别
+          特点
+          代表算法
+          
+      
+  
+  
+      
+          Policy-based
+          直接建模并优化策略 π(a,s)，通过最大化期望回报更新策略
+          REINFORCE, PPO, TRPO
+          
+      
+      
+          Value-based
+          学习动作价值函数 Q(s,a)，通过贪婪策略导出动作选择
+          DQN, Double DQN, Dueling DQN
+          
+      
+      
+          Actor-Critic
+          同时学习策略和价值函数，策略用于决策，价值函数用于评估
+          A2C, A3C, DDPG, TD3, SAC, PPO
+          
+      
+  
+
+
+Policy-based 方法训练稳定性强、适合高维动作空间，但样本效率较低。
+Value-based 方法样本效率较高，适用于离散动作任务，但连续控制较困难。
+Actor-Critic 综合两者优势，是当前主流算法的主干框架。
+
+
+一个完整训练循环的结构
+以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/how-to-train-drl-model/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/how-to-train-drl-model/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      怎么训练一个 DRL 模型？需要准备哪些模块？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="为什么训练-drl-模型是一个系统性工作">为什么训练 DRL 模型是一个系统性工作？<a hidden class="anchor" aria-hidden="true" href="#为什么训练-drl-模型是一个系统性工作">#</a></h2>
+<p>在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。</p>
+<p>整个训练流程不是一行 <code>.fit()</code> 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。</p>
+<hr>
+<h2 id="drl-训练流程的核心结构">DRL 训练流程的核心结构<a hidden class="anchor" aria-hidden="true" href="#drl-训练流程的核心结构">#</a></h2>
+<p>一个标准的 DRL 系统至少包括以下几个部分：</p>
+<h3 id="1-环境environment">1. 环境（Environment）<a hidden class="anchor" aria-hidden="true" href="#1-环境environment">#</a></h3>
+<ul>
+<li>提供 <code>reset()</code> 和 <code>step(action)</code> 接口</li>
+<li>返回状态、奖励、终止信号和调试信息</li>
+<li>通常使用 Gymnasium 编写，也可以是仿真器（如 PyBullet、AirSim）或实际系统接口</li>
+</ul>
+<h3 id="2-策略网络policy-network">2. 策略网络（Policy Network）<a hidden class="anchor" aria-hidden="true" href="#2-策略网络policy-network">#</a></h3>
+<ul>
+<li>输入当前状态，输出一个动作（或动作分布）</li>
+<li>对于离散动作空间，常见输出为 softmax 分布；连续动作空间则直接输出浮点数</li>
+<li>通常是 MLP（结构化输入）或 CNN（图像输入）网络</li>
+</ul>
+<h3 id="3-值函数网络critic-可选">3. 值函数网络（Critic, 可选）<a hidden class="anchor" aria-hidden="true" href="#3-值函数网络critic-可选">#</a></h3>
+<ul>
+<li>用于评估当前策略下某状态的“好坏”，即状态值 V(s) 或动作值 Q(s,a)</li>
+<li>在 Actor-Critic 架构中，Actor 提出动作，Critic 提供反馈</li>
+</ul>
+<h3 id="4-回放缓存replay-buffer">4. 回放缓存（Replay Buffer）<a hidden class="anchor" aria-hidden="true" href="#4-回放缓存replay-buffer">#</a></h3>
+<ul>
+<li>保存经验 <code>(state, action, reward, next_state, done)</code></li>
+<li>支持随机采样，避免训练中数据高度相关</li>
+<li>对于 off-policy 算法（如 DDPG、TD3）是必要组件</li>
+</ul>
+<h3 id="5-优化器与更新规则optimizer">5. 优化器与更新规则（Optimizer）<a hidden class="anchor" aria-hidden="true" href="#5-优化器与更新规则optimizer">#</a></h3>
+<ul>
+<li>根据策略梯度、TD 误差、KL 散度等损失函数对网络参数进行更新</li>
+<li>通常使用 Adam 优化器</li>
+</ul>
+<hr>
+<h2 id="强化学习算法的三种主流架构">强化学习算法的三种主流架构<a hidden class="anchor" aria-hidden="true" href="#强化学习算法的三种主流架构">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>方法类别</th>
+          <th>特点</th>
+          <th>代表算法</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Policy-based</td>
+          <td>直接建模并优化策略 π(a,s)，通过最大化期望回报更新策略</td>
+          <td>REINFORCE, PPO, TRPO</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Value-based</td>
+          <td>学习动作价值函数 Q(s,a)，通过贪婪策略导出动作选择</td>
+          <td>DQN, Double DQN, Dueling DQN</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Actor-Critic</td>
+          <td>同时学习策略和价值函数，策略用于决策，价值函数用于评估</td>
+          <td>A2C, A3C, DDPG, TD3, SAC, PPO</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li><strong>Policy-based</strong> 方法训练稳定性强、适合高维动作空间，但样本效率较低。</li>
+<li><strong>Value-based</strong> 方法样本效率较高，适用于离散动作任务，但连续控制较困难。</li>
+<li><strong>Actor-Critic</strong> 综合两者优势，是当前主流算法的主干框架。</li>
+</ul>
+<hr>
+<h2 id="一个完整训练循环的结构">一个完整训练循环的结构<a hidden class="anchor" aria-hidden="true" href="#一个完整训练循环的结构">#</a></h2>
+<p>以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(num_episodes):
+</span></span><span style="display:flex;"><span>    obs, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> step <span style="color:#f92672">in</span> range(max_steps):
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> policy(obs)                      <span style="color:#75715e"># 根据当前策略选择动作</span>
+</span></span><span style="display:flex;"><span>        next_obs, reward, done, truncated, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>        replay_buffer<span style="color:#f92672">.</span>add(obs, action, reward, next_obs, done)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> replay_buffer<span style="color:#f92672">.</span>size <span style="color:#f92672">&gt;</span> batch_size:
+</span></span><span style="display:flex;"><span>            batch <span style="color:#f92672">=</span> replay_buffer<span style="color:#f92672">.</span>sample()
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>update(batch)           <span style="color:#75715e"># 更新网络参数</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        obs <span style="color:#f92672">=</span> next_obs
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> done <span style="color:#f92672">or</span> truncated:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span></code></pre></div><p>对于 on-policy 方法（如 PPO），数据在采集后立即用于训练，不会重复利用。</p>
+<hr>
+<h2 id="使用-stable-baselines3-简化训练">使用 stable-baselines3 简化训练<a hidden class="anchor" aria-hidden="true" href="#使用-stable-baselines3-简化训练">#</a></h2>
+<p>对于标准任务，你也可以直接使用封装良好的开源库，如 stable-baselines3：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> stable_baselines3 <span style="color:#f92672">import</span> PPO
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;CartPole-v1&#34;</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> PPO(<span style="color:#e6db74">&#34;MlpPolicy&#34;</span>, env, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>learn(total_timesteps<span style="color:#f92672">=</span><span style="color:#ae81ff">100_000</span>)
+</span></span></code></pre></div><p>其内部集成了策略网络、值函数、采样器、优化器和学习率调度等。</p>
+<hr>
+<h2 id="训练中的常见问题与调参建议">训练中的常见问题与调参建议<a hidden class="anchor" aria-hidden="true" href="#训练中的常见问题与调参建议">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>问题类型</th>
+          <th>表现</th>
+          <th>建议处理方式</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>奖励不增长</td>
+          <td>策略无法改进</td>
+          <td>检查 reward 设计是否过于稀疏，尝试 reward shaping</td>
+      </tr>
+      <tr>
+          <td>模型震荡</td>
+          <td>训练不稳定</td>
+          <td>降低学习率，加入 entropy regularization</td>
+      </tr>
+      <tr>
+          <td>动作超界</td>
+          <td>输出超过合法控制范围</td>
+          <td>使用 tanh 输出，并在环境中做动作缩放</td>
+      </tr>
+      <tr>
+          <td>状态未归一化</td>
+          <td>网络学习困难</td>
+          <td>对状态进行标准化（如减均值除标准差）</td>
+      </tr>
+      <tr>
+          <td>收敛缓慢或停滞</td>
+          <td>训练初期策略没有探索能力</td>
+          <td>增加 epsilon 或 entropy，鼓励探索</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="总结一个训练系统的核心闭环">总结：一个训练系统的核心闭环<a hidden class="anchor" aria-hidden="true" href="#总结一个训练系统的核心闭环">#</a></h2>
+<p>训练一个 DRL 模型可以视作构建以下模块的闭环：</p>
+<ol>
+<li>环境与交互机制</li>
+<li>策略模型和采样方式（Policy / Value / Actor-Critic）</li>
+<li>学习模块与优化规则</li>
+<li>经验管理与调试工具</li>
+</ol>
+<p>理解这些基础后，你可以更灵活地选择算法、调整结构、修改回报函数，并将其部署在真实系统或模拟环境中。</p>
+<hr>
+<p><a href="/posts/save-load-deploy-drl">下一篇：训练好的模型如何保存和加载？如何部署模型进行预测？</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">强化学习</a></li>
+      <li><a href="//localhost:1313/tags/%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B/">训练流程</a></li>
+      <li><a href="//localhost:1313/tags/policy/">Policy</a></li>
+      <li><a href="//localhost:1313/tags/replay-buffer/">Replay Buffer</a></li>
+      <li><a href="//localhost:1313/tags/actor-critic/">Actor-Critic</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

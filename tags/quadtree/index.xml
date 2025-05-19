@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>QuadTree on </title>
+    <link>//localhost:1313/tags/quadtree/</link>
+    <description>Recent content in QuadTree on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/quadtree/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
+      <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
+&lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;generate_map()&lt;/code&gt;：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;get_geometric_map()&lt;/code&gt;：将地图对象转换为可用于膨胀和路径推理的几何结构。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Inflator&lt;/code&gt; 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-四叉树路径规划模块&#34;&gt;2. 四叉树路径规划模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由外部函数 &lt;code&gt;create_quadtree_from_occupancy_map()&lt;/code&gt; 从栅格占用地图创建四叉树划分空间&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;quadtree_to_mpc_constraints()&lt;/code&gt;（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-mpc-控制器接口&#34;&gt;3. MPC 控制器接口&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;InterfaceMpc&lt;/code&gt;（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;integrate_quadtree_with_mpc()&lt;/code&gt;：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-drl-策略控制&#34;&gt;4. DRL 策略控制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。&lt;/li&gt;
+&lt;li&gt;动作 smoothness 与可行性在 &lt;code&gt;Metrics&lt;/code&gt; 中有单独评估指标。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-智能切换模块&#34;&gt;5. 智能切换模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HintSwitcher&lt;/code&gt;：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。&lt;/li&gt;
+&lt;li&gt;切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二系统整体工作流程&#34;&gt;二、系统整体工作流程&lt;/h2&gt;
+&lt;p&gt;以下代码片段概括了系统的主要运行步骤：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 1: 创建地图对象&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;map_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; generate_map()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; InterfaceMpc(map_data)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Configurator()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 2: 四叉树路径规划&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quadtree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_quadtree_from_occupancy_map(occupancy_map)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;constraints &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 3: MPC 轨迹生成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update_static_constraints(constraints)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate_trajectory(current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 4: 智能控制切换（DRL or MPC）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;switcher &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; HintSwitcher(max_switch_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.0&lt;/span&gt;, min_detach_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8.0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; switcher&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;switch(current_position, original_traj, new_traj, obstacle_list):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; drl_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(observation)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_control_action()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三关键函数解读&#34;&gt;三、关键函数解读&lt;/h2&gt;
+&lt;h3 id=&#34;quadtree_to_mpc_constraints&#34;&gt;&lt;code&gt;quadtree_to_mpc_constraints&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>四叉树与 MPC 集成在机器人导航中的应用</title>
+      <link>//localhost:1313/posts/quadtree_integrate_mpc/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/quadtree_integrate_mpc/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;总览&#34;&gt;总览&lt;/h2&gt;
+&lt;p&gt;本篇文档介绍了如何将&lt;strong&gt;四叉树（QuadTree）空间表示法&lt;/strong&gt;与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。&lt;/p&gt;
+&lt;p&gt;该架构的优势在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;四叉树&lt;/strong&gt; 提供了适应环境复杂度的空间划分与凸包区域&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MPC&lt;/strong&gt; 可在动态、带约束的前瞻性框架下生成最优控制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心思想是：将四叉树节点生成的&lt;strong&gt;凸包区域&lt;/strong&gt;转化为&lt;strong&gt;线性不等式约束&lt;/strong&gt;，供 MPC 在轨迹优化中使用，完成避障与路径限制。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;架构图&#34;&gt;架构图&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;   
+环境地图 ────► 四叉树分解 ────►凸包生成 
+
+                                            │
+                                            ▼
+
+机器人控制 ◄──── MPC优化器 ◄────线性几何约束
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&#34;四叉树地图表示&#34;&gt;四叉树地图表示&lt;/h2&gt;
+&lt;p&gt;四叉树将环境划分为不同分辨率的空间单元：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;开放区域使用较大的节点&lt;/li&gt;
+&lt;li&gt;障碍物附近使用更小的细节节点&lt;/li&gt;
+&lt;li&gt;仅保留表示自由区域的叶子节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优势&#34;&gt;优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;凸包区域构建&#34;&gt;凸包区域构建&lt;/h2&gt;
+&lt;p&gt;四叉树分解完成后：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将每个自由叶子节点看作不规则区域&lt;/li&gt;
+&lt;li&gt;为每个叶子节点生成一个凸包（Convex Hull）&lt;/li&gt;
+&lt;li&gt;这些凸包表示机器人可以安全通行的区域&lt;/li&gt;
+&lt;li&gt;邻接凸包间连接形成路径图
+&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;mpc-所需的约束生成方式&#34;&gt;MPC 所需的约束生成方式&lt;/h2&gt;
+&lt;p&gt;对于路径经过的每个凸包区域：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;凸包每条边转化为半空间线性约束 &lt;code&gt;ax + by + c ≤ 0&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;约束的法向量需朝向&lt;strong&gt;凸包外部&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;保证 MPC 优化轨迹始终在凸包（安全区）内&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数学上，对于边 &lt;code&gt;(x₁,y₁)&lt;/code&gt; → &lt;code&gt;(x₂,y₂)&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;a = -(y₂ - y₁)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b =  (x₂ - x₁)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;c = -ax₁ - by₁
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;约束形式为：&lt;code&gt;ax + by + c ≤ 0&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>如何合并多个 Safe Area 以简化规划图结构？</title>
+      <link>//localhost:1313/posts/merge_safe_areas/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/merge_safe_areas/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;背景为什么要合并-safe-area&#34;&gt;背景：为什么要合并 Safe Area？&lt;/h2&gt;
+&lt;p&gt;在使用 QuadTree 构建环境分区时，每一个 &lt;code&gt;FREE&lt;/code&gt; 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;路径图节点数量过多，导致 A* 搜索复杂度提升&lt;/li&gt;
+&lt;li&gt;MPC 控制器的参考轨迹中断多，规划不平滑&lt;/li&gt;
+&lt;li&gt;可视化和维护困难&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因此，&lt;strong&gt;将临近的 Safe Area 合并为更大的安全区域&lt;/strong&gt; 是简化规划图结构、提高控制性能的重要手段。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;合并判据设计&#34;&gt;合并判据设计&lt;/h2&gt;
+&lt;p&gt;在 &lt;code&gt;connective_quadtree.py&lt;/code&gt; 和 &lt;code&gt;utils_geo.py&lt;/code&gt; 中，我们可以基于以下原则实现 Safe Area 合并：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;邻接性&lt;/strong&gt;：两个凸包边界是否接近或重合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;几何相容性&lt;/strong&gt;：合并后的点集是否仍然可以构成一个有效凸包&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;面积提升评估&lt;/strong&gt;：合并后凸包面积未显著膨胀，避免引入死角区域&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;利用 &lt;code&gt;shapely&lt;/code&gt; 和 &lt;code&gt;scipy.spatial.ConvexHull&lt;/code&gt;，可以进行合并模拟与几何判断。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;合并过程实现思路&#34;&gt;合并过程实现思路&lt;/h2&gt;
+&lt;p&gt;合并逻辑可以封装为 &lt;code&gt;merge_safe_areas()&lt;/code&gt; 函数，并添加到 &lt;code&gt;QuadTree&lt;/code&gt; 类中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;merge_safe_areas&lt;/span&gt;(self, distance_threshold&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    merged &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    used &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; set()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    keys &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;keys())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(keys)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        id1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; keys[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; id1 &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; used: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        hull1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls[id1]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        points1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hull1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;points[hull1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vertices]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, len(keys)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            id2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; keys[j]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; id2 &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; used: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            hull2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls[id2]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            points2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hull2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;points[hull2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vertices]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 判断是否可合并（如边界相近、联合后仍凸）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; can_merge(points1, points2, distance_threshold):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                combined &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vstack((points1, points2))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                new_hull &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ConvexHull(combined)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                merged&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(new_hull)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                used&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update([id1, id2])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convex_hulls &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;merged_&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;: hull &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, hull &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(merged)}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 &lt;code&gt;can_merge()&lt;/code&gt; 可以使用 &lt;code&gt;shapely.Polygon&lt;/code&gt; 判断是否相交或几何接近。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
+      <link>//localhost:1313/posts/quadtree_to_mpc/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/quadtree_to_mpc/</guid>
+      <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
+&lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;规划模块&lt;/strong&gt;：找到一条从起点到目标的无碰路径&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制模块&lt;/strong&gt;：跟随这条路径，使机器人平稳、可控地到达目标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
+&lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
+&lt;li&gt;快速查询从 &lt;code&gt;start_pos&lt;/code&gt; 到 &lt;code&gt;goal_pos&lt;/code&gt; 的路径节点&lt;/li&gt;
+&lt;li&gt;每个叶子节点有 &lt;code&gt;center()&lt;/code&gt;，表示其几何中心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_nodes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quadtree&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_path(start_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], goal_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
+&lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
+&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

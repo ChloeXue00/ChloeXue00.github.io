@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>如何训练用于狭窄通道规划的 DRL 策略？ | </title>
+<meta name="keywords" content="DRL, TD3, 狭窄通道, 轨迹规划, 策略训练">
+<meta name="description" content="
+在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
+
+1. 使用的算法与损失函数
+我们使用 TD3 或 DDPG 算法，分别训练策略网络（Actor）和价值网络（Critic）。
+DDPG
+DDPG 有时能够实现出色的性能，但它在超参数和其他类型的调优方面往往很脆弱。DDPG 的一个常见故障模式是，学习到的 Q 函数开始大幅高估 Q 值，从而导致策略破坏，因为它利用了 Q 函数中的误差。
+TD3
+td3 在DDPG基础上做到了三个技巧的更新，解决DDPG Q值过高的问题
+
+
+技巧1： 裁剪双Q学习
+TD3学习两个Q函数 而不是一个（因此称为twin），并使用两个Q值比较小的一个作为bellman误差损失函数中的目标
+
+
+技巧2： “延迟”策略更新
+TD3 更新策略和目标网络的频率低于Q函数，本文建议没更新两次Q函数就进行依次策略更新
+
+
+技巧2： 目标策略平滑
+TD3为目标动作添加了噪声，通过平滑动作中的Q的变化，使策略更难利用Q函数误差
+这三个技巧可以显著提高baseline DDPG 的性能
+
+
+TD3 是一种off-policy algorithm
+
+
+TD3 只能用于具有连续动作空间的环境
+
+
+TD3 的Spinning up实现不支持并行化
+
+
+关键方程式：
+TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_phi_2， 其方式于DDPG学习单个Q函数的方式几乎相同，
+为了准确展示TD3的实现方式， 以及它与普通DDPG的区别，我们将从损失函数的最内层向外进行讲解。
+
+
+第一：目标策略平滑
+用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &lt;= alpha &lt;= alpha_high）。因此，目标动作如下：
+
+目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
+它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
+这种情况可以通过平滑类似动作的Q函数来避免，
+而这正是目标策略平滑的设计初衷。">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/narrow_exploration/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/narrow_exploration/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      如何训练用于狭窄通道规划的 DRL 策略？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><hr>
+<h2 id="狭窄通道">在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
+<img alt="狭窄通道" loading="lazy" src="/images/hybrid_image_result.png"></h2>
+<h2 id="1-使用的算法与损失函数">1. 使用的算法与损失函数<a hidden class="anchor" aria-hidden="true" href="#1-使用的算法与损失函数">#</a></h2>
+<p>我们使用 <strong>TD3 或 DDPG</strong> 算法，分别训练策略网络（Actor）和价值网络（Critic）。</p>
+<h3 id="ddpg">DDPG<a hidden class="anchor" aria-hidden="true" href="#ddpg">#</a></h3>
+<p>DDPG 有时能够实现出色的性能，但它在超参数和其他类型的调优方面往往很脆弱。DDPG 的一个常见故障模式是，学习到的 Q 函数开始大幅高估 Q 值，从而导致策略破坏，因为它利用了 Q 函数中的误差。</p>
+<h3 id="td3">TD3<a hidden class="anchor" aria-hidden="true" href="#td3">#</a></h3>
+<p>td3 在DDPG基础上做到了三个技巧的更新，解决DDPG Q值过高的问题</p>
+<ul>
+<li>
+<p>技巧1： 裁剪双Q学习
+TD3学习两个Q函数 而不是一个（因此称为twin），并使用两个Q值比较小的一个作为bellman误差损失函数中的目标</p>
+</li>
+<li>
+<p>技巧2： “延迟”策略更新
+TD3 更新策略和目标网络的频率低于Q函数，本文建议没更新两次Q函数就进行依次策略更新</p>
+</li>
+<li>
+<p>技巧2： 目标策略平滑
+TD3为目标动作添加了噪声，通过平滑动作中的Q的变化，使策略更难利用Q函数误差
+这三个技巧可以显著提高baseline DDPG 的性能</p>
+</li>
+<li>
+<p>TD3 是一种off-policy algorithm</p>
+</li>
+<li>
+<p>TD3 只能用于具有连续动作空间的环境</p>
+</li>
+<li>
+<p>TD3 的Spinning up实现不支持并行化</p>
+</li>
+</ul>
+<p>关键方程式：
+TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_phi_2， 其方式于DDPG学习单个Q函数的方式几乎相同，
+为了准确展示TD3的实现方式， 以及它与普通DDPG的区别，我们将从损失函数的最内层向外进行讲解。</p>
+<ul>
+<li>
+<p>第一：目标策略平滑
+用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &lt;= alpha &lt;= alpha_high）。因此，目标动作如下：
+<img alt="目标动作方程" loading="lazy" src="/images/td3_target_action.png">
+目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
+它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
+这种情况可以通过平滑类似动作的Q函数来避免，
+而这正是目标策略平滑的设计初衷。</p>
+</li>
+<li>
+<p>第二，裁剪双Q学习
+两个Q函数都是用同一个目标，该目标使用两个Q函数中目标值较小的哪个来计算：
+<img alt="裁剪双q目标函数" loading="lazy" src="/images/%E8%A3%81%E5%89%AA%E5%8F%8Cq%E5%AD%A6%E4%B9%A0_%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0.png"></p>
+<p>然后通过回归这个目标来学习：
+<img alt="TD3_lossfunction" loading="lazy" src="/images/td3_loss_function.png"></p>
+<p>使用较小的Q值作为目标，并想该值回归，有助于避免Q函数的高估</p>
+<p>该策略仅通过最大化来学习Q_phi_1:
+<img alt="最大化学习Q1" loading="lazy" src="/images/TD3_%E6%9C%80%E5%A4%A7%E5%8C%96%E5%AD%A6%E4%B9%A0Q1.png"></p>
+<p>这与DDPG几乎没有变化，然而在TD3中策略的更新频率低于Q函数，这有助于一直DDPG中由于策略更新改变目标而通常出现的波动性。</p>
+</li>
+</ul>
+<p>TD3以离策略（off-policy）的方式训练确定性策略。由于该策略是确定性的，如果agent进行离策略探索，一开始他可能不会尝试足够多的动作来找到有用的学习信号.为了提高TD3策略的探索效果，我们在训练时为其动作添加了噪声，通常是不相干的均值为零的高斯噪声。为了便于获得更高质量的训练数据，可以在训练过程中降低噪声的规模（在现实中不会这么做并且始终保持噪声规模不变）</p>
+<p>TD3实现在训练开始时使用了一种技巧来改进探索。在开始时，对于固定数量的步数（使用start_steps关键字参数设置），agents会采取从有效动作的均匀随机分补中采样的动作。之后，它将回复正常的TD3探索。</p>
+<h3 id="critic-损失函数均方误差-mse">Critic 损失函数（均方误差 MSE）：<a hidden class="anchor" aria-hidden="true" href="#critic-损失函数均方误差-mse">#</a></h3>
+<p><img alt="critic损失函数" loading="lazy" src="/images/Critic_loss_function.png"></p>
+<ul>
+<li>Q：当前 Critic 网络，输入（s_t, a_t）,输出Q（s_t,a_t; theta^Q）,估计当前状态-动作对的预期累积回报</li>
+<li>Q&rsquo;：目标 Critic 网络（延迟同步）</li>
+<li>π&rsquo;：目标策略网络 给出动作</li>
+</ul>
+<p>或者写为：
+L = E[(Q(s_t, a_t) - y_t  )^2]</p>
+<ul>
+<li>y_t = r_t + γ * Q&rsquo;(s_{t+1}, a&rsquo;) 目标值</li>
+<li>a&rsquo; = π&rsquo;(s_{t+1})</li>
+</ul>
+<p>critic网络训练过程 就是通过这个MSE 损失函数 让当前预测值逐渐靠近目标值</p>
+<p>critic网络的作用是接收 (s_t​,a_t) 对，输出 Q 值</p>
+<p>Q’的输入是s_(t+1) 和动作a&rsquo; , 这个动作不是任意选的，而是 a&rsquo; =  π&rsquo;(s_{t+1} )
+由**目标 Actor 网络 π&rsquo;**生成的</p>
+<p>所以 π&rsquo; 的作用是：
+生成下一个状态s_{t+1} 下的动作a'
+用于构建目标critic网络（Q&rsquo;）的输入（s_{t+1} ，a&rsquo;）</p>
+<p>为什么不使用当前策略π？
+为了稳定训练： 目标网络π&rsquo; Q&rsquo; 都是延迟更新的副本，能减少训练不稳定
+如果用当前策略π， 每一步都在变化，计算目标y_t 会更抖动，更难收敛</p>
+<pre tabindex="0"><code>(s_t, a_t, r_t, s_{t+1})
+          │
+          ↓
+       Critic(Q)  → 输出 Q(s_t, a_t)
+当前估计的 Q 值│                 π&#39;(s_{t+1})
+              ↓                      ↓   π&#39;在s_{t+1}时刻提供动作a&#39; ， 用于计算Q’(s_{t+1}, a&#39;)    
+  计算MSE Loss ←—————— 计算出目标值[r_t + γ * Q&#39;(s_{t+1}, a&#39;)]
+</code></pre><h3 id="actor-损失函数最大化期望-q">Actor 损失函数（最大化期望 Q）：<a hidden class="anchor" aria-hidden="true" href="#actor-损失函数最大化期望-q">#</a></h3>
+<p><img alt="actor损失函数" loading="lazy" src="/images/Actor_lossfunction.png"></p>
+<p>目标是学习在当前状态下能最大化预期 Q 值的<strong>动作</strong>。
+π(s_t)：当前 Actor 策略给出的动作
+Q(s_t,a_t): critic给该动作打分（累积预期回报）</p>
+<p>训练步骤：</p>
+<ol>
+<li>状态s_t 来自  replay buffer。</li>
+<li>Actor根据状态s_t输出策略动作a_t = π(s_t)</li>
+<li>Critic 对（s_t, a_t）计算Q值</li>
+<li>用负的Q值当作损失，反向传播更新Actor参数</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># s: state batch</span>
+</span></span><span style="display:flex;"><span>action <span style="color:#f92672">=</span> actor(s)                           <span style="color:#75715e"># π(s)</span>
+</span></span><span style="display:flex;"><span>q_value <span style="color:#f92672">=</span> critic(s, action)                 <span style="color:#75715e"># Q(s, π(s))</span>
+</span></span><span style="display:flex;"><span>actor_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>q_value<span style="color:#f92672">.</span>mean()                <span style="color:#75715e"># 损失函数</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>actor_optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>actor_loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>actor_optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><h3 id="actor-critic">Actor-Critic<a hidden class="anchor" aria-hidden="true" href="#actor-critic">#</a></h3>
+<p>Actor 网络和 Critic 网络会在训练和推理过程中同时使用, Critic输出Q值， Q值用来给Actor网络策略π(s_t)输出的action打分，更新自身策略，目标是让Q值最大，
+Actor输出的action : a_t =π(s_t)  又被用于critic网络生成Q值</p>
+<h2 id="replay-buffer经验回放池是强化学习中的一个-数据存储机制用于缓存智能体过去的交互数据s_t-a_tr_ts_t1以便训练时反复利用">Replay Buffer（经验回放池）是强化学习中的一个 数据存储机制，用于缓存智能体过去的交互数据（s_t, a_t,r_t,s_(t+1)），以便训练时反复利用<a hidden class="anchor" aria-hidden="true" href="#replay-buffer经验回放池是强化学习中的一个-数据存储机制用于缓存智能体过去的交互数据s_t-a_tr_ts_t1以便训练时反复利用">#</a></h2>
+<h2 id="2-网络输入结构">2. 网络输入结构<a hidden class="anchor" aria-hidden="true" href="#2-网络输入结构">#</a></h2>
+<p>该模型采用 <strong>图像 + 几何量</strong> 的多模态输入结构：</p>
+<h3 id="actor-网络输入">Actor 网络输入：<a hidden class="anchor" aria-hidden="true" href="#actor-网络输入">#</a></h3>
+<ul>
+<li>图像观测（ImageObservation）尺寸为 54×54，经过中心对齐、下采样与归一化处理。</li>
+<li>几何状态包括：当前速度、角速度、局部路径点信息。</li>
+</ul>
+<h3 id="critic-网络输入">Critic 网络输入：<a hidden class="anchor" aria-hidden="true" href="#critic-网络输入">#</a></h3>
+<ul>
+<li>同 Actor 状态部分</li>
+<li>加入动作维度 <code>[v, ω]</code>（线速度与角速度）</li>
+</ul>
+<p>模型使用 <code>MultiInputPolicy</code>，支持 dict 类型输入，如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;image&#34;</span>: img_tensor,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;speed&#34;</span>: v,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;angular_velocity&#34;</span>: w,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;ref_path&#34;</span>: path_features,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="3-观测空间组成">3. 观测空间组成<a hidden class="anchor" aria-hidden="true" href="#3-观测空间组成">#</a></h2>
+<p>来自环境 <code>TrajectoryPlannerEnvironmentImgsRewardExplore</code> 的观测包括：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>    SpeedObservation(),
+</span></span><span style="display:flex;"><span>    AngularVelocityObservation(),
+</span></span><span style="display:flex;"><span>    ReferencePathSampleObservation(),
+</span></span><span style="display:flex;"><span>    ReferencePathCornerObservation(),
+</span></span><span style="display:flex;"><span>    ImageObservation(<span style="color:#f92672">...</span>),
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p>这些模块将状态信息封装成统一 dict，用于输入 Actor/Critic 网络。</p>
+<hr>
+<h2 id="4-奖励函数设计">4. 奖励函数设计<a hidden class="anchor" aria-hidden="true" href="#4-奖励函数设计">#</a></h2>
+<p>为了专注训练在狭窄通道中安全穿越的行为，奖励函数对路径跟踪和速度控制施加强激励/惩罚，并引入了关键奖励项 <code>NarrowPassageReward</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">+=</span> ReachGoalReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">-=</span> CollisionReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">-=</span> CrossTrackReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">-=</span> ExcessiveSpeedReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">-=</span> AccelerationReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">-=</span> AngularAccelerationReward()
+</span></span><span style="display:flex;"><span>reward <span style="color:#f92672">+=</span> NarrowPassageReward(factor<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>, width_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">1.2</span>)
+</span></span></code></pre></div><p>其中：</p>
+<ul>
+<li><code>NarrowPassageReward</code>：只有当路径宽度低于阈值时启用，鼓励策略在收紧空间内维持稳定动作。</li>
+<li>奖励形状经过归一化、平滑处理，避免训练震荡。</li>
+</ul>
+<hr>
+<h2 id="5-策略训练与部署流程">5. 策略训练与部署流程<a hidden class="anchor" aria-hidden="true" href="#5-策略训练与部署流程">#</a></h2>
+<p>训练脚本使用 stable-baselines3 接口：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> stable_baselines3 <span style="color:#f92672">import</span> TD3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> TD3(<span style="color:#e6db74">&#34;MultiInputPolicy&#34;</span>, env, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>learn(total_timesteps<span style="color:#f92672">=</span><span style="color:#ae81ff">300_000</span>)
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#34;td3_narrow_passage&#34;</span>)
+</span></span></code></pre></div><p>部署阶段：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>obs <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>action <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(obs, deterministic<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><p>配合 <code>HintSwitcher</code> 控制调用时机，DRL 控制模块仅在障碍过近、MPC 无法规划时介入。</p>
+<hr>
+<h2 id="6-效果与后续优化方向">6. 效果与后续优化方向<a hidden class="anchor" aria-hidden="true" href="#6-效果与后续优化方向">#</a></h2>
+<p>该策略已在多个狭窄通道任务中取得平稳穿越效果，具体表现为：</p>
+<ul>
+<li>减速主动避障</li>
+<li>保持路径中心行驶</li>
+<li>避免局部震荡和动作突变</li>
+</ul>
+<p>下一步优化方向包括：</p>
+<ul>
+<li>多策略集成（curriculum + fine-tune）</li>
+<li>模拟-实物迁移训练（domain randomization）</li>
+<li>更精细的 reward shaping（如边界接近惩罚）</li>
+</ul>
+<hr>
+<p><a href="/posts/hybrid-planner-integration">上一篇：如何集成四叉树 + MPC + DRL 进行机器人轨迹规划？</a></p>
+<p><a href="/posts/deploy-hybrid-planner">下一篇：如何部署 DRL 策略与 MPC 控制器于仿真平台？</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/drl/">DRL</a></li>
+      <li><a href="//localhost:1313/tags/td3/">TD3</a></li>
+      <li><a href="//localhost:1313/tags/%E7%8B%AD%E7%AA%84%E9%80%9A%E9%81%93/">狭窄通道</a></li>
+      <li><a href="//localhost:1313/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/">轨迹规划</a></li>
+      <li><a href="//localhost:1313/tags/%E7%AD%96%E7%95%A5%E8%AE%AD%E7%BB%83/">策略训练</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

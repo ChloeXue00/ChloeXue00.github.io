@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>算法对比 on </title>
+    <link>//localhost:1313/tags/%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94/</link>
+    <description>Recent content in 算法对比 on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？</title>
+      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;为什么了解不同的-drl-算法非常重要&#34;&gt;为什么了解不同的 DRL 算法非常重要？&lt;/h2&gt;
+&lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;三大算法流派对比&#34;&gt;三大算法流派对比&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;算法类型&lt;/th&gt;
+          &lt;th&gt;特点&lt;/th&gt;
+          &lt;th&gt;优点&lt;/th&gt;
+          &lt;th&gt;局限&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Value-based&lt;/td&gt;
+          &lt;td&gt;学习 Q(s, a) 并通过贪婪策略选动作&lt;/td&gt;
+          &lt;td&gt;样本利用率高，适合离散动作空间&lt;/td&gt;
+          &lt;td&gt;不适用于连续/高维动作&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Policy-based&lt;/td&gt;
+          &lt;td&gt;直接建模并优化策略 π(a&lt;/td&gt;
+          &lt;td&gt;s)&lt;/td&gt;
+          &lt;td&gt;适合连续动作，训练稳定&lt;/td&gt;
+          &lt;td&gt;样本效率低，梯度方差大&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Actor-Critic&lt;/td&gt;
+          &lt;td&gt;同时训练策略和价值函数&lt;/td&gt;
+          &lt;td&gt;综合两者优势，适用于复杂控制问题&lt;/td&gt;
+          &lt;td&gt;架构复杂，对超参数敏感&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一dqndeep-q-network&#34;&gt;一、DQN（Deep Q-Network）&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;类型&lt;/strong&gt;：Value-based&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;损失函数（均方 TD 误差）&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;L(θ) = 𝔼ₜ [(rₜ + γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;θ 是 Q 网络参数&lt;/li&gt;
+&lt;li&gt;θ⁻ 是目标网络参数（定期同步）&lt;/li&gt;
+&lt;li&gt;使用贪婪策略选择 &lt;code&gt;a′ = argmax Q(s′, a′)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;优化器&lt;/strong&gt;：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

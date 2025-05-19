@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>ACC（自适应巡航控制）策略设计与问题集 | </title>
 <meta name="keywords" content="L2, ACC, 自动驾驶, 功能策略, 测试验证">
 <meta name="description" content="解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/acc-strategy/">
+<link rel="canonical" href="//localhost:1313/posts/acc-strategy/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/acc-strategy/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/acc-strategy/">
 <noscript>
     <style>
         #theme-toggle,
@@ -55,73 +55,7 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/acc-strategy/">
-  <meta property="og:title" content="ACC（自适应巡航控制）策略设计与问题集">
-  <meta property="og:description" content="解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-05-15T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-05-15T00:00:00+00:00">
-    <meta property="article:tag" content="L2">
-    <meta property="article:tag" content="ACC">
-    <meta property="article:tag" content="自动驾驶">
-    <meta property="article:tag" content="功能策略">
-    <meta property="article:tag" content="测试验证">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ACC（自适应巡航控制）策略设计与问题集">
-<meta name="twitter:description" content="解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "ACC（自适应巡航控制）策略设计与问题集",
-      "item": "/posts/acc-strategy/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "ACC（自适应巡航控制）策略设计与问题集",
-  "name": "ACC（自适应巡航控制）策略设计与问题集",
-  "description": "解析L2/L2+中的核心功能之一——ACC的策略设计、常见问题与测试要点",
-  "keywords": [
-    "L2", "ACC", "自动驾驶", "功能策略", "测试验证"
-  ],
-  "articleBody": "ACC（自适应巡航控制）策略设计与问题集 一、功能简介 ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。\n应用场景涵盖高速公路、城市快速路等，需要与AEB（自动紧急制动）、LKA等模块进行协同。\n功能层级 定速巡航模式（CC）：当前无前车干扰，车辆自动维持设定巡航速度\n支持直道、弯道、上下坡； 控制精度 +-1km/h(平路)， +-2km/h(坡道) 允许巡航速度 0-150km/h; 激活逻辑：初始速度小于30km/h 设为30，否则为当前车速 自适应巡航模式（ACC）：在设定车速范围内，系统基于前方目标车与自车的相对距离、相对速度信息，动态调整纵向加速度，保持安全车距。\n支持识别静态/动态目标车辆（主要使用前向毫米波雷达 + 视觉融合） 根据设定时距（如 1.5s）和当前车速计算期望跟车距离 动态调整加速度，保证相对时距误差收敛 控制加速度/减速度不能超过设定限值（如 ±3 m/s²） 系统状态平滑切换（Cruise → Follow → Brake → Resume） 核心输入信号： V_ego : 自车速度 D_rel : 前车相对距离 V_rel : 前车相对速度 t_gap_set: 设定的时距 ACC_SetSpeed: 驾驶员设定的目标速度 TargetValid: 是否有有效目标车（用于状态判断） 输出信号： ACC_CmdAccel ：期望纵向加速度 ACC_State: 当前ACC子状态（Cruise, Follow, Brake等） DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，前车图标等等\n停走模式（Stop \u0026 Go）：低速或拥堵场景下支持自动减速直至完全停止，并在前车起步后自动跟随（部分车型支持） 1） 自车跟停后，开始计时，若跟停时间＜5min，前车起步，自车自动跟随起步； 2） 若跟停时间≥5min，则通过HMI告知驾驶员自车处于Hold状态，需要驾驶员的确认【踩油门踏板】，才能继续自动起步 3） 若0min≤跟停时间＜10min，收到驾驶员的确认【踩油门踏板】，车辆再次恢复到静止后，重新计时 4） 若跟停时间＞10min，ACC功能自动退出，拉起EPB 5） 前车起步，自车跟随起步的延迟不得大于2s【可标定】\n低速跟车阶段（0-30km/h） 支持自动停止\n系统自动判读是否完全静止，控制制动保持\n前车起步时，在3秒内无驾驶员介入时系统自动起步；3秒后序轻踩油门出发\n起步控制应考虑低速舒适性\n与AEB协同避免误停 或者 误起步\n核心输入信号：\nV_ego : 自车速度\nStopFlag: 自车是否处于静止状态\nTargetRelDistance: 与前车相对距离\nV_target：前车速度\nElapsedStopTime：当前停车持续时间\nDriverTouchGas: 驾驶员是否轻踩油门或操作\n输出信号：\nBrakeHoldCmd 是否激活自动驻车/制动保持 StartReadyFlag: 是否满足自动起步条件 ACC_CmdAccel：自动起步加速度指令 DriverDisplayInfo:显示“前车起步”、“准备起步”等提示 Cut-in 响应策略 当前车道突然插入新目标车，ACC 需快速识别并决策是否将其作为新的跟车目标。\n策略要点：\n探测目标优先级变化（原目标 → 插入车辆） 判断 Cut-in 成立条件（横向速度、角度、入侵程度） 动态切换目标对象并进入 Brake 状态 限制减速度与 jerk，确保响应及时与乘坐舒适性 Cut-out 响应策略 当前跟随目标突然驶离自车车道，系统需判断是否恢复巡航状态或切换至新目标。\n策略要点：\n判断目标车是否退出自车轨迹 判断是否存在新的目标车并切换 状态切换逻辑：Follow → Cruise 或 Follow → New Follow 控制输出应平滑过渡，避免瞬时加速或突变响应 纵向防撞子策略（Longitudinal Collision Avoidance） 当前处于巡航或跟车状态，前方出现横穿目标（行人、自行车、非机动车等），系统基于入侵判断与 时间到碰撞(TTC) 进行风险评估，主动减速降低碰撞风险。\n项目 描述 运行速度范围 1–60 km/h（适用于城市工况） 目标类型检测 横穿行人、车辆、非机动车 风险评估机制 入侵轨迹判断 + TTC（时间到碰撞）估计 控制策略 主动减速 + jerk 限制 恢复策略 风险解除后，恢复 Cruise / Follow 模式 功能要求（Function Requirements）： 要求项 描述 工作速度范围 1–60 km/h（覆盖城市、郊区低速场景） 感知目标类型 横穿行人、非机动车、掉头车辆、侧向切入目标 风险评估机制 预测目标轨迹是否侵入自车车道，估算 TTC（时间到碰撞） 响应逻辑 满足触发条件后，ACC主动输出减速度指令，降低潜在风险 恢复逻辑 风险目标退出后，恢复巡航或跟车状态 舒适性限制 减速度不超过 3 m/s²，jerk（加加速度）不超过 1 m/s³，避免剧烈制动 AEB协同 在纵向防撞无法避免碰撞时交由 AEB 接管执行紧急制动 输入信号与传感器要求：\n信号 来源 说明 PedestrianList / ObstacleList 摄像头（视觉感知） 检测到的动态行人、非机动车、横向目标 ObjectTrajectory 视觉感知 + 时序预测 目标轨迹预测，用于判断轨迹交点 SelfLaneBoundary 摄像头 / 高精地图 自车车道边界，用于判断目标是否入侵车道 V_ego 车速传感器 / CAN 自车当前速度 CurrentACCState ACC控制模块 当前是否为 Cruise/Follow 状态 TTC 策略模块计算 时间到碰撞值，用于触发逻辑判断 +-------------------------+ | 摄像头检测横穿目标 | +-------------------------+ ↓ +----------------------------+ | 判断目标轨迹是否入侵车道 | +----------------------------+ ↓ +----------------------------+ | 判断 TTC 是否低于安全阈值 | +----------------------------+ ↓ +----------------------------+ | ACC 进入纵向减速控制模式 | +----------------------------+ ↓ +----------------------------+ | 风险解除后恢复巡航或跟车状态 | +----------------------------+ 二、核心策略逻辑 1. 状态机划分（简化） 巡航状态（Cruise）：无前车干扰，维持设定速度 跟车状态（Follow）：前方目标车进入设定时距，系统控速保持安全距离 减速状态（Brake）：前车突然减速或cut-in，需快速减速 恢复状态（Resume）：前车离开或驾驶员触发，系统恢复巡航 完全停止（Stop）: 完全减速至停止 2. 关键参数 设定速度 V_set: 若当前速度与设定速度存在偏差，系统通过调整油门或者制动系统的输出来改变车辆加速度从而调整车速指目标范围内 目标车与本车距离 D_rel：跟车距离控制，系统利用传感器试试监控前车速度和距离，并根据预设的安全诗句（车辆与前车保持的时间间隔乘以当前速度）或者动态调整的安全距离与之，计算出应维持的跟车距离，当实际跟车激励小于计算值时，通过减速来拉大距离；当实际距离大于计算值时，则再确保安全的前提下适当加速以缩短距离，车辆跟车距离控制还需要考虑前车的制动意图、道路坡度等因素以确保稳定性和安全性。 相对速度 V_rel = V_ego - V_target 设定时距 t_gap（如1.5s） 期望距离 D_desired = V_ego * t_gap 车辆道路位置控制：系统通过摄像头激光雷达试试监控车辆位置，若偏离预定位置，系统调整方向盘来修正轨迹。 3. 控制输出（纵向加速度） 可选扩展为 MPC 控制器，考虑多时间步内的规划控制量。\n三、策略模块结构图 +-------------------------+ | 驾驶员设定（巡航速度/时距） | +-------------------------+ ↓ +-----------+ | 目标检测模块 | |（视觉 + 雷达）| +-----------+ ↓ +-------------------------------+ | 目标选择与评估模块 | |（Cut-in识别 / Cut-out判断 / 有效性判断）| +-------------------------------+ ↓ +------------------------------------------------+ | 跟车策略计算模块（核心） | | - 状态机：Cruise / Follow / Brake / Resume | | - 距离 \u0026 速度控制：PD / MPC | | - 安全策略：纵向防撞 / jerk 限制 / fail-safe | +------------------------------------------------+ ↓ +----------------------+ | 控制量输出模块（加速度） | +----------------------+ ↓ +--------------------+ | 执行器控制接口 | |（油门 / 制动 控制） | +--------------------+ ↓ +----------------+ | 车辆动力学响应 | +----------------+ 四、典型问题集与对策 ✅ Q1：加速/减速过程不够平顺，乘客晕车感强？ 原因：加速度过大 / PD 参数未调优 对策：加入加速度变化率（jerk）限制 + 调节控制器参数 ✅ Q2：前车 cut-in 后减速不及时，存在碰撞风险？ 原因：目标车识别滞后或过滤器响应慢 对策：目标选择算法引入优先级策略 + 加快cut-in识别反应 ✅ Q3：前车突然退出后加速太快，导致乘客不适？ 原因：状态切换为恢复巡航过于激进 对策：使用缓速恢复策略 + 平滑切换状态机逻辑 ✅ Q4：上下坡过程中跟车距离不稳定？ 原因：长坡对速度和距离误差影响显著 对策：结合地图高精定位或坡度估计模块进行坡度补偿 ✅ Q5：误识别旁车为目标车导致误刹车？ 原因：雷达/视觉融合不完善，目标优选错误 对策：增强融合算法准确性 + 加入横向速度与角度筛选机制 五、测试指标设计 测试项 描述 跟车时距准确率 实际 vs 设定距离误差均值/方差 加速度舒适性评分 加速度 RMS，jerk 限值内比例 目标车切换响应时间 从目标切换到控制输出调整延时 Cut-in 应对成功率 成功减速且无干预或报警占比 状态切换稳定性 状态频繁跳变占比 + 是否稳定收敛 六、后续扩展方向 ✅ 引入强化学习调整控制策略（如速度保持 vs 节能模式） ✅ 使用 V2X 信号预知目标意图，提升 cut-in 提前响应能力 ✅ 面向城市L2+场景扩展红绿灯感知、行人干扰等处理机制 ",
-  "wordCount" : "433",
-  "inLanguage": "en",
-  "datePublished": "2025-05-15T00:00:00Z",
-  "dateModified": "2025-05-15T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/acc-strategy/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -177,7 +111,7 @@
     <div class="post-description">
       解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点
     </div>
-    <div class="post-meta"><span title='2025-05-15 00:00:00 +0000 UTC'>May 15, 2025</span>
+    <div class="post-meta"><span title='2024-04-15 00:00:00 +0000 UTC'>April 15, 2024</span>
 
 </div>
   </header> 
@@ -560,84 +494,23 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="/tags/l2/">L2</a></li>
-      <li><a href="/tags/acc/">ACC</a></li>
-      <li><a href="/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
-      <li><a href="/tags/%E5%8A%9F%E8%83%BD%E7%AD%96%E7%95%A5/">功能策略</a></li>
-      <li><a href="/tags/%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81/">测试验证</a></li>
+      <li><a href="//localhost:1313/tags/l2/">L2</a></li>
+      <li><a href="//localhost:1313/tags/acc/">ACC</a></li>
+      <li><a href="//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
+      <li><a href="//localhost:1313/tags/%E5%8A%9F%E8%83%BD%E7%AD%96%E7%95%A5/">功能策略</a></li>
+      <li><a href="//localhost:1313/tags/%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81/">测试验证</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
-<footer class="footer">
-        <span>&copy; 2025 <a href="/"></a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
+<script src="/js/cursor-effects.js"></script>
 <script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
 </script>
 </body>
 

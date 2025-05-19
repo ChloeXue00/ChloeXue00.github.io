@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>场景规划 on </title>
-    <link>/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/</link>
+    <link>//localhost:1313/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/</link>
     <description>Recent content in 场景规划 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Thu, 15 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/%E5%9C%BA%E6%99%AF%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
-      <link>/posts/nop_strategy/</link>
+      <link>//localhost:1313/posts/nop_strategy/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/nop_strategy/</guid>
+      <guid>//localhost:1313/posts/nop_strategy/</guid>
       <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
     </item>
   </channel>

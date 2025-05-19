@@ -2,24 +2,58 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>路径规划 on </title>
-    <link>/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/</link>
+    <link>//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/</link>
     <description>Recent content in 路径规划 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Fri, 16 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
-      <link>/posts/quadtree_safearea/</link>
+      <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
+      <link>//localhost:1313/posts/quadtree_to_mpc/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_safearea/</guid>
+      <guid>//localhost:1313/posts/quadtree_to_mpc/</guid>
+      <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
+&lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;规划模块&lt;/strong&gt;：找到一条从起点到目标的无碰路径&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制模块&lt;/strong&gt;：跟随这条路径，使机器人平稳、可控地到达目标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
+&lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
+&lt;li&gt;快速查询从 &lt;code&gt;start_pos&lt;/code&gt; 到 &lt;code&gt;goal_pos&lt;/code&gt; 的路径节点&lt;/li&gt;
+&lt;li&gt;每个叶子节点有 &lt;code&gt;center()&lt;/code&gt;，表示其几何中心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_nodes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quadtree&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_path(start_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], goal_pos[:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
+&lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
+&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
+      <link>//localhost:1313/posts/quadtree_safearea/</link>
+      <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/quadtree_safearea/</guid>
       <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
     </item>
     <item>
-      <title>几何地图与占用地图在路径规划中的应用</title>
-      <link>/posts/map-structure-explained/</link>
+      <title>路径规划（一）几何地图与占用地图在路径规划中的应用</title>
+      <link>//localhost:1313/posts/map-structure-explained/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/map-structure-explained/</guid>
+      <guid>//localhost:1313/posts/map-structure-explained/</guid>
       <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
     </item>
   </channel>

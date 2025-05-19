@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DRL on </title>
+    <link>//localhost:1313/tags/drl/</link>
+    <description>Recent content in DRL on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/drl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
+      <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
+&lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;generate_map()&lt;/code&gt;：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;get_geometric_map()&lt;/code&gt;：将地图对象转换为可用于膨胀和路径推理的几何结构。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Inflator&lt;/code&gt; 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-四叉树路径规划模块&#34;&gt;2. 四叉树路径规划模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由外部函数 &lt;code&gt;create_quadtree_from_occupancy_map()&lt;/code&gt; 从栅格占用地图创建四叉树划分空间&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;quadtree_to_mpc_constraints()&lt;/code&gt;（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-mpc-控制器接口&#34;&gt;3. MPC 控制器接口&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;InterfaceMpc&lt;/code&gt;（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;integrate_quadtree_with_mpc()&lt;/code&gt;：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-drl-策略控制&#34;&gt;4. DRL 策略控制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。&lt;/li&gt;
+&lt;li&gt;动作 smoothness 与可行性在 &lt;code&gt;Metrics&lt;/code&gt; 中有单独评估指标。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-智能切换模块&#34;&gt;5. 智能切换模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HintSwitcher&lt;/code&gt;：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。&lt;/li&gt;
+&lt;li&gt;切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二系统整体工作流程&#34;&gt;二、系统整体工作流程&lt;/h2&gt;
+&lt;p&gt;以下代码片段概括了系统的主要运行步骤：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 1: 创建地图对象&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;map_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; generate_map()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; InterfaceMpc(map_data)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Configurator()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 2: 四叉树路径规划&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quadtree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_quadtree_from_occupancy_map(occupancy_map)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;constraints &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 3: MPC 轨迹生成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update_static_constraints(constraints)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate_trajectory(current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 4: 智能控制切换（DRL or MPC）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;switcher &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; HintSwitcher(max_switch_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.0&lt;/span&gt;, min_detach_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8.0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; switcher&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;switch(current_position, original_traj, new_traj, obstacle_list):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; drl_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(observation)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_control_action()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三关键函数解读&#34;&gt;三、关键函数解读&lt;/h2&gt;
+&lt;h3 id=&#34;quadtree_to_mpc_constraints&#34;&gt;&lt;code&gt;quadtree_to_mpc_constraints&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
+      <link>//localhost:1313/posts/narrow_exploration/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/narrow_exploration/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
+&lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
+&lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
+&lt;p&gt;DDPG 有时能够实现出色的性能，但它在超参数和其他类型的调优方面往往很脆弱。DDPG 的一个常见故障模式是，学习到的 Q 函数开始大幅高估 Q 值，从而导致策略破坏，因为它利用了 Q 函数中的误差。&lt;/p&gt;
+&lt;h3 id=&#34;td3&#34;&gt;TD3&lt;/h3&gt;
+&lt;p&gt;td3 在DDPG基础上做到了三个技巧的更新，解决DDPG Q值过高的问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;技巧1： 裁剪双Q学习
+TD3学习两个Q函数 而不是一个（因此称为twin），并使用两个Q值比较小的一个作为bellman误差损失函数中的目标&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;技巧2： “延迟”策略更新
+TD3 更新策略和目标网络的频率低于Q函数，本文建议没更新两次Q函数就进行依次策略更新&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;技巧2： 目标策略平滑
+TD3为目标动作添加了噪声，通过平滑动作中的Q的变化，使策略更难利用Q函数误差
+这三个技巧可以显著提高baseline DDPG 的性能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 是一种off-policy algorithm&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 只能用于具有连续动作空间的环境&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TD3 的Spinning up实现不支持并行化&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关键方程式：
+TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_phi_2， 其方式于DDPG学习单个Q函数的方式几乎相同，
+为了准确展示TD3的实现方式， 以及它与普通DDPG的区别，我们将从损失函数的最内层向外进行讲解。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;第一：目标策略平滑
+用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
+目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
+它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
+这种情况可以通过平滑类似动作的Q函数来避免，
+而这正是目标策略平滑的设计初衷。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

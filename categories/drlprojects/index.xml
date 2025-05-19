@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DRL,Projects on </title>
+    <link>//localhost:1313/categories/drlprojects/</link>
+    <description>Recent content in DRL,Projects on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/categories/drlprojects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
+      <link>//localhost:1313/posts/what-is-gymnasium/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
+&lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;action_space&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sample()  &lt;span style=&#34;color:#75715e&#34;&gt;# 随机动作（一般训练中由模型决定）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    obs, reward, terminated, truncated, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step(action)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; terminated &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; truncated:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码展示了标准的强化学习交互流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化环境（&lt;code&gt;reset()&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
+&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
+&lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

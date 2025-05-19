@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>训练流程 on </title>
+    <link>//localhost:1313/tags/%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B/</link>
+    <description>Recent content in 训练流程 on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>怎么训练一个 DRL 模型？需要准备哪些模块？</title>
+      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
+      <description>&lt;h2 id=&#34;为什么训练-drl-模型是一个系统性工作&#34;&gt;为什么训练 DRL 模型是一个系统性工作？&lt;/h2&gt;
+&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
+&lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;drl-训练流程的核心结构&#34;&gt;DRL 训练流程的核心结构&lt;/h2&gt;
+&lt;p&gt;一个标准的 DRL 系统至少包括以下几个部分：&lt;/p&gt;
+&lt;h3 id=&#34;1-环境environment&#34;&gt;1. 环境（Environment）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;提供 &lt;code&gt;reset()&lt;/code&gt; 和 &lt;code&gt;step(action)&lt;/code&gt; 接口&lt;/li&gt;
+&lt;li&gt;返回状态、奖励、终止信号和调试信息&lt;/li&gt;
+&lt;li&gt;通常使用 Gymnasium 编写，也可以是仿真器（如 PyBullet、AirSim）或实际系统接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-策略网络policy-network&#34;&gt;2. 策略网络（Policy Network）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;输入当前状态，输出一个动作（或动作分布）&lt;/li&gt;
+&lt;li&gt;对于离散动作空间，常见输出为 softmax 分布；连续动作空间则直接输出浮点数&lt;/li&gt;
+&lt;li&gt;通常是 MLP（结构化输入）或 CNN（图像输入）网络&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-值函数网络critic-可选&#34;&gt;3. 值函数网络（Critic, 可选）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用于评估当前策略下某状态的“好坏”，即状态值 V(s) 或动作值 Q(s,a)&lt;/li&gt;
+&lt;li&gt;在 Actor-Critic 架构中，Actor 提出动作，Critic 提供反馈&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-回放缓存replay-buffer&#34;&gt;4. 回放缓存（Replay Buffer）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;保存经验 &lt;code&gt;(state, action, reward, next_state, done)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;支持随机采样，避免训练中数据高度相关&lt;/li&gt;
+&lt;li&gt;对于 off-policy 算法（如 DDPG、TD3）是必要组件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-优化器与更新规则optimizer&#34;&gt;5. 优化器与更新规则（Optimizer）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;根据策略梯度、TD 误差、KL 散度等损失函数对网络参数进行更新&lt;/li&gt;
+&lt;li&gt;通常使用 Adam 优化器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;强化学习算法的三种主流架构&#34;&gt;强化学习算法的三种主流架构&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;方法类别&lt;/th&gt;
+          &lt;th&gt;特点&lt;/th&gt;
+          &lt;th&gt;代表算法&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Policy-based&lt;/td&gt;
+          &lt;td&gt;直接建模并优化策略 π(a,s)，通过最大化期望回报更新策略&lt;/td&gt;
+          &lt;td&gt;REINFORCE, PPO, TRPO&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Value-based&lt;/td&gt;
+          &lt;td&gt;学习动作价值函数 Q(s,a)，通过贪婪策略导出动作选择&lt;/td&gt;
+          &lt;td&gt;DQN, Double DQN, Dueling DQN&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Actor-Critic&lt;/td&gt;
+          &lt;td&gt;同时学习策略和价值函数，策略用于决策，价值函数用于评估&lt;/td&gt;
+          &lt;td&gt;A2C, A3C, DDPG, TD3, SAC, PPO&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Policy-based&lt;/strong&gt; 方法训练稳定性强、适合高维动作空间，但样本效率较低。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Value-based&lt;/strong&gt; 方法样本效率较高，适用于离散动作任务，但连续控制较困难。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Actor-Critic&lt;/strong&gt; 综合两者优势，是当前主流算法的主干框架。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一个完整训练循环的结构&#34;&gt;一个完整训练循环的结构&lt;/h2&gt;
+&lt;p&gt;以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

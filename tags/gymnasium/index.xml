@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Gymnasium on </title>
+    <link>//localhost:1313/tags/gymnasium/</link>
+    <description>Recent content in Gymnasium on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/gymnasium/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
+      <link>//localhost:1313/posts/what-is-gymnasium/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
+&lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;action_space&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sample()  &lt;span style=&#34;color:#75715e&#34;&gt;# 随机动作（一般训练中由模型决定）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    obs, reward, terminated, truncated, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step(action)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; terminated &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; truncated:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        obs, info &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; env&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码展示了标准的强化学习交互流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化环境（&lt;code&gt;reset()&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
+&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
+&lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>状态空间和动作空间是什么？</title>
+      <link>//localhost:1313/posts/state-action-space/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/state-action-space/</guid>
+      <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
+&lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;状态空间observation-space&#34;&gt;状态空间（Observation Space）&lt;/h2&gt;
+&lt;p&gt;状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。&lt;/p&gt;
+&lt;h3 id=&#34;常见类型&#34;&gt;常见类型：&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;示例&lt;/th&gt;
+          &lt;th&gt;含义说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(4,)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;[-4.8, 4.8]&lt;/code&gt; × 4&lt;/td&gt;
+          &lt;td&gt;连续变量向量，如位置、速度等&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(84, 84, 3)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;图像输入&lt;/td&gt;
+          &lt;td&gt;视觉输入，常用于端到端控制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Dict(...)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;多通道输入&lt;/td&gt;
+          &lt;td&gt;图像 + 雷达 + IMU 组合观测&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;本项目中的状态空间定义&#34;&gt;本项目中的状态空间定义：&lt;/h3&gt;
+&lt;p&gt;在本项目中，我们的状态空间通常包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;图像帧&lt;/strong&gt;：从机器人前置摄像头获取的 RGB 图像（如 &lt;code&gt;(224, 224, 3)&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;附加状态向量&lt;/strong&gt;（可选）：如上一帧速度、转角、航向角等传感器读数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;状态空间结构可能是：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Box(low&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, high&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;255&lt;/span&gt;, shape&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;), dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uint8)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Dict({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;image&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;speed&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;yaw&amp;#34;&lt;/span&gt;: Box(&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;动作空间action-space&#34;&gt;动作空间（Action Space）&lt;/h2&gt;
+&lt;p&gt;动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。&lt;/p&gt;
+&lt;h3 id=&#34;常见类型-1&#34;&gt;常见类型：&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;示例&lt;/th&gt;
+          &lt;th&gt;用途说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Discrete(n)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;Discrete(3)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;离散控制，如左、右、直行&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;Box(...)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;Box(-1, 1, (2,), float32)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;连续动作，如转角和加速度控制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;MultiBinary(n)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;MultiBinary(5)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;多位二进制开关组合&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;本项目中的动作空间定义&#34;&gt;本项目中的动作空间定义：&lt;/h3&gt;
+&lt;p&gt;我们通常使用连续动作空间来控制机器人，例如：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

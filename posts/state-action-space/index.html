@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>状态空间和动作空间是什么？ | </title>
+<meta name="keywords" content="状态空间, 动作空间, gymnasium, 观测定义">
+<meta name="description" content="在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。
+在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。
+
+状态空间（Observation Space）
+状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。
+常见类型：
+
+  
+      
+          类型
+          示例
+          含义说明
+      
+  
+  
+      
+          Box(4,)
+          [-4.8, 4.8] × 4
+          连续变量向量，如位置、速度等
+      
+      
+          Box(84, 84, 3)
+          图像输入
+          视觉输入，常用于端到端控制
+      
+      
+          Dict(...)
+          多通道输入
+          图像 &#43; 雷达 &#43; IMU 组合观测
+      
+  
+
+本项目中的状态空间定义：
+在本项目中，我们的状态空间通常包括：
+
+图像帧：从机器人前置摄像头获取的 RGB 图像（如 (224, 224, 3)）
+附加状态向量（可选）：如上一帧速度、转角、航向角等传感器读数
+
+状态空间结构可能是：
+Box(low=0, high=255, shape=(224, 224, 3), dtype=np.uint8)
+或
+Dict({
+    &#34;image&#34;: Box(...),
+    &#34;speed&#34;: Box(...),
+    &#34;yaw&#34;: Box(...)
+})
+
+动作空间（Action Space）
+动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。
+常见类型：
+
+  
+      
+          类型
+          示例
+          用途说明
+      
+  
+  
+      
+          Discrete(n)
+          Discrete(3)
+          离散控制，如左、右、直行
+      
+      
+          Box(...)
+          Box(-1, 1, (2,), float32)
+          连续动作，如转角和加速度控制
+      
+      
+          MultiBinary(n)
+          MultiBinary(5)
+          多位二进制开关组合
+      
+  
+
+本项目中的动作空间定义：
+我们通常使用连续动作空间来控制机器人，例如：">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/state-action-space/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/state-action-space/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      状态空间和动作空间是什么？
+    </h1>
+    <div class="post-meta"><span title='2025-05-17 00:00:00 +0000 UTC'>May 17, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。</p>
+<p>在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。</p>
+<hr>
+<h2 id="状态空间observation-space">状态空间（Observation Space）<a hidden class="anchor" aria-hidden="true" href="#状态空间observation-space">#</a></h2>
+<p>状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。</p>
+<h3 id="常见类型">常见类型：<a hidden class="anchor" aria-hidden="true" href="#常见类型">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>示例</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Box(4,)</code></td>
+          <td><code>[-4.8, 4.8]</code> × 4</td>
+          <td>连续变量向量，如位置、速度等</td>
+      </tr>
+      <tr>
+          <td><code>Box(84, 84, 3)</code></td>
+          <td>图像输入</td>
+          <td>视觉输入，常用于端到端控制</td>
+      </tr>
+      <tr>
+          <td><code>Dict(...)</code></td>
+          <td>多通道输入</td>
+          <td>图像 + 雷达 + IMU 组合观测</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="本项目中的状态空间定义">本项目中的状态空间定义：<a hidden class="anchor" aria-hidden="true" href="#本项目中的状态空间定义">#</a></h3>
+<p>在本项目中，我们的状态空间通常包括：</p>
+<ul>
+<li><strong>图像帧</strong>：从机器人前置摄像头获取的 RGB 图像（如 <code>(224, 224, 3)</code>）</li>
+<li><strong>附加状态向量</strong>（可选）：如上一帧速度、转角、航向角等传感器读数</li>
+</ul>
+<p>状态空间结构可能是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Box(low<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span><span style="color:#ae81ff">255</span>, shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">3</span>), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>uint8)
+</span></span></code></pre></div><p>或</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Dict({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;image&#34;</span>: Box(<span style="color:#f92672">...</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;speed&#34;</span>: Box(<span style="color:#f92672">...</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;yaw&#34;</span>: Box(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><hr>
+<h2 id="动作空间action-space">动作空间（Action Space）<a hidden class="anchor" aria-hidden="true" href="#动作空间action-space">#</a></h2>
+<p>动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。</p>
+<h3 id="常见类型-1">常见类型：<a hidden class="anchor" aria-hidden="true" href="#常见类型-1">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>示例</th>
+          <th>用途说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Discrete(n)</code></td>
+          <td><code>Discrete(3)</code></td>
+          <td>离散控制，如左、右、直行</td>
+      </tr>
+      <tr>
+          <td><code>Box(...)</code></td>
+          <td><code>Box(-1, 1, (2,), float32)</code></td>
+          <td>连续动作，如转角和加速度控制</td>
+      </tr>
+      <tr>
+          <td><code>MultiBinary(n)</code></td>
+          <td><code>MultiBinary(5)</code></td>
+          <td>多位二进制开关组合</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="本项目中的动作空间定义">本项目中的动作空间定义：<a hidden class="anchor" aria-hidden="true" href="#本项目中的动作空间定义">#</a></h3>
+<p>我们通常使用连续动作空间来控制机器人，例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Box(low<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array([<span style="color:#f92672">-</span><span style="color:#ae81ff">1.0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.0</span>]), high<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>]), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32)
+</span></span></code></pre></div><p>这表示：</p>
+<ul>
+<li>第一个输出控制<strong>方向角（steering angle）</strong>，范围 [-1, 1]</li>
+<li>第二个输出控制<strong>加速度或速度</strong>，范围 [-1, 1]</li>
+</ul>
+<p>动作会经过缩放，映射到实际的执行命令中，例如 [-1, 1] → [-30°, 30°]。</p>
+<hr>
+<h2 id="状态空间和动作空间如何影响模型设计">状态空间和动作空间如何影响模型设计？<a hidden class="anchor" aria-hidden="true" href="#状态空间和动作空间如何影响模型设计">#</a></h2>
+<ol>
+<li>
+<p><strong>模型输入必须匹配状态空间结构</strong></p>
+<ul>
+<li>图像输入通常使用卷积神经网络（CNN）提取空间特征</li>
+<li>结构化向量信息则传入多层感知机（MLP）网络，MLP 是一种基本的前馈神经网络，由多个全连接层组成，适合处理低维向量输入 [1]</li>
+</ul>
+</li>
+<li>
+<p><strong>模型输出应匹配动作空间格式</strong></p>
+<ul>
+<li>如果是 <code>Discrete</code>，通常用 softmax 输出多个动作概率</li>
+<li>如果是 <code>Box</code>，使用连续输出（如 tanh 激活）限定在动作范围内</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="示例一个典型训练循环">示例：一个典型训练循环<a hidden class="anchor" aria-hidden="true" href="#示例一个典型训练循环">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>obs, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> step <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">200</span>):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> policy(obs)  <span style="color:#75715e"># 模型根据 obs 生成动作</span>
+</span></span><span style="display:flex;"><span>    obs, reward, done, truncated, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> done <span style="color:#f92672">or</span> truncated:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>
+</span></span></code></pre></div><p><code>obs</code> 来自状态空间定义，<code>action</code> 必须符合动作空间定义。两者必须和 <code>env.observation_space</code> 与 <code>env.action_space</code> 严格匹配。</p>
+<hr>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<ul>
+<li>状态空间是模型的输入接口，反映了它感知世界的能力</li>
+<li>动作空间是模型的输出接口，决定了它的控制能力</li>
+</ul>
+<p>在实际项目中，状态空间和动作空间的设计直接决定了强化学习能否有效应用在任务中。理解它们，是进入 DRL 项目开发的第一步。</p>
+<hr>
+<p><strong>参考资料：</strong>
+[1] Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press. （第 6 章，Multilayer Perceptrons）</p>
+<hr>
+<p><a href="/posts/what-is-gymnasium/">上一篇:什么是 Gymnasium？强化学习中的环境是怎么定义的？</a></p>
+<p><a href="/posts/drl-algorithm-comparison/">下一篇:DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4/">状态空间</a></li>
+      <li><a href="//localhost:1313/tags/%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4/">动作空间</a></li>
+      <li><a href="//localhost:1313/tags/gymnasium/">Gymnasium</a></li>
+      <li><a href="//localhost:1313/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/">观测定义</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>
