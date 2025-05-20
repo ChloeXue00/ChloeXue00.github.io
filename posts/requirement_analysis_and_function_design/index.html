@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="每个上线场景的功能需求清单（含优先级 / SOP投放批次）
+工具：Confluence
+
+NOP(Navigation On Pilot)
+
+功能目标：高速场景下的智能导航驾驶
+上线场景（典型使用场景）：
+
+高速主路
+自动变道（超车 / 躲避慢车）
+主路汇入匝道
+匝道驶出并与导航交互
+弯道曲率适配控制
+
+
+
+
+
+NOP（Navigate on Pilot）功能需求与设计拆解表
+
+  
+      
+          上线场景
+          功能需求（What）
+          子需求（细化 What）
+          所属模块
+          功能设计（How）
+      
+  
+  
+      
+          高速主路巡航
+          保持车辆在当前车道稳定巡航
+          识别清晰车道线，维持居中行驶
+          感知 / 控制
+          车道线识别 &#43; 轨迹偏移计算 &#43; PID 控制器
+      
+      
+          
+          
+          抑制车道线虚假识别干扰
+          感知
+          多源融合 &#43; 稳定性判别机制
+      
+      
+          主路跟车
+          前方有车时能稳定跟随并保持安全车距
+          实时识别前车位置与速度
+          感知
+          雷达&#43;视觉融合检测，计算相对距离
+      
+      
+          
+          
+          动态调整跟车距离与加速度
+          控制 / 策略
+          ACC控制策略 &#43; 自适应速度规划
+      
+      
+          自动变道（超车/避障）
+          根据策略与环境条件安全触发并完成变道动作
+          判断变道时机（前车慢、侧方可变道）
+          感知 / 策略
+          速度判断 &#43; 安全空隙评估模块
+      
+      
+          
+          
+          规划变道路径并执行横向平滑过渡
+          规划 / 控制
+          五阶轨迹规划 &#43; LQR横向控制器
+      
+      
+          主路汇入匝道
+          在即将进入匝道前自动切入合适车道
+          提前识别出口与汇入点
+          定位 / 感知
+          HD地图出口匹配 &#43; 定位融合模块
+      
+      
+          
+          
+          生成合理汇入路径并协调控制器执行
+          规划 / 控制
+          插入轨迹规划 &#43; 速度过渡控制
+      
+      
+          匝道驶出与导航联动
+          出高速并进入本地路段，顺利切换控制与路线逻辑
+          出口匹配导航并生成分岔路线决策
+          感知 / 交互
+          导航路径同步模块 &#43; 分岔点策略决策
+      
+      
+          
+          
+          平滑完成车道切换并保持目标路线
+          控制 / 状态机
+          状态迁移控制逻辑 &#43; 轨迹融合
+      
+      
+          弯道曲率适配控制
+          根据道路曲率调整车速与横向控制，保证安全与舒适性
+          实时感知路段曲率，并动态控制转向
+          感知 / 控制
+          曲率计算模块 &#43; 控制器参数调节
+      
+      
+          
+          
+          弯道内速度限制及横向加速度限制策略
+          策略 / 控制
+          最大侧向加速度阈值设定 &#43; 速度规划器
+      
+  
+
+
+APA（Auto Parkign Assist）
+
+
+功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/requirement_analysis_and_function_design/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/requirement_analysis_and_function_design/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><p>每个上线场景的功能需求清单（含优先级 / SOP投放批次）
+工具：Confluence</p>
+<ul>
+<li>NOP(Navigation On Pilot)
+<ul>
+<li>功能目标：高速场景下的智能导航驾驶</li>
+<li>上线场景（典型使用场景）：
+<ul>
+<li>高速主路</li>
+<li>自动变道（超车 / 躲避慢车）</li>
+<li>主路汇入匝道</li>
+<li>匝道驶出并与导航交互</li>
+<li>弯道曲率适配控制</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>NOP（Navigate on Pilot）功能需求与设计拆解表</p>
+<table>
+  <thead>
+      <tr>
+          <th>上线场景</th>
+          <th>功能需求（What）</th>
+          <th>子需求（细化 What）</th>
+          <th>所属模块</th>
+          <th>功能设计（How）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速主路巡航</td>
+          <td>保持车辆在当前车道稳定巡航</td>
+          <td>识别清晰车道线，维持居中行驶</td>
+          <td>感知 / 控制</td>
+          <td>车道线识别 + 轨迹偏移计算 + PID 控制器</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>抑制车道线虚假识别干扰</td>
+          <td>感知</td>
+          <td>多源融合 + 稳定性判别机制</td>
+      </tr>
+      <tr>
+          <td>主路跟车</td>
+          <td>前方有车时能稳定跟随并保持安全车距</td>
+          <td>实时识别前车位置与速度</td>
+          <td>感知</td>
+          <td>雷达+视觉融合检测，计算相对距离</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>动态调整跟车距离与加速度</td>
+          <td>控制 / 策略</td>
+          <td>ACC控制策略 + 自适应速度规划</td>
+      </tr>
+      <tr>
+          <td>自动变道（超车/避障）</td>
+          <td>根据策略与环境条件安全触发并完成变道动作</td>
+          <td>判断变道时机（前车慢、侧方可变道）</td>
+          <td>感知 / 策略</td>
+          <td>速度判断 + 安全空隙评估模块</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>规划变道路径并执行横向平滑过渡</td>
+          <td>规划 / 控制</td>
+          <td>五阶轨迹规划 + LQR横向控制器</td>
+      </tr>
+      <tr>
+          <td>主路汇入匝道</td>
+          <td>在即将进入匝道前自动切入合适车道</td>
+          <td>提前识别出口与汇入点</td>
+          <td>定位 / 感知</td>
+          <td>HD地图出口匹配 + 定位融合模块</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>生成合理汇入路径并协调控制器执行</td>
+          <td>规划 / 控制</td>
+          <td>插入轨迹规划 + 速度过渡控制</td>
+      </tr>
+      <tr>
+          <td>匝道驶出与导航联动</td>
+          <td>出高速并进入本地路段，顺利切换控制与路线逻辑</td>
+          <td>出口匹配导航并生成分岔路线决策</td>
+          <td>感知 / 交互</td>
+          <td>导航路径同步模块 + 分岔点策略决策</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>平滑完成车道切换并保持目标路线</td>
+          <td>控制 / 状态机</td>
+          <td>状态迁移控制逻辑 + 轨迹融合</td>
+      </tr>
+      <tr>
+          <td>弯道曲率适配控制</td>
+          <td>根据道路曲率调整车速与横向控制，保证安全与舒适性</td>
+          <td>实时感知路段曲率，并动态控制转向</td>
+          <td>感知 / 控制</td>
+          <td>曲率计算模块 + 控制器参数调节</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>弯道内速度限制及横向加速度限制策略</td>
+          <td>策略 / 控制</td>
+          <td>最大侧向加速度阈值设定 + 速度规划器</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>APA（Auto Parkign Assist）
+<ul>
+<li>
+<p>功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位</p>
+</li>
+<li>
+<p>上线场景（典型使用场景）：</p>
+<ul>
+<li>
+<p>垂直车位自动泊入</p>
+</li>
+<li>
+<p>侧方车位自动泊入</p>
+</li>
+<li>
+<p>多车邻近车位泊入</p>
+</li>
+<li>
+<p>自动泊出狭窄车位</p>
+</li>
+<li>
+<p>驾驶员中途介入 / 切换控制权</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>APA（Auto Parking Assist）功能需求与设计拆解表</p>
+<table>
+  <thead>
+      <tr>
+          <th>上线场景</th>
+          <th>功能需求（What）</th>
+          <th>子需求（细化 What）</th>
+          <th>所属模块</th>
+          <th>功能设计（How）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>垂直车位泊入</td>
+          <td>系统应识别垂直车位并完成泊入</td>
+          <td>检测垂直车位边界形状并判断可用性</td>
+          <td>感知</td>
+          <td>基于视觉/超声波的车位线/障碍检测算法</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>规划最优倒车路径</td>
+          <td>规划</td>
+          <td>倒车轨迹生成 + 回旋调整规划逻辑</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>控制车辆以适中速度平稳入位</td>
+          <td>控制</td>
+          <td>速度-舵角联合控制策略，目标速度分级</td>
+      </tr>
+      <tr>
+          <td>侧方车位泊入</td>
+          <td>识别侧方车位并倒车入位</td>
+          <td>评估可泊入空间大小与车辆包络限制</td>
+          <td>感知 / 规划</td>
+          <td>空间建图 + 动态可行区域提取</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>执行两段或三段泊入轨迹</td>
+          <td>控制 / 规划</td>
+          <td>多阶段路径分段规划 + 方向调整控制策略</td>
+      </tr>
+      <tr>
+          <td>多车邻近泊入</td>
+          <td>能在邻车距离小于常规阈值时泊入</td>
+          <td>检测与前后侧车辆间距，动态判断泊入风险</td>
+          <td>感知</td>
+          <td>实时障碍检测 + 安全区动态收缩</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>生成最小转弯半径路径并逐步调整</td>
+          <td>规划 / 控制</td>
+          <td>极限包络路径生成 + 缓慢渐进控制</td>
+      </tr>
+      <tr>
+          <td>狭窄车位泊出</td>
+          <td>系统可自动从限位车位驶出</td>
+          <td>判断左右出车方向是否可行</td>
+          <td>感知 / 交互</td>
+          <td>空间地图分析 + 方向提示UI设计</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>分多步执行泊出操作（前后切换）</td>
+          <td>控制 / 状态机</td>
+          <td>泊出状态机设计 + 动作段执行器</td>
+      </tr>
+      <tr>
+          <td>驾驶员介入 / 切换</td>
+          <td>泊车过程中驾驶员可主动接管控制权</td>
+          <td>检测驾驶员动作意图，如方向盘/刹车/档位</td>
+          <td>感知 / 交互</td>
+          <td>控制输入监听模块 + 权限转移策略</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>在切换过程中安全结束泊车或保持原状态</td>
+          <td>控制 / 状态机</td>
+          <td>控制器失效保护 + 状态保持机制</td>
+      </tr>
+  </tbody>
+</table>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

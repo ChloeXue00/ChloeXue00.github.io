@@ -9,7 +9,7 @@
     <lastBuildDate>Sun, 17 Nov 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>状态空间和动作空间是什么？</title>
+      <title>强化学习的状态空间和动作空间是什么</title>
       <link>/posts/state-action-space/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
       <guid>/posts/state-action-space/</guid>

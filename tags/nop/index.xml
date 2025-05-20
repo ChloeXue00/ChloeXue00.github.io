@@ -6,8 +6,559 @@
     <description>Recent content in NOP on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 15 May 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 May 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/nop/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NOP主要功能设计逻辑图（状态机 &#43; 决策路径）</title>
+      <link>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</link>
+      <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
+      <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
+&lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一设计目标&#34;&gt;一、设计目标&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验&lt;/li&gt;
+&lt;li&gt;支持用户切入、退出、过渡等操作&lt;/li&gt;
+&lt;li&gt;在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二核心状态机结构nop-functional-state-machine&#34;&gt;二、核心状态机结构（NOP Functional State Machine）&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;stateDiagram-v2
+    [*] --&amp;gt; Idle
+    Idle --&amp;gt; Activated : 用户开启NOP
+    Activated --&amp;gt; Cruise : 成功识别车道 + 导航同步
+    Cruise --&amp;gt; LaneChange : 策略触发变道
+    LaneChange --&amp;gt; Cruise : 变道完成
+    Cruise --&amp;gt; ExitPreparation : 出口识别提前准备
+    ExitPreparation --&amp;gt; ExitExecution : 到达出口区
+    ExitExecution --&amp;gt; Idle : NOP退出或用户接管
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三状态说明&#34;&gt;三、状态说明&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;状态名&lt;/th&gt;
+          &lt;th&gt;含义说明&lt;/th&gt;
+          &lt;th&gt;触发条件&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Idle&lt;/td&gt;
+          &lt;td&gt;NOP未激活或退出状态&lt;/td&gt;
+          &lt;td&gt;用户未启用NOP / 驶出高速&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Activated&lt;/td&gt;
+          &lt;td&gt;系统初始化并准备启用巡航&lt;/td&gt;
+          &lt;td&gt;用户点击NOP按钮，车速/车道满足条件&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Cruise&lt;/td&gt;
+          &lt;td&gt;进入自动巡航，包括车道保持 + ACC跟车&lt;/td&gt;
+          &lt;td&gt;系统感知良好，导航同步，无异常事件&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;LaneChange&lt;/td&gt;
+          &lt;td&gt;触发主动变道（超车 / 路况避障）&lt;/td&gt;
+          &lt;td&gt;策略模块判断变道条件满足&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;ExitPreparation&lt;/td&gt;
+          &lt;td&gt;提前感知导航出口，准备变道至出口车道&lt;/td&gt;
+          &lt;td&gt;与导航路径匹配，出口识别提前量足够&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;ExitExecution&lt;/td&gt;
+          &lt;td&gt;实施出口变道与减速，并准备交接控制权&lt;/td&gt;
+          &lt;td&gt;距离出口不足100m，车道和速度就绪&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;四策略决策路径decision-logic-path&#34;&gt;四、策略决策路径（Decision Logic Path）&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;启动 → 是否满足最低NOP开启条件？
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 是 → 判断导航是否同步？
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 是 → 进入巡航状态（车道保持 + 跟车）
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车慢？侧后空？→ 变道触发
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 导航出口匹配？提前变道？→ 出口准备
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 否 → 保持手动驾驶或提示同步失败
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 否 → 禁用NOP，提示“条件不满足”
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;五模块交互简图建议配合时序图使用&#34;&gt;五、模块交互简图（建议配合时序图使用）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用户交互（启动、退出、转向灯） ↔ NOP 控制状态机&lt;/li&gt;
+&lt;li&gt;感知输入（车道、车辆、障碍） → 策略模块（是否变道）&lt;/li&gt;
+&lt;li&gt;导航模块（出口路径） → 策略模块（是否切换车道）&lt;/li&gt;
+&lt;li&gt;控制模块 ← 状态机指令（加速、减速、横向控制）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;小结&#34;&gt;小结&lt;/h2&gt;
+&lt;p&gt;该状态机设计确保了：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>用户旅程地图与上线场景梳理的关系</title>
+      <link>/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</link>
+      <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</guid>
+      <description>&lt;p&gt;用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一用户旅程地图是什么&#34;&gt;一、用户旅程地图是什么&lt;/h2&gt;
+&lt;p&gt;用户旅程（User Journey）是用户完成某个任务或者达到某个目标的全过程, 它是分析用户旅程的可视化工具之一。它是一个有方向的信息图表（按照时间线，从左往右），从用户的角度出发、以讲故事的方式，清晰地描述用户在某个业务场景下完成任务或达到目标时的详细过程和体验。&lt;/p&gt;
+&lt;p&gt;完整的用户旅程包含用户模型、可视化的体验过程和机会点三部分。&lt;/p&gt;
+&lt;h3 id=&#34;1-用户模型&#34;&gt;1. 用户模型&lt;/h3&gt;
+&lt;p&gt;要构造用户旅程地图，我们首先需要构建用户模型。即用户群体是谁，想要在什么样的业务场景下，达成什么样的目标。&lt;/p&gt;
+&lt;p&gt;这部分的信息通常来源于用户研究，比如用户访谈、问卷调查、及实地观察等。&lt;/p&gt;
+&lt;h3 id=&#34;2-可视化的体验过程&#34;&gt;2. 可视化的体验过程&lt;/h3&gt;
+&lt;p&gt;这是用户旅程地图中最重要的组成部分，描述用户在达成目标时的全过程，及在每个过程中的情感体验。这部分的信息可以来自于用户研究，也可以邀请用户一起完成。&lt;/p&gt;
+&lt;p&gt;它包含 5 个元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;关键活动&lt;/strong&gt;：用户在该业务场景下达成目标时的关键活动，按时间顺序排列。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;具体行为&lt;/strong&gt;：每个关键活动下的具体操作步骤。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;触点&lt;/strong&gt;：用户在每个行为中接触的工具、系统或产品功能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;心情曲线&lt;/strong&gt;：用户在行为过程中的情绪高低，通常用线图或 Emoji 表示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;痛点&lt;/strong&gt;：行为过程中遇到的挑战或不适体验。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-机会点&#34;&gt;3. 机会点&lt;/h3&gt;
+&lt;p&gt;这是从体验过程中挖掘到的优化用户旅程的洞见、改善用户痛点的契机等。&lt;br&gt;
+机会点不是来源于用户，而是由产品经理或需求分析人员通过“对心情曲线与痛点的理解”推导得出。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二用户旅程地图与上线场景的联动关系&#34;&gt;二、用户旅程地图与上线场景的联动关系&lt;/h2&gt;
+&lt;p&gt;用户旅程地图不仅可以用来讲述用户故事，更是连接“用户需求”与“功能上线规划”的桥梁：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;用户调研 / 产品目标
+    ↓
+用户需求分析（用户目标、行为、痛点）
+    ↓           ←←←←←←←←←←←←←←
+用户旅程地图（阶段划分 + 用户行为 + 系统反应 + 情绪）
+    ↓                            ↑
+上线场景梳理（功能需求表）       ↑ 可用于校验场景完整性
+    ↓
+功能子目标拆解 + 模块设计 + 投放节奏图
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三用户旅程地图与上线场景的对照示例&#34;&gt;三、用户旅程地图与上线场景的对照示例&lt;/h2&gt;
+&lt;p&gt;以自动变道为例：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;阶段&lt;/th&gt;
+          &lt;th&gt;用户旅程地图中的表达&lt;/th&gt;
+          &lt;th&gt;上线场景表中的表达&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;自动变道&lt;/td&gt;
+          &lt;td&gt;用户希望无操作也能高效超车，担心变道是否安全&lt;/td&gt;
+          &lt;td&gt;系统需在安全条件满足时触发自动变道策略&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;痛点机会&lt;/td&gt;
+          &lt;td&gt;用户想知道变道的理由&lt;/td&gt;
+          &lt;td&gt;系统应提供变道决策依据或提示信息&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;系统反应&lt;/td&gt;
+          &lt;td&gt;策略触发变道，执行控制&lt;/td&gt;
+          &lt;td&gt;轨迹规划模块 + 安全判断模块 + 控制模块&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;四示意图&#34;&gt;四、示意图&lt;/h2&gt;
+&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;/static/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>智能驾驶功能版本节奏管理经验总结</title>
+      <link>/posts/adas-feature-roadmap/</link>
+      <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/adas-feature-roadmap/</guid>
+      <description>&lt;h2 id=&#34;一版本节奏管理的目的与核心价值&#34;&gt;一、版本节奏管理的目的与核心价值&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;目标&lt;/strong&gt;：确保在 SOP（量产节点）/OTS（测试节点）前，核心功能稳定上线、策略迭代有序、用户体验持续提升；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;价值&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;支持跨模块协同（感知-规划-控制）；&lt;/li&gt;
+&lt;li&gt;管理功能从“可用”到“好用”的演进；&lt;/li&gt;
+&lt;li&gt;支撑量产目标达成，规避后期堆叠风险；&lt;/li&gt;
+&lt;li&gt;聚焦子目标分批验证，降低系统集成风险。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二功能模块节奏规划机制&#34;&gt;二、功能模块节奏规划机制&lt;/h2&gt;
+&lt;h3 id=&#34;1-版本节奏图的制定流程&#34;&gt;1. 版本节奏图的制定流程&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;步骤&lt;/th&gt;
+          &lt;th&gt;内容&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;明确主功能目标（如 NOP、APA）及上线场景目标&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2&lt;/td&gt;
+          &lt;td&gt;拆解为 10~20 个子目标（可感知、可验证）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;3&lt;/td&gt;
+          &lt;td&gt;评估各子目标所依赖模块（感知/定位/规划/控制/交互）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;与各模块 owner 共创投放节奏与资源计划&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;5&lt;/td&gt;
+          &lt;td&gt;制定阶段性投放图，标注每个阶段策略迭代目标与接口稳定性要求&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;6&lt;/td&gt;
+          &lt;td&gt;工具绘图（Excel 甘特图、Jira Advanced Roadmap、Visio）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;7&lt;/td&gt;
+          &lt;td&gt;周/月同步会议动态调整&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;/images/output.png&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例图形： NOP版本迭代节奏图，描述每一版本功能合入&lt;br&gt;
+横坐标代表迭代版本（Alpha → Final），纵坐标代表功能子目标，颜色代表完成状态或优先级（灰色：未开始，橙色：已规划，金色：开发中，绿色：已完成）。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;三子功能验证目标的梳理与拆分逻辑&#34;&gt;三、子功能验证目标的梳理与拆分逻辑&lt;/h2&gt;
+&lt;h3 id=&#34;以-nopnavigate-on-pilot为例&#34;&gt;以 NOP（Navigate on Pilot）为例：&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;主功能&lt;/th&gt;
+          &lt;th&gt;子功能示例&lt;/th&gt;
+          &lt;th&gt;用户价值&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;高速自主巡航&lt;/td&gt;
+          &lt;td&gt;保持车道行驶&lt;/td&gt;
+          &lt;td&gt;提供舒适稳态巡航体验&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;变道触发判断&lt;/td&gt;
+          &lt;td&gt;前车慢、旁车安全&lt;/td&gt;
+          &lt;td&gt;提高效率&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;自动变道执行&lt;/td&gt;
+          &lt;td&gt;目标轨迹稳定，控制平顺&lt;/td&gt;
+          &lt;td&gt;增强信任感&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;入口识别与汇入&lt;/td&gt;
+          &lt;td&gt;场景识别准确，决策合理&lt;/td&gt;
+          &lt;td&gt;完成复杂融合任务&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;出匝道与导航联动&lt;/td&gt;
+          &lt;td&gt;与导航结构联动决策&lt;/td&gt;
+          &lt;td&gt;实现端到端任务闭环&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;子功能编号&lt;/th&gt;
+          &lt;th&gt;子功能目标&lt;/th&gt;
+          &lt;th&gt;依赖模块&lt;/th&gt;
+          &lt;th&gt;验证点&lt;/th&gt;
+          &lt;th&gt;所属阶段&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-01&lt;/td&gt;
+          &lt;td&gt;车道线保持&lt;/td&gt;
+          &lt;td&gt;感知 / 控制&lt;/td&gt;
+          &lt;td&gt;横向偏差 &amp;lt; 0.3m，控制稳定无抖动&lt;/td&gt;
+          &lt;td&gt;Alpha&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-02&lt;/td&gt;
+          &lt;td&gt;前车跟随控制&lt;/td&gt;
+          &lt;td&gt;感知 / 控制&lt;/td&gt;
+          &lt;td&gt;跟车时距控制在安全区间（1~2s）&lt;/td&gt;
+          &lt;td&gt;Alpha&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-03&lt;/td&gt;
+          &lt;td&gt;自动变道触发判断&lt;/td&gt;
+          &lt;td&gt;感知 / 规划&lt;/td&gt;
+          &lt;td&gt;正确识别变道意图与安全空隙&lt;/td&gt;
+          &lt;td&gt;Beta&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-04&lt;/td&gt;
+          &lt;td&gt;自动变道轨迹生成&lt;/td&gt;
+          &lt;td&gt;规划 / 控制&lt;/td&gt;
+          &lt;td&gt;轨迹无切换突变，控制平滑&lt;/td&gt;
+          &lt;td&gt;Beta&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-05&lt;/td&gt;
+          &lt;td&gt;变道后轨迹融合&lt;/td&gt;
+          &lt;td&gt;控制&lt;/td&gt;
+          &lt;td&gt;跟主车道轨迹融合自然，无震荡&lt;/td&gt;
+          &lt;td&gt;Beta&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-06&lt;/td&gt;
+          &lt;td&gt;出口识别&lt;/td&gt;
+          &lt;td&gt;感知 / 定位&lt;/td&gt;
+          &lt;td&gt;能提前100m以上识别正确匝道口&lt;/td&gt;
+          &lt;td&gt;Beta&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-07&lt;/td&gt;
+          &lt;td&gt;匝道汇入识别&lt;/td&gt;
+          &lt;td&gt;感知 / 定位&lt;/td&gt;
+          &lt;td&gt;能判断主路车流情况，择机切入&lt;/td&gt;
+          &lt;td&gt;Gamma&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-08&lt;/td&gt;
+          &lt;td&gt;与导航结构联动&lt;/td&gt;
+          &lt;td&gt;交互 / 规划&lt;/td&gt;
+          &lt;td&gt;能正确匹配导航路径并触发控制动作&lt;/td&gt;
+          &lt;td&gt;Gamma&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-09&lt;/td&gt;
+          &lt;td&gt;弯道曲率自适应&lt;/td&gt;
+          &lt;td&gt;感知 / 控制&lt;/td&gt;
+          &lt;td&gt;曲率大时减速及时，控制无甩尾&lt;/td&gt;
+          &lt;td&gt;Gamma&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;NOP-10&lt;/td&gt;
+          &lt;td&gt;用户手动变道提示策略&lt;/td&gt;
+          &lt;td&gt;交互 / 规划&lt;/td&gt;
+          &lt;td&gt;手动变道引导提示及时、易理解&lt;/td&gt;
+          &lt;td&gt;Final&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;拆分原则&#34;&gt;拆分原则：&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;验证点清晰&lt;/strong&gt;：每个子目标需能单独测试；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖模块最小化&lt;/strong&gt;：优先推进感知、定位等前置模块；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;策略难度可控&lt;/strong&gt;：先上线“安全可用”，再迭代“体验更佳”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;模块owner协同机制与节奏指定&#34;&gt;模块owner协同机制与节奏指定&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每个子目标分配对应模块owner（如感知-andy,规划：bella）&lt;/li&gt;
+&lt;li&gt;月度节奏会中确认下一阶段资源安排与投放责任人&lt;/li&gt;
+&lt;li&gt;Jira中维护迭代节奏表格和状态视图（状态： 设计中/联调中/验收中/上线）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;四策略优化迭代的管理方法&#34;&gt;四、策略优化迭代的管理方法&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;每版本明确 1~2 个策略优化目标&lt;/strong&gt;（如变道频率控制/曲率优化）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;以用户场景和工况数据驱动策略设计&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;策略评审机制&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;每两周组织一次策略逻辑评审；&lt;/li&gt;
+&lt;li&gt;联调验证覆盖率记录与问题闭环；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;策略版本管理工具&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;Git 分支、策略配置文件版本管理、评审记录表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;五如何最大程度满足用户满意度&#34;&gt;五、如何最大程度满足用户满意度&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;从试驾反馈和投诉中提炼高频痛点&lt;/strong&gt;（如“变道犹豫”、“制动突兀”）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建体验指标驱动优化路径&lt;/strong&gt;：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指标&lt;/th&gt;
+          &lt;th&gt;目标值&lt;/th&gt;
+          &lt;th&gt;投放节奏节点&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;变道成功率&lt;/td&gt;
+          &lt;td&gt;≥ 95%&lt;/td&gt;
+          &lt;td&gt;Beta2版本&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;进入匝道正确率&lt;/td&gt;
+          &lt;td&gt;≥ 98%&lt;/td&gt;
+          &lt;td&gt;Gamma版本&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;弯道跟踪误差&lt;/td&gt;
+          &lt;td&gt;&amp;lt; 0.2m&lt;/td&gt;
+          &lt;td&gt;Final版本&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;六典型工具与协作机制&#34;&gt;六、典型工具与协作机制&lt;/h2&gt;
+&lt;h3 id=&#34;工具&#34;&gt;工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;甘特图工具&lt;/strong&gt;：Excel、Jira Advanced Roadmap；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;流程图工具&lt;/strong&gt;：Visio,PPT；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;任务与接口管理&lt;/strong&gt;：Jira + Confluence；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;测试验证管理&lt;/strong&gt;：TestRail 或自研平台。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;协作机制&#34;&gt;协作机制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;双周节奏会（产品/算法/测试）；&lt;/li&gt;
+&lt;li&gt;准入评审机制：子功能上线前需通过策略联调验收；&lt;/li&gt;
+&lt;li&gt;问题闭环机制：每一版需处理上版遗留问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;这套机制不仅提升了跨模块协作效率，更帮助功能从早期可用阶段迭代至最终的“好用”，是支撑 L2/L2+ 智能驾驶系统快速迭代的核心抓手。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>需求分析与功能设计</title>
+      <link>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
+      <description>&lt;p&gt;基于用户体验目标与典型使用场景，对需求进行逐步细化，最终转化为可实现的功能设计。&lt;/p&gt;
+&lt;h3 id=&#34;以nop和apa为例&#34;&gt;以NOP和APA为例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;NOP(Navigation On Pilot)
+&lt;ul&gt;
+&lt;li&gt;功能目标：高速场景下的智能导航驾驶&lt;/li&gt;
+&lt;li&gt;上线场景（典型使用场景）：
+&lt;ul&gt;
+&lt;li&gt;高速主路&lt;/li&gt;
+&lt;li&gt;自动变道（超车 / 躲避慢车）&lt;/li&gt;
+&lt;li&gt;主路汇入匝道&lt;/li&gt;
+&lt;li&gt;匝道驶出并与导航交互&lt;/li&gt;
+&lt;li&gt;弯道曲率适配控制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;NOP（Navigate on Pilot）功能需求与设计拆解表&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;上线场景&lt;/th&gt;
+          &lt;th&gt;功能需求（What）&lt;/th&gt;
+          &lt;th&gt;子需求（细化 What）&lt;/th&gt;
+          &lt;th&gt;所属模块&lt;/th&gt;
+          &lt;th&gt;功能设计（How）&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;高速主路巡航&lt;/td&gt;
+          &lt;td&gt;保持车辆在当前车道稳定巡航&lt;/td&gt;
+          &lt;td&gt;识别清晰车道线，维持居中行驶&lt;/td&gt;
+          &lt;td&gt;感知 / 控制&lt;/td&gt;
+          &lt;td&gt;车道线识别 + 轨迹偏移计算 + PID 控制器&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;抑制车道线虚假识别干扰&lt;/td&gt;
+          &lt;td&gt;感知&lt;/td&gt;
+          &lt;td&gt;多源融合 + 稳定性判别机制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;主路跟车&lt;/td&gt;
+          &lt;td&gt;前方有车时能稳定跟随并保持安全车距&lt;/td&gt;
+          &lt;td&gt;实时识别前车位置与速度&lt;/td&gt;
+          &lt;td&gt;感知&lt;/td&gt;
+          &lt;td&gt;雷达+视觉融合检测，计算相对距离&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;动态调整跟车距离与加速度&lt;/td&gt;
+          &lt;td&gt;控制 / 策略&lt;/td&gt;
+          &lt;td&gt;ACC控制策略 + 自适应速度规划&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;自动变道（超车/避障）&lt;/td&gt;
+          &lt;td&gt;根据策略与环境条件安全触发并完成变道动作&lt;/td&gt;
+          &lt;td&gt;判断变道时机（前车慢、侧方可变道）&lt;/td&gt;
+          &lt;td&gt;感知 / 策略&lt;/td&gt;
+          &lt;td&gt;速度判断 + 安全空隙评估模块&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;规划变道路径并执行横向平滑过渡&lt;/td&gt;
+          &lt;td&gt;规划 / 控制&lt;/td&gt;
+          &lt;td&gt;五阶轨迹规划 + LQR横向控制器&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;主路汇入匝道&lt;/td&gt;
+          &lt;td&gt;在即将进入匝道前自动切入合适车道&lt;/td&gt;
+          &lt;td&gt;提前识别出口与汇入点&lt;/td&gt;
+          &lt;td&gt;定位 / 感知&lt;/td&gt;
+          &lt;td&gt;HD地图出口匹配 + 定位融合模块&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;生成合理汇入路径并协调控制器执行&lt;/td&gt;
+          &lt;td&gt;规划 / 控制&lt;/td&gt;
+          &lt;td&gt;插入轨迹规划 + 速度过渡控制&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;匝道驶出与导航联动&lt;/td&gt;
+          &lt;td&gt;出高速并进入本地路段，顺利切换控制与路线逻辑&lt;/td&gt;
+          &lt;td&gt;出口匹配导航并生成分岔路线决策&lt;/td&gt;
+          &lt;td&gt;感知 / 交互&lt;/td&gt;
+          &lt;td&gt;导航路径同步模块 + 分岔点策略决策&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;平滑完成车道切换并保持目标路线&lt;/td&gt;
+          &lt;td&gt;控制 / 状态机&lt;/td&gt;
+          &lt;td&gt;状态迁移控制逻辑 + 轨迹融合&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;弯道曲率适配控制&lt;/td&gt;
+          &lt;td&gt;根据道路曲率调整车速与横向控制，保证安全与舒适性&lt;/td&gt;
+          &lt;td&gt;实时感知路段曲率，并动态控制转向&lt;/td&gt;
+          &lt;td&gt;感知 / 控制&lt;/td&gt;
+          &lt;td&gt;曲率计算模块 + 控制器参数调节&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;弯道内速度限制及横向加速度限制策略&lt;/td&gt;
+          &lt;td&gt;策略 / 控制&lt;/td&gt;
+          &lt;td&gt;最大侧向加速度阈值设定 + 速度规划器&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;apa&#34;&gt;APA&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;APA（Auto Parkign Assist）
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位&lt;/p&gt;</description>
+    </item>
     <item>
       <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
       <link>/posts/nop_strategy/</link>

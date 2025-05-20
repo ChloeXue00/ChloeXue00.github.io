@@ -9,12 +9,11 @@
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/categories/drl/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？</title>
+      <title>DRL 常见算法对比</title>
       <link>/posts/drl-algorithm-comparison/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/drl-algorithm-comparison/</guid>
       <description>&lt;hr&gt;
-&lt;h2 id=&#34;为什么了解不同的-drl-算法非常重要&#34;&gt;为什么了解不同的 DRL 算法非常重要？&lt;/h2&gt;
 &lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;三大算法流派对比&#34;&gt;三大算法流派对比&lt;/h2&gt;
@@ -67,12 +66,11 @@
 &lt;p&gt;&lt;strong&gt;优化器&lt;/strong&gt;：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>怎么训练一个 DRL 模型？需要准备哪些模块？</title>
+      <title>DRL训练</title>
       <link>/posts/how-to-train-drl-model/</link>
-      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 02 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/how-to-train-drl-model/</guid>
-      <description>&lt;h2 id=&#34;为什么训练-drl-模型是一个系统性工作&#34;&gt;为什么训练 DRL 模型是一个系统性工作？&lt;/h2&gt;
-&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
+      <description>&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
 &lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;drl-训练流程的核心结构&#34;&gt;DRL 训练流程的核心结构&lt;/h2&gt;
@@ -147,7 +145,7 @@
 &lt;p&gt;以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>什么是 Gymnasium？强化学习中的环境是怎么定义的？</title>
+      <title>强化学习环境之 Gymnasium</title>
       <link>/posts/what-is-gymnasium/</link>
       <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
       <guid>/posts/what-is-gymnasium/</guid>
@@ -162,7 +160,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id=&#34;-在代码中如何导入并使用&#34;&gt;📥 在代码中如何导入并使用&lt;/h2&gt;
+&lt;h2 id=&#34;在代码中如何导入并使用&#34;&gt;在代码中如何导入并使用&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gymnasium &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; gym
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;env &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gym&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;make(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CartPole-v1&amp;#34;&lt;/span&gt;)
@@ -179,12 +177,12 @@
 &lt;li&gt;持续循环：选择动作 → 执行动作 → 接收反馈&lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-环境的输入与输出env-接口结构&#34;&gt;🧱 环境的输入与输出：Env 接口结构&lt;/h2&gt;
-&lt;h3 id=&#34;-输入action&#34;&gt;✅ 输入：action&lt;/h3&gt;
+&lt;h2 id=&#34;环境的输入与输出env-接口结构&#34;&gt;环境的输入与输出：Env 接口结构&lt;/h2&gt;
+&lt;h3 id=&#34;输入action&#34;&gt;输入：action&lt;/h3&gt;
 &lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>状态空间和动作空间是什么？</title>
+      <title>强化学习的状态空间和动作空间是什么</title>
       <link>/posts/state-action-space/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
       <guid>/posts/state-action-space/</guid>

@@ -6,12 +6,12 @@
     <description>Recent content in LSTM on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 14 May 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 10 Apr 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/lstm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
       <link>/posts/e2e-driving-resnet-lstm/</link>
-      <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
       <guid>/posts/e2e-driving-resnet-lstm/</guid>
       <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;

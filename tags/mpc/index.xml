@@ -9,67 +9,6 @@
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/mpc/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
-      <link>/posts/hybrid-planner-integration/</link>
-      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/hybrid-planner-integration/</guid>
-      <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
-&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
-&lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;generate_map()&lt;/code&gt;：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;get_geometric_map()&lt;/code&gt;：将地图对象转换为可用于膨胀和路径推理的几何结构。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Inflator&lt;/code&gt; 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;2-四叉树路径规划模块&#34;&gt;2. 四叉树路径规划模块&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;由外部函数 &lt;code&gt;create_quadtree_from_occupancy_map()&lt;/code&gt; 从栅格占用地图创建四叉树划分空间&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;quadtree_to_mpc_constraints()&lt;/code&gt;（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;3-mpc-控制器接口&#34;&gt;3. MPC 控制器接口&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;InterfaceMpc&lt;/code&gt;（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;integrate_quadtree_with_mpc()&lt;/code&gt;：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;4-drl-策略控制&#34;&gt;4. DRL 策略控制&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。&lt;/li&gt;
-&lt;li&gt;动作 smoothness 与可行性在 &lt;code&gt;Metrics&lt;/code&gt; 中有单独评估指标。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;5-智能切换模块&#34;&gt;5. 智能切换模块&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;HintSwitcher&lt;/code&gt;：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。&lt;/li&gt;
-&lt;li&gt;切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二系统整体工作流程&#34;&gt;二、系统整体工作流程&lt;/h2&gt;
-&lt;p&gt;以下代码片段概括了系统的主要运行步骤：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 1: 创建地图对象&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;map_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; generate_map()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; InterfaceMpc(map_data)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Configurator()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 2: 四叉树路径规划&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quadtree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_quadtree_from_occupancy_map(occupancy_map)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;constraints &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 3: MPC 轨迹生成&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update_static_constraints(constraints)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate_trajectory(current_state, goal_state)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 4: 智能控制切换（DRL or MPC）&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;switcher &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; HintSwitcher(max_switch_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.0&lt;/span&gt;, min_detach_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8.0&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; switcher&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;switch(current_position, original_traj, new_traj, obstacle_list):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; drl_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(observation)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_control_action()
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id=&#34;三关键函数解读&#34;&gt;三、关键函数解读&lt;/h2&gt;
-&lt;h3 id=&#34;quadtree_to_mpc_constraints&#34;&gt;&lt;code&gt;quadtree_to_mpc_constraints&lt;/code&gt;&lt;/h3&gt;
-&lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>四叉树与 MPC 集成在机器人导航中的应用</title>
       <link>/posts/quadtree_integrate_mpc/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
@@ -163,6 +102,67 @@
 &lt;hr&gt;
 &lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
 &lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
+      <link>/posts/hybrid-planner-integration/</link>
+      <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/hybrid-planner-integration/</guid>
+      <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
+&lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;generate_map()&lt;/code&gt;：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;get_geometric_map()&lt;/code&gt;：将地图对象转换为可用于膨胀和路径推理的几何结构。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Inflator&lt;/code&gt; 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-四叉树路径规划模块&#34;&gt;2. 四叉树路径规划模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由外部函数 &lt;code&gt;create_quadtree_from_occupancy_map()&lt;/code&gt; 从栅格占用地图创建四叉树划分空间&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;quadtree_to_mpc_constraints()&lt;/code&gt;（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-mpc-控制器接口&#34;&gt;3. MPC 控制器接口&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;InterfaceMpc&lt;/code&gt;（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;integrate_quadtree_with_mpc()&lt;/code&gt;：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-drl-策略控制&#34;&gt;4. DRL 策略控制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。&lt;/li&gt;
+&lt;li&gt;动作 smoothness 与可行性在 &lt;code&gt;Metrics&lt;/code&gt; 中有单独评估指标。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-智能切换模块&#34;&gt;5. 智能切换模块&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HintSwitcher&lt;/code&gt;：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。&lt;/li&gt;
+&lt;li&gt;切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二系统整体工作流程&#34;&gt;二、系统整体工作流程&lt;/h2&gt;
+&lt;p&gt;以下代码片段概括了系统的主要运行步骤：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 1: 创建地图对象&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;map_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; generate_map()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; InterfaceMpc(map_data)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Configurator()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 2: 四叉树路径规划&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quadtree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_quadtree_from_occupancy_map(occupancy_map)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;constraints &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 3: MPC 轨迹生成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update_static_constraints(constraints)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate_trajectory(current_state, goal_state)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Step 4: 智能控制切换（DRL or MPC）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;switcher &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; HintSwitcher(max_switch_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.0&lt;/span&gt;, min_detach_distance&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8.0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; switcher&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;switch(current_position, original_traj, new_traj, obstacle_list):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; drl_model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(observation)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mpc_controller&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_control_action()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三关键函数解读&#34;&gt;三、关键函数解读&lt;/h2&gt;
+&lt;h3 id=&#34;quadtree_to_mpc_constraints&#34;&gt;&lt;code&gt;quadtree_to_mpc_constraints&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
