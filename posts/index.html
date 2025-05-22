@@ -1575,7 +1575,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 </span></span><span style="display:flex;"><span>         → 否 → 保持手动驾驶或提示同步失败
 </span></span><span style="display:flex;"><span>     → 否 → 禁用NOP，提示“条件不满足”
 </span></span></code></pre></div><hr>
-<h2 id="五模块交互简图建议配合时序图使用">五、模块交互简图（建议配合时序图使用）</h2>
+<h2 id="五模块交互简图配合时序图使用">五、模块交互简图（配合时序图使用）</h2>
 <ul>
 <li>用户交互（启动、退出、转向灯） ↔ NOP 控制状态机</li>
 <li>感知输入（车道、车辆、障碍） → 策略模块（是否变道）</li>
@@ -1599,7 +1599,8 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
     </h2>
   </header>
   <section class="entry-content">
-    <p><p>用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。</p>
+    <p><p><img alt="用户旅程地图" loading="lazy" src="/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png">
+用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。</p>
 <hr>
 <h2 id="一用户旅程地图是什么">一、用户旅程地图是什么</h2>
 <p>用户旅程（User Journey）是用户完成某个任务或者达到某个目标的全过程, 它是分析用户旅程的可视化工具之一。它是一个有方向的信息图表（按照时间线，从左往右），从用户的角度出发、以讲故事的方式，清晰地描述用户在某个业务场景下完成任务或达到目标时的详细过程和体验。</p>
@@ -1661,9 +1662,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
       </tr>
   </tbody>
 </table>
-<hr>
-<h2 id="四示意图">四、示意图</h2>
-<p><img alt="用户旅程地图" loading="lazy" src="/static/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png"></p></p>
+<hr></p>
   </section>
   <footer class="entry-footer">
     <span class="entry-date">May 20, 2025</span>
@@ -1787,14 +1786,14 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
   <tbody>
       <tr>
           <td>NOP-01</td>
-          <td>车道线保持</td>
+          <td>车道线保持LKA</td>
           <td>感知 / 控制</td>
           <td>横向偏差 &lt; 0.3m，控制稳定无抖动</td>
           <td>Alpha</td>
       </tr>
       <tr>
           <td>NOP-02</td>
-          <td>前车跟随控制</td>
+          <td>前车跟随控制ACC</td>
           <td>感知 / 控制</td>
           <td>跟车时距控制在安全区间（1~2s）</td>
           <td>Alpha</td>
@@ -1860,81 +1859,14 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 <h3 id="拆分原则">拆分原则：</h3>
 <ul>
 <li><strong>验证点清晰</strong>：每个子目标需能单独测试；</li>
+<li><strong>功能依赖优先级</strong>：有些功能 是其他功能的基础依赖，必须先上线</li>
 <li><strong>依赖模块最小化</strong>：优先推进感知、定位等前置模块；</li>
 <li><strong>策略难度可控</strong>：先上线“安全可用”，再迭代“体验更佳”。</li>
 </ul>
-<h3 id="模块owner协同机制与节奏指定">模块owner协同机制与节奏指定</h3>
-<ul>
-<li>每个子目标分配对应模块owner（如感知-andy,规划：bella）</li>
-<li>月度节奏会中确认下一阶段资源安排与投放责任人</li>
-<li>Jira中维护迭代节奏表格和状态视图（状态： 设计中/联调中/验收中/上线）</li>
-</ul>
-<hr>
-<h2 id="四策略优化迭代的管理方法">四、策略优化迭代的管理方法</h2>
-<ul>
-<li><strong>每版本明确 1~2 个策略优化目标</strong>（如变道频率控制/曲率优化）；</li>
-<li><strong>以用户场景和工况数据驱动策略设计</strong>；</li>
-<li><strong>策略评审机制</strong>：
-<ul>
-<li>每两周组织一次策略逻辑评审；</li>
-<li>联调验证覆盖率记录与问题闭环；</li>
-</ul>
-</li>
-<li><strong>策略版本管理工具</strong>：
-<ul>
-<li>Git 分支、策略配置文件版本管理、评审记录表。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="五如何最大程度满足用户满意度">五、如何最大程度满足用户满意度</h2>
-<ul>
-<li><strong>从试驾反馈和投诉中提炼高频痛点</strong>（如“变道犹豫”、“制动突兀”）；</li>
-<li><strong>构建体验指标驱动优化路径</strong>：</li>
-</ul>
-<table>
-  <thead>
-      <tr>
-          <th>指标</th>
-          <th>目标值</th>
-          <th>投放节奏节点</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>变道成功率</td>
-          <td>≥ 95%</td>
-          <td>Beta2版本</td>
-      </tr>
-      <tr>
-          <td>进入匝道正确率</td>
-          <td>≥ 98%</td>
-          <td>Gamma版本</td>
-      </tr>
-      <tr>
-          <td>弯道跟踪误差</td>
-          <td>&lt; 0.2m</td>
-          <td>Final版本</td>
-      </tr>
-  </tbody>
-</table>
-<hr>
-<h2 id="六典型工具与协作机制">六、典型工具与协作机制</h2>
-<h3 id="工具">工具</h3>
-<ul>
-<li><strong>甘特图工具</strong>：Excel、Jira Advanced Roadmap；</li>
-<li><strong>流程图工具</strong>：Visio,PPT；</li>
-<li><strong>任务与接口管理</strong>：Jira + Confluence；</li>
-<li><strong>测试验证管理</strong>：TestRail 或自研平台。</li>
-</ul>
-<h3 id="协作机制">协作机制</h3>
-<ul>
-<li>双周节奏会（产品/算法/测试）；</li>
-<li>准入评审机制：子功能上线前需通过策略联调验收；</li>
-<li>问题闭环机制：每一版需处理上版遗留问题。</li>
-</ul>
-<hr>
-<p>这套机制不仅提升了跨模块协作效率，更帮助功能从早期可用阶段迭代至最终的“好用”，是支撑 L2/L2+ 智能驾驶系统快速迭代的核心抓手。</p></p>
+<h3 id="功能依赖">功能依赖：</h3>
+<p>比如车道保持LKA是所有横向控制的基础，ACC是所有纵向跟车策略的基础，同时功能成熟度高，测试覆盖充分，风险&amp;联动复杂度小，因此在Alpha版本实现，优先投放；<br>
+变道触发判断是所有变道策略的起点，先于规划于执行，并且只生成变道请求不直接控制，功能成熟度中等， 联动复杂度低，建议beta版本上线；<br>
+出口检测是所有导航联动的前提，必须先于导航联动上线。</p></p>
   </section>
   <footer class="entry-footer">
     <span class="entry-date">Dec 20, 2024</span>

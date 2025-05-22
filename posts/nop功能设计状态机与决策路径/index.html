@@ -80,7 +80,7 @@ stateDiagram-v2
          → 否 → 保持手动驾驶或提示同步失败
      → 否 → 禁用NOP，提示“条件不满足”
 
-五、模块交互简图（建议配合时序图使用）
+五、模块交互简图（配合时序图使用）
 
 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机
 感知输入（车道、车辆、障碍） → 策略模块（是否变道）
@@ -140,7 +140,7 @@ stateDiagram-v2
 </noscript><meta property="og:url" content="/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/">
   <meta property="og:title" content="NOP主要功能设计逻辑图（状态机 &#43; 决策路径）">
   <meta property="og:description" content="NOP（Navigate on Pilot）主要功能设计逻辑概览 NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。
-一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --&gt; Idle Idle --&gt; Activated : 用户开启NOP Activated --&gt; Cruise : 成功识别车道 &#43; 导航同步 Cruise --&gt; LaneChange : 策略触发变道 LaneChange --&gt; Cruise : 变道完成 Cruise --&gt; ExitPreparation : 出口识别提前准备 ExitPreparation --&gt; ExitExecution : 到达出口区 ExitExecution --&gt; Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 &#43; ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 &#43; 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（建议配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：">
+一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --&gt; Idle Idle --&gt; Activated : 用户开启NOP Activated --&gt; Cruise : 成功识别车道 &#43; 导航同步 Cruise --&gt; LaneChange : 策略触发变道 LaneChange --&gt; Cruise : 变道完成 Cruise --&gt; ExitPreparation : 出口识别提前准备 ExitPreparation --&gt; ExitExecution : 到达出口区 ExitExecution --&gt; Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 &#43; ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 &#43; 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -223,7 +223,7 @@ stateDiagram-v2
          → 否 → 保持手动驾驶或提示同步失败
      → 否 → 禁用NOP，提示“条件不满足”
 
-五、模块交互简图（建议配合时序图使用）
+五、模块交互简图（配合时序图使用）
 
 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机
 感知输入（车道、车辆、障碍） → 策略模块（是否变道）
@@ -261,11 +261,11 @@ stateDiagram-v2
   "@type": "BlogPosting",
   "headline": "NOP主要功能设计逻辑图（状态机 + 决策路径）",
   "name": "NOP主要功能设计逻辑图（状态机 \u002b 决策路径）",
-  "description": "NOP（Navigate on Pilot）主要功能设计逻辑概览 NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。\n一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --\u0026gt; Idle Idle --\u0026gt; Activated : 用户开启NOP Activated --\u0026gt; Cruise : 成功识别车道 + 导航同步 Cruise --\u0026gt; LaneChange : 策略触发变道 LaneChange --\u0026gt; Cruise : 变道完成 Cruise --\u0026gt; ExitPreparation : 出口识别提前准备 ExitPreparation --\u0026gt; ExitExecution : 到达出口区 ExitExecution --\u0026gt; Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 + ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 + 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（建议配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：\n",
+  "description": "NOP（Navigate on Pilot）主要功能设计逻辑概览 NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。\n一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --\u0026gt; Idle Idle --\u0026gt; Activated : 用户开启NOP Activated --\u0026gt; Cruise : 成功识别车道 + 导航同步 Cruise --\u0026gt; LaneChange : 策略触发变道 LaneChange --\u0026gt; Cruise : 变道完成 Cruise --\u0026gt; ExitPreparation : 出口识别提前准备 ExitPreparation --\u0026gt; ExitExecution : 到达出口区 ExitExecution --\u0026gt; Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 + ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 + 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：\n",
   "keywords": [
     "NOP", "ADAS系统设计"
   ],
-  "articleBody": "NOP（Navigate on Pilot）主要功能设计逻辑概览 NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。\n一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --\u003e Idle Idle --\u003e Activated : 用户开启NOP Activated --\u003e Cruise : 成功识别车道 + 导航同步 Cruise --\u003e LaneChange : 策略触发变道 LaneChange --\u003e Cruise : 变道完成 Cruise --\u003e ExitPreparation : 出口识别提前准备 ExitPreparation --\u003e ExitExecution : 到达出口区 ExitExecution --\u003e Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 + ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 + 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（建议配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：\n各子功能（巡航、变道、出口）具备清晰的进入/退出逻辑 可支持中断、接管、恢复等交互链路 所有决策均基于“感知 + 策略 + 导航”三大支撑输入 此状态图可作为后续测试用例生成、策略验证逻辑的基础结构。\n",
+  "articleBody": "NOP（Navigate on Pilot）主要功能设计逻辑概览 NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。\n一、设计目标 提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验 支持用户切入、退出、过渡等操作 在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制 二、核心状态机结构（NOP Functional State Machine） stateDiagram-v2 [*] --\u003e Idle Idle --\u003e Activated : 用户开启NOP Activated --\u003e Cruise : 成功识别车道 + 导航同步 Cruise --\u003e LaneChange : 策略触发变道 LaneChange --\u003e Cruise : 变道完成 Cruise --\u003e ExitPreparation : 出口识别提前准备 ExitPreparation --\u003e ExitExecution : 到达出口区 ExitExecution --\u003e Idle : NOP退出或用户接管 三、状态说明 状态名 含义说明 触发条件 Idle NOP未激活或退出状态 用户未启用NOP / 驶出高速 Activated 系统初始化并准备启用巡航 用户点击NOP按钮，车速/车道满足条件 Cruise 进入自动巡航，包括车道保持 + ACC跟车 系统感知良好，导航同步，无异常事件 LaneChange 触发主动变道（超车 / 路况避障） 策略模块判断变道条件满足 ExitPreparation 提前感知导航出口，准备变道至出口车道 与导航路径匹配，出口识别提前量足够 ExitExecution 实施出口变道与减速，并准备交接控制权 距离出口不足100m，车道和速度就绪 四、策略决策路径（Decision Logic Path） 启动 → 是否满足最低NOP开启条件？ → 是 → 判断导航是否同步？ → 是 → 进入巡航状态（车道保持 + 跟车） → 前车慢？侧后空？→ 变道触发 → 导航出口匹配？提前变道？→ 出口准备 → 否 → 保持手动驾驶或提示同步失败 → 否 → 禁用NOP，提示“条件不满足” 五、模块交互简图（配合时序图使用） 用户交互（启动、退出、转向灯） ↔ NOP 控制状态机 感知输入（车道、车辆、障碍） → 策略模块（是否变道） 导航模块（出口路径） → 策略模块（是否切换车道） 控制模块 ← 状态机指令（加速、减速、横向控制） 小结 该状态机设计确保了：\n各子功能（巡航、变道、出口）具备清晰的进入/退出逻辑 可支持中断、接管、恢复等交互链路 所有决策均基于“感知 + 策略 + 导航”三大支撑输入 此状态图可作为后续测试用例生成、策略验证逻辑的基础结构。\n",
   "wordCount" : "141",
   "inLanguage": "en",
   "datePublished": "2025-05-20T00:00:00Z",
@@ -413,7 +413,7 @@ stateDiagram-v2
 </span></span><span style="display:flex;"><span>         → 否 → 保持手动驾驶或提示同步失败
 </span></span><span style="display:flex;"><span>     → 否 → 禁用NOP，提示“条件不满足”
 </span></span></code></pre></div><hr>
-<h2 id="五模块交互简图建议配合时序图使用">五、模块交互简图（建议配合时序图使用）<a hidden class="anchor" aria-hidden="true" href="#五模块交互简图建议配合时序图使用">#</a></h2>
+<h2 id="五模块交互简图配合时序图使用">五、模块交互简图（配合时序图使用）<a hidden class="anchor" aria-hidden="true" href="#五模块交互简图配合时序图使用">#</a></h2>
 <ul>
 <li>用户交互（启动、退出、转向灯） ↔ NOP 控制状态机</li>
 <li>感知输入（车道、车辆、障碍） → 策略模块（是否变道）</li>
