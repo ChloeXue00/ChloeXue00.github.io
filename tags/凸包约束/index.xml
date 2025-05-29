@@ -41,9 +41,9 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;优势&#34;&gt;优势&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ &lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
-&lt;li&gt;✅ &lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
-&lt;li&gt;✅ &lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;凸包区域构建&#34;&gt;凸包区域构建&lt;/h2&gt;

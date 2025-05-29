@@ -257,9 +257,9 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;优势&#34;&gt;优势&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ &lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
-&lt;li&gt;✅ &lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
-&lt;li&gt;✅ &lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自适应分辨率&lt;/strong&gt;：按需细化，避免资源浪费&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存友好&lt;/strong&gt;：比统一网格更节省存储&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持多分辨率路径规划&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;凸包区域构建&#34;&gt;凸包区域构建&lt;/h2&gt;
@@ -350,7 +350,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。&lt;/p&gt;
 &lt;p&gt;本项目采用 &lt;strong&gt;四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹&lt;/strong&gt; 的结构，成功实现了一个典型的路径→控制联合流程。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-第一步通过-quadtree-提取可行路径&#34;&gt;🌳 第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
+&lt;h2 id=&#34;第一步通过-quadtree-提取可行路径&#34;&gt;第一步：通过 QuadTree 提取可行路径&lt;/h2&gt;
 &lt;p&gt;我们使用 &lt;code&gt;connective_quadtree&lt;/code&gt; 构建了一个基于图的四叉树分区系统，它可以：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;在任意障碍物地图上生成 QuadTree 结构&lt;/li&gt;
@@ -361,14 +361,18 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path_points &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;center() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_nodes]
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里输出的是一个 [(x0, y0), (x1, y1), &amp;hellip;] 的路径点序列，尚不能直接用于控制器输入。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-第二步mpc-控制器的输入格式要求&#34;&gt;🧠 第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
+&lt;h2 id=&#34;第二步mpc-控制器的输入格式要求&#34;&gt;第二步：MPC 控制器的输入格式要求&lt;/h2&gt;
 &lt;p&gt;为了让 MPC 能正常运行，需要如下格式：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [x, y, yaw, v]  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前状态&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reference_trajectory &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[x0, y0], [x1, y1], &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;])
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;控制器内部会基于参考轨迹进行插值、预测、代价优化。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-第三步桥接逻辑实现完整整合流程&#34;&gt;🔗 第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
-&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;</description>
+&lt;h2 id=&#34;第三步桥接逻辑实现完整整合流程&#34;&gt;第三步：桥接逻辑实现（完整整合流程）&lt;/h2&gt;
+&lt;p&gt;我们在 &lt;code&gt;trajectory_generator.py&lt;/code&gt; 中实现了完整的桥接类 &lt;code&gt;TrajectoryGenerator&lt;/code&gt;，封装逻辑如下：&lt;/p&gt;
+&lt;h3 id=&#34;路径转为-mpc-输入轨迹&#34;&gt;路径转为 MPC 输入轨迹&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ref_path &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; PathNodeList([PathNode(p[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], p[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_points])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ref_trajectory(ref_path)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这一过程自动插值生成 &lt;code&gt;TrajectoryNodeList&lt;/code&gt;（x, y, theta），最终用于 MPC 滑窗轨迹。&lt;/p&gt;</description>
     </item>
     <item>
       <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
@@ -825,7 +829,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-如何安装-gymnasium&#34;&gt;🔧 如何安装 Gymnasium？&lt;/h2&gt;
+&lt;h2 id=&#34;如何安装-gymnasium&#34;&gt;如何安装 Gymnasium？&lt;/h2&gt;
 &lt;p&gt;在终端输入以下命令安装（建议使用虚拟环境）：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gymnasium&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;all&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：&lt;/p&gt;
@@ -1012,7 +1016,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
       <guid>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-一变道类问题nop--noa&#34;&gt;🛣️ 一、变道类问题（NOP / NOA）&lt;/h2&gt;
+&lt;h2 id=&#34;一变道类问题nop--noa&#34;&gt;一、变道类问题（NOP / NOA）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;变道轨迹抖动 / 折线过多，影响车辆平顺性&lt;/li&gt;
 &lt;li&gt;动作触发延迟，导致错过变道时机&lt;/li&gt;
@@ -1021,7 +1025,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;自主变道成功后未正确恢复至原始路径&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-二泊车类问题apa&#34;&gt;🅿️ 二、泊车类问题（APA）&lt;/h2&gt;
+&lt;h2 id=&#34;二泊车类问题apa&#34;&gt;二、泊车类问题（APA）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;泊车位识别偏移，车辆偏离泊车线&lt;/li&gt;
 &lt;li&gt;倒车入位时轨迹溢出安全范围&lt;/li&gt;
@@ -1030,7 +1034,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;驻车后未触发自动切换 P 挡 / 驻车制动状态异常&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-三跟车类问题acc--tja&#34;&gt;🚘 三、跟车类问题（ACC / TJA）&lt;/h2&gt;
+&lt;h2 id=&#34;三跟车类问题acc--tja&#34;&gt;三、跟车类问题（ACC / TJA）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;前车减速响应延迟，跟车距离拉近过快&lt;/li&gt;
 &lt;li&gt;误判静止物体为运动目标导致急刹&lt;/li&gt;
@@ -1039,7 +1043,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;默认加速度 / 跟车间距配置过大或过小，体验不一致&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-四横纵向控制类问题lka--planning&#34;&gt;🛞 四、横纵向控制类问题（LKA / Planning）&lt;/h2&gt;
+&lt;h2 id=&#34;四横纵向控制类问题lka--planning&#34;&gt;四、横纵向控制类问题（LKA / Planning）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;LKA 中车辆偏离车道线但未及时介入&lt;/li&gt;
 &lt;li&gt;弯道中曲率变化过快，导致控制器震荡&lt;/li&gt;
@@ -1048,7 +1052,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;转向指令与当前车速不匹配，导致过弯困难&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-五感知--状态识别类问题&#34;&gt;🧠 五、感知 &amp;amp; 状态识别类问题&lt;/h2&gt;
+&lt;h2 id=&#34;五感知--状态识别类问题&#34;&gt;五、感知 &amp;amp; 状态识别类问题&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;静态障碍识别误报，影响轨迹生成&lt;/li&gt;
 &lt;li&gt;交通灯状态识别错误，导致刹停失败&lt;/li&gt;
@@ -1057,7 +1061,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;上下匝道判断逻辑错误，导致路径漂移&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-六模块接口--策略交互类问题&#34;&gt;🧩 六、模块接口 / 策略交互类问题&lt;/h2&gt;
+&lt;h2 id=&#34;六模块接口--策略交互类问题&#34;&gt;六、模块接口 / 策略交互类问题&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;感知与规划模块的坐标系不一致&lt;/li&gt;
 &lt;li&gt;置信度阈值设置不合理，导致过早/过晚触发切换&lt;/li&gt;
@@ -1066,7 +1070,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;模块状态切换条件不一致，影响降级退出流程&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;-七用户体验--非功能性问题&#34;&gt;🧪 七、用户体验 / 非功能性问题&lt;/h2&gt;
+&lt;h2 id=&#34;七用户体验--非功能性问题&#34;&gt;七、用户体验 / 非功能性问题&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;变道过程中方向盘突然介入，造成“吓人”体验&lt;/li&gt;
 &lt;li&gt;倒车过程中音响提示与车速不一致&lt;/li&gt;
