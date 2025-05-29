@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>自动驾驶感知模块 on </title>
+    <link>/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/</link>
+    <description>Recent content in 自动驾驶感知模块 on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 17 Nov 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何使用 C&#43;&#43; 编写一个 ROS 设备驱动节点</title>
+      <link>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
+      <description>&lt;p&gt;通过本案例可以掌握：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何使用 C++ 编写一个 ROS 设备驱动节点；&lt;/li&gt;
+&lt;li&gt;如何调试 ROS 发布频率、时间戳和消息内容；&lt;/li&gt;
+&lt;li&gt;如何结合 rosbag 与 rqt_plot 分析传感器数据的稳定性；&lt;/li&gt;
+&lt;li&gt;为后续多传感器时间同步与融合（如 EKF）打下基础。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;-多传感器融合中的-ros-驱动开发实战案例&#34;&gt;🌐 多传感器融合中的 ROS 驱动开发实战案例&lt;/h1&gt;
+&lt;p&gt;在自动驾驶系统中，IMU、GNSS 和雷达等传感器是实现环境感知和车辆定位的关键。本文以 ROS 框架为基础，讲解如何编写一个简单的传感器驱动节点，实现数据采集 → 解析 → 发布 → 可视化，并附带常见调试命令。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-项目结构&#34;&gt;1. 项目结构&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;my_sensor_driver/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── launch/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── sensor_driver.launch
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── src/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_driver_node.cpp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── include/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_driver.hpp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── config/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_config.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── CMakeLists.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── package.xml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;my_sensor_driver： ROS package 根目录，所有内容都放在这里&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;launch/sensor_driver.launch：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ROS 的启动脚本，用 XML 格式描述：
+&lt;ul&gt;
+&lt;li&gt;启动哪个节点（node）&lt;/li&gt;
+&lt;li&gt;使用哪些参数文件（如 config/imu_config.yaml）&lt;/li&gt;
+&lt;li&gt;是否输出日志到屏幕等&lt;/li&gt;
+&lt;li&gt;用法：&lt;strong&gt;roslaunch my_sensor_driver sensor_driver.launch&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;示例：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-launch&#34; data-lang=&#34;launch&#34;&gt;&amp;lt;launch&amp;gt;
+&amp;lt;!-- 加载 IMU 参数配置 --&amp;gt;
+&amp;lt;rosparam file=&amp;#34;$(find my_sensor_driver)/config/imu_config.yaml&amp;#34; command=&amp;#34;load&amp;#34;/&amp;gt;
+
+&amp;lt;!-- 启动 IMU 驱动节点 --&amp;gt;
+&amp;lt;node name=&amp;#34;imu_driver&amp;#34; pkg=&amp;#34;my_sensor_driver&amp;#34; type=&amp;#34;imu_driver_node&amp;#34; output=&amp;#34;screen&amp;#34;/&amp;gt;
+&amp;lt;/launch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;src/imu_driver_node.cpp&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>激光点云处理（Lidar Point Cloud Processing）</title>
+      <link>/posts/lidar_point_cloud_processing/</link>
+      <pubDate>Thu, 02 May 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/lidar_point_cloud_processing/</guid>
+      <description>&lt;p&gt;激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧&lt;strong&gt;点云数据（point cloud）&lt;/strong&gt;，表示空间中障碍物的位置和形状。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-什么是点云&#34;&gt;1. 什么是点云？&lt;/h2&gt;
+&lt;p&gt;点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-点云数据结构&#34;&gt;2. 点云数据结构&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;字段&lt;/th&gt;
+          &lt;th&gt;描述&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;x, y, z&lt;/td&gt;
+          &lt;td&gt;三维坐标&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;intensity&lt;/td&gt;
+          &lt;td&gt;激光反射强度&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;ring&lt;/td&gt;
+          &lt;td&gt;激光束编号（多线雷达）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;timestamp&lt;/td&gt;
+          &lt;td&gt;每个点的时间戳&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;reflectivity / ambient&lt;/td&gt;
+          &lt;td&gt;可选，反映表面材质或亮度&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-常见处理流程&#34;&gt;3. 常见处理流程&lt;/h2&gt;
+&lt;h3 id=&#34;31-点云预处理&#34;&gt;3.1 点云预处理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;体素滤波（VoxelGrid）&lt;/strong&gt;：降低点云密度，加快处理速度&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;裁剪（CropBox）&lt;/strong&gt;：去除远处或地面点，聚焦感兴趣区域&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间同步&lt;/strong&gt;：与IMU/GNSS同步，统一坐标系&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;32-点云配准与融合&#34;&gt;3.2 点云配准与融合&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ICP算法（Iterative Closest Point）&lt;/strong&gt;：配准不同帧点云，构建地图&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NDT算法&lt;/strong&gt;：用于鲁棒配准，适应点云局部稀疏问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多帧融合&lt;/strong&gt;：提升障碍检测的完整性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;33-点云感知&#34;&gt;3.3 点云感知&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;地面分割（Ground Segmentation）&lt;/strong&gt;：识别并移除地面点&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;聚类（Euclidean Clustering）&lt;/strong&gt;：提取独立目标（车辆、行人）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目标跟踪与识别&lt;/strong&gt;：结合深度学习模型进行物体分类&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-使用工具与库&#34;&gt;4. 使用工具与库&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;工具/库&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;PCL (Point Cloud Library)&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;最主流的C++点云处理库&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;Open3D&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;Python友好，支持可视化与处理&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;ROS + sensor_msgs/PointCloud2&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;ROS中点云标准消息格式&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;rviz&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;可视化点云、障碍物、车辆模型&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;Autoware/Apollo&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;提供全套点云感知模块&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-示例pcl聚类伪代码&#34;&gt;5. 示例：PCL聚类伪代码&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pcl&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;EuclideanClusterExtraction&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;pcl&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;PointXYZ&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; ec;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ec.setClusterTolerance(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;); &lt;span style=&#34;color:#75715e&#34;&gt;// 50cm内为一类
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;ec.setMinClusterSize(&lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ec.setMaxClusterSize(&lt;span style=&#34;color:#ae81ff&#34;&gt;2500&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ec.setSearchMethod(tree);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ec.setInputCloud(cloud_filtered);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ec.extract(cluster_indices);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;推荐学习资料&#34;&gt;推荐学习资料&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://pointclouds.org/documentation/&#34;&gt;PCL官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.open3d.org/docs/&#34;&gt;Open3D教程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Apollo / Autoware 点云处理模块源码分析&lt;/li&gt;
+&lt;li&gt;Udacity Sensor Fusion Nanodegree&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>
