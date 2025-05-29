@@ -947,6 +947,125 @@ $$</p>
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
+      <a href="/posts/lidar_point_cloud_processing/">激光点云处理（Lidar Point Cloud Processing）</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧<strong>点云数据（point cloud）</strong>，表示空间中障碍物的位置和形状。</p>
+<hr>
+<h2 id="1-什么是点云">1. 什么是点云？</h2>
+<p>点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。</p>
+<hr>
+<h2 id="2-点云数据结构">2. 点云数据结构</h2>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>x, y, z</td>
+          <td>三维坐标</td>
+      </tr>
+      <tr>
+          <td>intensity</td>
+          <td>激光反射强度</td>
+      </tr>
+      <tr>
+          <td>ring</td>
+          <td>激光束编号（多线雷达）</td>
+      </tr>
+      <tr>
+          <td>timestamp</td>
+          <td>每个点的时间戳</td>
+      </tr>
+      <tr>
+          <td>reflectivity / ambient</td>
+          <td>可选，反映表面材质或亮度</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-常见处理流程">3. 常见处理流程</h2>
+<h3 id="31-点云预处理">3.1 点云预处理</h3>
+<ul>
+<li><strong>体素滤波（VoxelGrid）</strong>：降低点云密度，加快处理速度</li>
+<li><strong>裁剪（CropBox）</strong>：去除远处或地面点，聚焦感兴趣区域</li>
+<li><strong>时间同步</strong>：与IMU/GNSS同步，统一坐标系</li>
+</ul>
+<h3 id="32-点云配准与融合">3.2 点云配准与融合</h3>
+<ul>
+<li><strong>ICP算法（Iterative Closest Point）</strong>：配准不同帧点云，构建地图</li>
+<li><strong>NDT算法</strong>：用于鲁棒配准，适应点云局部稀疏问题</li>
+<li><strong>多帧融合</strong>：提升障碍检测的完整性</li>
+</ul>
+<h3 id="33-点云感知">3.3 点云感知</h3>
+<ul>
+<li><strong>地面分割（Ground Segmentation）</strong>：识别并移除地面点</li>
+<li><strong>聚类（Euclidean Clustering）</strong>：提取独立目标（车辆、行人）</li>
+<li><strong>目标跟踪与识别</strong>：结合深度学习模型进行物体分类</li>
+</ul>
+<hr>
+<h2 id="4-使用工具与库">4. 使用工具与库</h2>
+<table>
+  <thead>
+      <tr>
+          <th>工具/库</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>PCL (Point Cloud Library)</strong></td>
+          <td>最主流的C++点云处理库</td>
+      </tr>
+      <tr>
+          <td><strong>Open3D</strong></td>
+          <td>Python友好，支持可视化与处理</td>
+      </tr>
+      <tr>
+          <td><strong>ROS + sensor_msgs/PointCloud2</strong></td>
+          <td>ROS中点云标准消息格式</td>
+      </tr>
+      <tr>
+          <td><strong>rviz</strong></td>
+          <td>可视化点云、障碍物、车辆模型</td>
+      </tr>
+      <tr>
+          <td><strong>Autoware/Apollo</strong></td>
+          <td>提供全套点云感知模块</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="5-示例pcl聚类伪代码">5. 示例：PCL聚类伪代码</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>pcl<span style="color:#f92672">::</span>EuclideanClusterExtraction<span style="color:#f92672">&lt;</span>pcl<span style="color:#f92672">::</span>PointXYZ<span style="color:#f92672">&gt;</span> ec;
+</span></span><span style="display:flex;"><span>ec.setClusterTolerance(<span style="color:#ae81ff">0.5</span>); <span style="color:#75715e">// 50cm内为一类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>ec.setMinClusterSize(<span style="color:#ae81ff">30</span>);
+</span></span><span style="display:flex;"><span>ec.setMaxClusterSize(<span style="color:#ae81ff">2500</span>);
+</span></span><span style="display:flex;"><span>ec.setSearchMethod(tree);
+</span></span><span style="display:flex;"><span>ec.setInputCloud(cloud_filtered);
+</span></span><span style="display:flex;"><span>ec.extract(cluster_indices);
+</span></span></code></pre></div><hr>
+<h2 id="推荐学习资料">推荐学习资料</h2>
+<ul>
+<li><a href="https://pointclouds.org/documentation/">PCL官方文档</a></li>
+<li><a href="http://www.open3d.org/docs/">Open3D教程</a></li>
+<li>Apollo / Autoware 点云处理模块源码分析</li>
+<li>Udacity Sensor Fusion Nanodegree</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 2, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
       <a href="/posts/acc-strategy/">ACC（自适应巡航控制）策略设计与问题集</a>
     </h2>
   </header>
@@ -1475,6 +1594,154 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 </article>
 
         
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/data_structure_and_algorithm/">数据结构与算法(自动驾驶应用方向)</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="数据结构与算法自动驾驶应用方向">数据结构与算法（自动驾驶应用方向）</h1>
+<p>在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对<strong>数据的高效组织和计算方法的选择</strong>。</p>
+<hr>
+<h2 id="2-常见数据结构及自动驾驶应用">2. 常见数据结构（及自动驾驶应用）</h2>
+<table>
+  <thead>
+      <tr>
+          <th>数据结构</th>
+          <th>描述</th>
+          <th>应用示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>数组 / 向量</strong></td>
+          <td>连续存储，支持随机访问</td>
+          <td>储存历史轨迹点、车辆状态序列</td>
+      </tr>
+      <tr>
+          <td><strong>链表 / 环形队列</strong></td>
+          <td>灵活插入/删除</td>
+          <td>控制器中缓存最近速度或传感器数据</td>
+      </tr>
+      <tr>
+          <td><strong>栈 / 队列</strong></td>
+          <td>先进后出 / 先进先出</td>
+          <td>控制状态切换、命令排队处理</td>
+      </tr>
+      <tr>
+          <td><strong>哈希表（Hash Map）</strong></td>
+          <td>快速查找</td>
+          <td>建图中障碍物记录，传感器缓存索引</td>
+      </tr>
+      <tr>
+          <td><strong>堆（Heap）</strong></td>
+          <td>优先级队列</td>
+          <td>A*/Dijkstra路径搜索中寻找最短路径</td>
+      </tr>
+      <tr>
+          <td><strong>树 / 四叉树 / 八叉树</strong></td>
+          <td>分层组织空间</td>
+          <td>空间分割（如QuadTree用于2D路径规划）</td>
+      </tr>
+      <tr>
+          <td><strong>图（Graph）</strong></td>
+          <td>节点+边</td>
+          <td>路径规划地图、任务依赖图等</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-算法在自动驾驶中的典型应用">3. 算法在自动驾驶中的典型应用</h2>
+<h3 id="31-搜索与路径规划算法">3.1 搜索与路径规划算法</h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>A*</strong></td>
+          <td>地图中的最短路径搜索</td>
+      </tr>
+      <tr>
+          <td><strong>Dijkstra</strong></td>
+          <td>全局路径规划</td>
+      </tr>
+      <tr>
+          <td><strong>RRT/RRT*</strong></td>
+          <td>采样路径规划，适用于复杂动态场景</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-数学优化类算法">3.2 数学优化类算法</h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>MPC（Model Predictive Control）</strong></td>
+          <td>控制指令生成，预测未来行为</td>
+      </tr>
+      <tr>
+          <td><strong>最小均方（LMS）/最小二乘（LS）</strong></td>
+          <td>滤波器设计，状态估计等</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-搜索结构加速">3.3 搜索结构加速</h3>
+<table>
+  <thead>
+      <tr>
+          <th>技术</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>KD-Tree</td>
+          <td>快速搜索最近邻（如点云比对）</td>
+      </tr>
+      <tr>
+          <td>Hashing</td>
+          <td>快速定位地图块、路段编号</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-4-示例a-路径规划伪代码">🧪 4. 示例：A* 路径规划（伪代码）</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">A_star</span>(start, goal, map):
+</span></span><span style="display:flex;"><span>    open_list <span style="color:#f92672">=</span> PriorityQueue()
+</span></span><span style="display:flex;"><span>    open_list<span style="color:#f92672">.</span>put(start)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> open_list<span style="color:#f92672">.</span>empty():
+</span></span><span style="display:flex;"><span>        current <span style="color:#f92672">=</span> open_list<span style="color:#f92672">.</span>get()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> current <span style="color:#f92672">==</span> goal:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> reconstruct_path()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> neighbor <span style="color:#f92672">in</span> get_neighbors(current):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> visited(neighbor):
+</span></span><span style="display:flex;"><span>                cost <span style="color:#f92672">=</span> calculate_cost(current, neighbor)
+</span></span><span style="display:flex;"><span>                open_list<span style="color:#f92672">.</span>put(neighbor, cost)
+</span></span></code></pre></div><hr>
+<h2 id="-推荐学习资料">📘 推荐学习资料</h2>
+<ul>
+<li>《算法图解》：通俗易懂的入门书</li>
+<li>《数据结构与算法分析》：理论+实现</li>
+<li>LeetCode 专题：图、堆、树、搜索优化</li>
+<li>ROS Navigation Stack 源码分析</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 2, 2024</span>
+  </footer>
+</article>
+
+        
       </div>
     
       <h2 style="margin-top: 2rem;">Product &amp; Project Management</h2>
@@ -1862,6 +2129,83 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
+      <a href="/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/">智能驾驶功能开发中的典型问题汇总</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。</p>
+<hr>
+<h2 id="-一变道类问题nop--noa">🛣️ 一、变道类问题（NOP / NOA）</h2>
+<ul>
+<li>变道轨迹抖动 / 折线过多，影响车辆平顺性</li>
+<li>动作触发延迟，导致错过变道时机</li>
+<li>插队判断错误，未能正确识别目标车道间距</li>
+<li>导航目标车道识别偏差，影响入口/出口变道</li>
+<li>自主变道成功后未正确恢复至原始路径</li>
+</ul>
+<hr>
+<h2 id="-二泊车类问题apa">🅿️ 二、泊车类问题（APA）</h2>
+<ul>
+<li>泊车位识别偏移，车辆偏离泊车线</li>
+<li>倒车入位时轨迹溢出安全范围</li>
+<li>APA 识别过程误将墙面、栏杆识别为车位</li>
+<li>泊车起始位置不合理，导致 APA 无法生成可行轨迹</li>
+<li>驻车后未触发自动切换 P 挡 / 驻车制动状态异常</li>
+</ul>
+<hr>
+<h2 id="-三跟车类问题acc--tja">🚘 三、跟车类问题（ACC / TJA）</h2>
+<ul>
+<li>前车减速响应延迟，跟车距离拉近过快</li>
+<li>误判静止物体为运动目标导致急刹</li>
+<li>在拥堵工况中频繁启停，舒适性差</li>
+<li>跟车目标丢失时未及时降级退出 ACC 状态</li>
+<li>默认加速度 / 跟车间距配置过大或过小，体验不一致</li>
+</ul>
+<hr>
+<h2 id="-四横纵向控制类问题lka--planning">🛞 四、横纵向控制类问题（LKA / Planning）</h2>
+<ul>
+<li>LKA 中车辆偏离车道线但未及时介入</li>
+<li>弯道中曲率变化过快，导致控制器震荡</li>
+<li>轨迹规划不连续，目标点抖动</li>
+<li>控制指令变化陡峭，引发急转或急加速</li>
+<li>转向指令与当前车速不匹配，导致过弯困难</li>
+</ul>
+<hr>
+<h2 id="-五感知--状态识别类问题">🧠 五、感知 &amp; 状态识别类问题</h2>
+<ul>
+<li>静态障碍识别误报，影响轨迹生成</li>
+<li>交通灯状态识别错误，导致刹停失败</li>
+<li>车道线检测置信度低，影响路径规划</li>
+<li>车辆定位误差大于可接受范围（&gt; 0.5m）</li>
+<li>上下匝道判断逻辑错误，导致路径漂移</li>
+</ul>
+<hr>
+<h2 id="-六模块接口--策略交互类问题">🧩 六、模块接口 / 策略交互类问题</h2>
+<ul>
+<li>感知与规划模块的坐标系不一致</li>
+<li>置信度阈值设置不合理，导致过早/过晚触发切换</li>
+<li>策略端参数配置未与实际功能同步（如最大变道时间）</li>
+<li>轨迹下发频率与控制器采样周期不匹配</li>
+<li>模块状态切换条件不一致，影响降级退出流程</li>
+</ul>
+<hr>
+<h2 id="-七用户体验--非功能性问题">🧪 七、用户体验 / 非功能性问题</h2>
+<ul>
+<li>变道过程中方向盘突然介入，造成“吓人”体验</li>
+<li>倒车过程中音响提示与车速不一致</li>
+<li>自动泊车未显示进度/状态信息，缺乏可感知反馈</li>
+<li>能力触发门槛过高，用户难以体验完整流程</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 21, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
       <a href="/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/">需求分析与功能设计</a>
     </h2>
   </header>
@@ -1995,12 +2339,341 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 </article>
 
         
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">模块分工与接口定义表</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="模块通信接口定义文档感知--规划--控制">模块通信接口定义文档（感知 / 规划 / 控制）</h1>
+<p>本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。</p>
+<h1 id="模块分工与接口定义表感知--规划--控制">模块分工与接口定义表（感知 / 规划 / 控制）</h1>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>主要职责</th>
+          <th>输入接口</th>
+          <th>输出接口</th>
+          <th>依赖参数 / 配置</th>
+          <th>典型异常情况</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知模块</td>
+          <td>提供环境建图、障碍物检测、车道线识别等基础信息</td>
+          <td>摄像头、雷达、超声波、IMU 原始数据</td>
+          <td>- 障碍物列表<!-- raw HTML omitted -->- 车道线模型<!-- raw HTML omitted -->- 可通行区域Mask<!-- raw HTML omitted -->- 动态物体预测轨迹</td>
+          <td>感知置信度阈值<!-- raw HTML omitted -->障碍物融合策略</td>
+          <td>静态物体误识别<!-- raw HTML omitted -->车道线断裂<!-- raw HTML omitted -->预测轨迹跳变</td>
+      </tr>
+      <tr>
+          <td>规划模块</td>
+          <td>基于感知结果和导航目标，生成轨迹并动态调整行为策略</td>
+          <td>- 当前车辆状态<!-- raw HTML omitted -->- 障碍物列表<!-- raw HTML omitted -->- 可通行区域<!-- raw HTML omitted -->- 全局路径</td>
+          <td>- 局部轨迹（轨迹点序列）<!-- raw HTML omitted -->- 行为决策（变道 / 跟车 / 停止）</td>
+          <td>最远预测距离<!-- raw HTML omitted -->轨迹重规划频率<!-- raw HTML omitted -->变道策略参数</td>
+          <td>轨迹折线过多<!-- raw HTML omitted -->变道触发不合理<!-- raw HTML omitted -->变道后不恢复原车道</td>
+      </tr>
+      <tr>
+          <td>控制模块</td>
+          <td>接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行</td>
+          <td>- 规划轨迹<!-- raw HTML omitted -->- 当前车速 / 横摆角<!-- raw HTML omitted -->- 控制目标点</td>
+          <td>- 方向盘角度<!-- raw HTML omitted -->- 加速度 / 油门开度<!-- raw HTML omitted -->- 制动指令</td>
+          <td>控制频率<!-- raw HTML omitted -->控制器类型（PID/MPC）<!-- raw HTML omitted -->跟踪误差阈值</td>
+          <td>指令跳变<!-- raw HTML omitted -->横向控制震荡<!-- raw HTML omitted -->刹车响应滞后</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="1-模块功能分工">1. 模块功能分工</h2>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>主要职责</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知模块</td>
+          <td>环境建图、车道线识别、障碍物检测与跟踪</td>
+      </tr>
+      <tr>
+          <td>规划模块</td>
+          <td>行为决策（如变道、跟车）、轨迹生成</td>
+      </tr>
+      <tr>
+          <td>控制模块</td>
+          <td>控制命令输出（转向、加减速），完成车辆运动控制</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="2-模块间通信接口定义">2. 模块间通信接口定义</h2>
+<h3 id="-21-感知--规划">🔹 2.1 感知 → 规划</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>数据字段示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/perception/obstacles</td>
+          <td>ObstacleArray</td>
+          <td>20 Hz</td>
+          <td>id, position(x,y), velocity, type, confidence</td>
+      </tr>
+      <tr>
+          <td>/perception/lane</td>
+          <td>LaneModel</td>
+          <td>20 Hz</td>
+          <td>lane_id, coeffs(a,b,c), confidence</td>
+      </tr>
+      <tr>
+          <td>/perception/area</td>
+          <td>DrivableArea</td>
+          <td>10 Hz</td>
+          <td>polygon_mask, timestamp</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="-22-规划--控制">🔹 2.2 规划 → 控制</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>数据字段示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/planning/trajectory</td>
+          <td>Trajectory</td>
+          <td>50 Hz</td>
+          <td>points[x,y,v,acc,yaw], timestamp</td>
+      </tr>
+      <tr>
+          <td>/planning/behavior</td>
+          <td>BehaviorState</td>
+          <td>10 Hz</td>
+          <td>state_type (lane_following, lane_change, stop), duration</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="-23-感知--控制直接辅助控制冗余通道">🔹 2.3 感知 → 控制（直接辅助控制冗余通道）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/perception/yaw_rate</td>
+          <td>Float32</td>
+          <td>100 Hz</td>
+          <td>高频率反馈用于横向控制辅助</td>
+      </tr>
+      <tr>
+          <td>/imu/data</td>
+          <td>IMUData</td>
+          <td>100 Hz</td>
+          <td>惯性导航传感器数据</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-配置参数依赖项">3. 配置参数依赖项</h2>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>参数名称</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知</td>
+          <td>lane_conf_threshold</td>
+          <td>车道线识别的最低置信度</td>
+      </tr>
+      <tr>
+          <td>规划</td>
+          <td>lane_change_timeout</td>
+          <td>变道超时时间设置</td>
+      </tr>
+      <tr>
+          <td>控制</td>
+          <td>lateral_ctrl_gain</td>
+          <td>横向 PID 控制器增益参数</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="4-常见接口问题与调试建议">4. 常见接口问题与调试建议</h2>
+<table>
+  <thead>
+      <tr>
+          <th>问题描述</th>
+          <th>可能原因</th>
+          <th>调试建议</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>轨迹点跳变 / 抖动</td>
+          <td>感知误差大，置信度低</td>
+          <td>检查感知数据时间同步与滤波器配置</td>
+      </tr>
+      <tr>
+          <td>控制器响应滞后</td>
+          <td>轨迹点更新频率低</td>
+          <td>提高轨迹发布频率，调整控制器采样率</td>
+      </tr>
+      <tr>
+          <td>行为状态误判（频繁进入lane_change）</td>
+          <td>规则配置阈值过低 / 误判插队</td>
+          <td>优化状态机转移条件，结合多维输入决策</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="5-接口格式示例ros-message">5. 接口格式示例（ROS Message）</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Trajectory.msg</span>
+</span></span><span style="display:flex;"><span>Header header
+</span></span><span style="display:flex;"><span>TrajectoryPoint[] points
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># TrajectoryPoint.msg</span>
+</span></span><span style="display:flex;"><span>float64 x
+</span></span><span style="display:flex;"><span>float64 y
+</span></span><span style="display:flex;"><span>float64 v
+</span></span><span style="display:flex;"><span>float64 acc
+</span></span><span style="display:flex;"><span>float64 yaw
+</span></span></code></pre></div><hr>
+<p>本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Jan 21, 2024</span>
+  </footer>
+</article>
+
+        
       </div>
     
       <h2 style="margin-top: 2rem;">Function Strategy &amp; UX Optimization</h2>
       <div class="post-list">
         
-          <p>No posts in this category.</p>
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/">L2&#43;&#43; 智能驾驶典型场景落地路径研究</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>本篇文档主要分析落地场景和相应的技术路径</p>
+<h2 id="一l2典型落地场景总览">一、L2++典型落地场景总览</h2>
+<table>
+  <thead>
+      <tr>
+          <th>场景类型</th>
+          <th>场景示例</th>
+          <th>是否主流落地</th>
+          <th>代表功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速场景</td>
+          <td>高速跟车、变道超车、上下匝道</td>
+          <td>已广泛部署</td>
+          <td>NOA、ACC、ALC</td>
+      </tr>
+      <tr>
+          <td>城市快速路</td>
+          <td>红绿灯通行、左转右转、避让行人非机动车</td>
+          <td>城市NOA核心区域</td>
+          <td>城市NOA、TJP</td>
+      </tr>
+      <tr>
+          <td>泊车场景</td>
+          <td>车位搜索、自动泊入泊出、记忆泊车</td>
+          <td>商业化广泛</td>
+          <td>APA、RPA、VPA</td>
+      </tr>
+      <tr>
+          <td>通勤路径</td>
+          <td>自定义路线记忆、熟路线高阶自动驾驶</td>
+          <td>差异化亮点</td>
+          <td>通勤NOA、记忆行驶</td>
+      </tr>
+      <tr>
+          <td>高速/城市融合</td>
+          <td>点到点导航，全程自动辅助驾驶</td>
+          <td>探索中</td>
+          <td>全域NOA、PPA</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二典型场景落地路径分析">二、典型场景落地路径分析</h2>
+<h3 id="1-高速场景最成熟的l2落地入口">1️ 高速场景：最成熟的L2++落地入口</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从ACC/LKA演进到NOA</li>
+<li>配合高精地图完成匝道上下、变道超车</li>
+<li>再演进为“无图NOA”</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>自动变道超车（ALC）</li>
+<li>自动上下匝道</li>
+<li>智能限速</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA</p>
+<hr>
+<h3 id="2-城市道路场景能力挑战最大战略重点场景">2️ 城市道路场景：能力挑战最大、战略重点场景</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从城市主干道直行 → 红绿灯识别通行</li>
+<li>→ 支持交叉路口通行、无保护左转、避让行人等</li>
+<li>→ BEV感知+轻地图+规则策略并存</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>城市NOA</li>
+<li>红绿灯识别与响应</li>
+<li>异形障碍避让</li>
+<li>非保护转弯/礼让行人/加塞识别</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot</p>
+<hr>
+<h3 id="3-泊车类场景感知主导场景落地稳定">3️ 泊车类场景：感知主导场景、落地稳定</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>APA → RPA → 记忆泊车 → 云图泊车</li>
+</ul>
+<p><strong>代表功能：</strong></p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Feb 15, 2024</span>
+  </footer>
+</article>
+
         
       </div>
     

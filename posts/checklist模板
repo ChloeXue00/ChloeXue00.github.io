@@ -1,0 +1,69 @@
+import pandas as pd
+from datetime import datetime, timedelta
+
+# 示例数据：功能交付燃尽图模板
+burn_down_data = [
+    {
+        "功能模块": "NOP变道策略",
+        "所属版本": "v3.3.1",
+        "当前状态": "开发中",
+        "计划完成时间": datetime(2025, 6, 10),
+        "实际完成时间": "",
+        "责任人": "算法组-Alice",
+        "风险提示": "策略逻辑尚未完成"
+    },
+    {
+        "功能模块": "APA泊车识别",
+        "所属版本": "v3.3.1",
+        "当前状态": "联调中",
+        "计划完成时间": datetime(2025, 6, 5),
+        "实际完成时间": "",
+        "责任人": "感知组-Bob",
+        "风险提示": "待完成角度识别优化"
+    },
+    {
+        "功能模块": "曲率自适应控制",
+        "所属版本": "v3.3.1",
+        "当前状态": "已完成",
+        "计划完成时间": datetime(2025, 5, 25),
+        "实际完成时间": datetime(2025, 5, 24),
+        "责任人": "控制组-Carol",
+        "风险提示": ""
+    }
+]
+
+# 示例数据：Readiness checklist 模板
+checklist_data = [
+    {
+        "功能模块": "NOP变道策略",
+        "PRD冻结": "✅",
+        "策略完成": "❌",
+        "联调通过": "❌",
+        "用例覆盖": "❌",
+        "灰度开关": "✅",
+        "Blocking问题": "有",
+        "可发布": "否"
+    },
+    {
+        "功能模块": "APA泊车识别",
+        "PRD冻结": "✅",
+        "策略完成": "✅",
+        "联调通过": "✅",
+        "用例覆盖": "✅",
+        "灰度开关": "✅",
+        "Blocking问题": "无",
+        "可发布": "是"
+    }
+]
+
+# 创建DataFrame
+burn_down_df = pd.DataFrame(burn_down_data)
+checklist_df = pd.DataFrame(checklist_data)
+
+# 保存为Excel文件
+file_path = "/mnt/data/交付燃尽图与ReadinessChecklist模板.xlsx"
+with pd.ExcelWriter(file_path) as writer:
+    burn_down_df.to_excel(writer, sheet_name="功能交付燃尽图", index=False)
+    checklist_df.to_excel(writer, sheet_name="Readiness Checklist", index=False)
+
+file_path

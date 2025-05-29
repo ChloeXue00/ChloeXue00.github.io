@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>L2&#43;&#43; 智能驾驶典型场景落地路径研究 | </title>
+<meta name="keywords" content="">
+<meta name="description" content="本篇文档主要分析落地场景和相应的技术路径
+一、L2&#43;&#43;典型落地场景总览
+
+  
+      
+          场景类型
+          场景示例
+          是否主流落地
+          代表功能
+      
+  
+  
+      
+          高速场景
+          高速跟车、变道超车、上下匝道
+          已广泛部署
+          NOA、ACC、ALC
+      
+      
+          城市快速路
+          红绿灯通行、左转右转、避让行人非机动车
+          城市NOA核心区域
+          城市NOA、TJP
+      
+      
+          泊车场景
+          车位搜索、自动泊入泊出、记忆泊车
+          商业化广泛
+          APA、RPA、VPA
+      
+      
+          通勤路径
+          自定义路线记忆、熟路线高阶自动驾驶
+          差异化亮点
+          通勤NOA、记忆行驶
+      
+      
+          高速/城市融合
+          点到点导航，全程自动辅助驾驶
+          探索中
+          全域NOA、PPA
+      
+  
+
+
+二、典型场景落地路径分析
+1️ 高速场景：最成熟的L2&#43;&#43;落地入口
+路径演进：
+
+从ACC/LKA演进到NOA
+配合高精地图完成匝道上下、变道超车
+再演进为“无图NOA”
+
+代表功能：
+
+自动变道超车（ALC）
+自动上下匝道
+智能限速
+
+代表落地品牌：
+蔚来NOP&#43;、华为ADS、Momenta Mpilot、理想NOA
+
+2️ 城市道路场景：能力挑战最大、战略重点场景
+路径演进：
+
+从城市主干道直行 → 红绿灯识别通行
+→ 支持交叉路口通行、无保护左转、避让行人等
+→ BEV感知&#43;轻地图&#43;规则策略并存
+
+代表功能：
+
+城市NOA
+红绿灯识别与响应
+异形障碍避让
+非保护转弯/礼让行人/加塞识别
+
+代表落地品牌：
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot
+
+3️ 泊车类场景：感知主导场景、落地稳定
+路径演进：
+
+APA → RPA → 记忆泊车 → 云图泊车
+
+代表功能：">
+<meta name="author" content="">
+<link rel="canonical" href="/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/">
+  <meta property="og:title" content="L2&#43;&#43; 智能驾驶典型场景落地路径研究">
+  <meta property="og:description" content="本篇文档主要分析落地场景和相应的技术路径
+一、L2&#43;&#43;典型落地场景总览 场景类型 场景示例 是否主流落地 代表功能 高速场景 高速跟车、变道超车、上下匝道 已广泛部署 NOA、ACC、ALC 城市快速路 红绿灯通行、左转右转、避让行人非机动车 城市NOA核心区域 城市NOA、TJP 泊车场景 车位搜索、自动泊入泊出、记忆泊车 商业化广泛 APA、RPA、VPA 通勤路径 自定义路线记忆、熟路线高阶自动驾驶 差异化亮点 通勤NOA、记忆行驶 高速/城市融合 点到点导航，全程自动辅助驾驶 探索中 全域NOA、PPA 二、典型场景落地路径分析 1️ 高速场景：最成熟的L2&#43;&#43;落地入口 路径演进：
+从ACC/LKA演进到NOA 配合高精地图完成匝道上下、变道超车 再演进为“无图NOA” 代表功能：
+自动变道超车（ALC） 自动上下匝道 智能限速 代表落地品牌：
+蔚来NOP&#43;、华为ADS、Momenta Mpilot、理想NOA
+2️ 城市道路场景：能力挑战最大、战略重点场景 路径演进：
+从城市主干道直行 → 红绿灯识别通行 → 支持交叉路口通行、无保护左转、避让行人等 → BEV感知&#43;轻地图&#43;规则策略并存 代表功能：
+城市NOA 红绿灯识别与响应 异形障碍避让 非保护转弯/礼让行人/加塞识别 代表落地品牌：
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot
+3️ 泊车类场景：感知主导场景、落地稳定 路径演进：
+APA → RPA → 记忆泊车 → 云图泊车 代表功能：">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-02-15T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="L2&#43;&#43; 智能驾驶典型场景落地路径研究">
+<meta name="twitter:description" content="本篇文档主要分析落地场景和相应的技术路径
+一、L2&#43;&#43;典型落地场景总览
+
+  
+      
+          场景类型
+          场景示例
+          是否主流落地
+          代表功能
+      
+  
+  
+      
+          高速场景
+          高速跟车、变道超车、上下匝道
+          已广泛部署
+          NOA、ACC、ALC
+      
+      
+          城市快速路
+          红绿灯通行、左转右转、避让行人非机动车
+          城市NOA核心区域
+          城市NOA、TJP
+      
+      
+          泊车场景
+          车位搜索、自动泊入泊出、记忆泊车
+          商业化广泛
+          APA、RPA、VPA
+      
+      
+          通勤路径
+          自定义路线记忆、熟路线高阶自动驾驶
+          差异化亮点
+          通勤NOA、记忆行驶
+      
+      
+          高速/城市融合
+          点到点导航，全程自动辅助驾驶
+          探索中
+          全域NOA、PPA
+      
+  
+
+
+二、典型场景落地路径分析
+1️ 高速场景：最成熟的L2&#43;&#43;落地入口
+路径演进：
+
+从ACC/LKA演进到NOA
+配合高精地图完成匝道上下、变道超车
+再演进为“无图NOA”
+
+代表功能：
+
+自动变道超车（ALC）
+自动上下匝道
+智能限速
+
+代表落地品牌：
+蔚来NOP&#43;、华为ADS、Momenta Mpilot、理想NOA
+
+2️ 城市道路场景：能力挑战最大、战略重点场景
+路径演进：
+
+从城市主干道直行 → 红绿灯识别通行
+→ 支持交叉路口通行、无保护左转、避让行人等
+→ BEV感知&#43;轻地图&#43;规则策略并存
+
+代表功能：
+
+城市NOA
+红绿灯识别与响应
+异形障碍避让
+非保护转弯/礼让行人/加塞识别
+
+代表落地品牌：
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot
+
+3️ 泊车类场景：感知主导场景、落地稳定
+路径演进：
+
+APA → RPA → 记忆泊车 → 云图泊车
+
+代表功能：">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "L2++ 智能驾驶典型场景落地路径研究",
+      "item": "/posts/l2++%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "L2++ 智能驾驶典型场景落地路径研究",
+  "name": "L2\u002b\u002b 智能驾驶典型场景落地路径研究",
+  "description": "本篇文档主要分析落地场景和相应的技术路径\n一、L2++典型落地场景总览 场景类型 场景示例 是否主流落地 代表功能 高速场景 高速跟车、变道超车、上下匝道 已广泛部署 NOA、ACC、ALC 城市快速路 红绿灯通行、左转右转、避让行人非机动车 城市NOA核心区域 城市NOA、TJP 泊车场景 车位搜索、自动泊入泊出、记忆泊车 商业化广泛 APA、RPA、VPA 通勤路径 自定义路线记忆、熟路线高阶自动驾驶 差异化亮点 通勤NOA、记忆行驶 高速/城市融合 点到点导航，全程自动辅助驾驶 探索中 全域NOA、PPA 二、典型场景落地路径分析 1️ 高速场景：最成熟的L2++落地入口 路径演进：\n从ACC/LKA演进到NOA 配合高精地图完成匝道上下、变道超车 再演进为“无图NOA” 代表功能：\n自动变道超车（ALC） 自动上下匝道 智能限速 代表落地品牌：\n蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA\n2️ 城市道路场景：能力挑战最大、战略重点场景 路径演进：\n从城市主干道直行 → 红绿灯识别通行 → 支持交叉路口通行、无保护左转、避让行人等 → BEV感知+轻地图+规则策略并存 代表功能：\n城市NOA 红绿灯识别与响应 异形障碍避让 非保护转弯/礼让行人/加塞识别 代表落地品牌：\nMomenta、华为ADS 2.0、百度Apollo Max、文远WePilot\n3️ 泊车类场景：感知主导场景、落地稳定 路径演进：\nAPA → RPA → 记忆泊车 → 云图泊车 代表功能：\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "本篇文档主要分析落地场景和相应的技术路径\n一、L2++典型落地场景总览 场景类型 场景示例 是否主流落地 代表功能 高速场景 高速跟车、变道超车、上下匝道 已广泛部署 NOA、ACC、ALC 城市快速路 红绿灯通行、左转右转、避让行人非机动车 城市NOA核心区域 城市NOA、TJP 泊车场景 车位搜索、自动泊入泊出、记忆泊车 商业化广泛 APA、RPA、VPA 通勤路径 自定义路线记忆、熟路线高阶自动驾驶 差异化亮点 通勤NOA、记忆行驶 高速/城市融合 点到点导航，全程自动辅助驾驶 探索中 全域NOA、PPA 二、典型场景落地路径分析 1️ 高速场景：最成熟的L2++落地入口 路径演进：\n从ACC/LKA演进到NOA 配合高精地图完成匝道上下、变道超车 再演进为“无图NOA” 代表功能：\n自动变道超车（ALC） 自动上下匝道 智能限速 代表落地品牌：\n蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA\n2️ 城市道路场景：能力挑战最大、战略重点场景 路径演进：\n从城市主干道直行 → 红绿灯识别通行 → 支持交叉路口通行、无保护左转、避让行人等 → BEV感知+轻地图+规则策略并存 代表功能：\n城市NOA 红绿灯识别与响应 异形障碍避让 非保护转弯/礼让行人/加塞识别 代表落地品牌：\nMomenta、华为ADS 2.0、百度Apollo Max、文远WePilot\n3️ 泊车类场景：感知主导场景、落地稳定 路径演进：\nAPA → RPA → 记忆泊车 → 云图泊车 代表功能：\n自动泊车（APA） 远程控制泊车（RPA） 记忆泊车（VPA） 代表落地品牌：\n蔚来APA、比亚迪DiPilot、上汽智己APA+、理想记忆泊车\n4 通勤类场景：用户粘性强的私域路径 路径演进：\n用户固定路线记忆学习 端到端策略模型持续训练 地图自由化路径探索 代表功能：\n通勤NOA 用户驾驶偏好学习（并道习惯、速度设定等） 代表落地品牌：\nMomenta通勤模式、百度Apollo通勤助手、理想自定义通勤\n5️ 高速+城市融合场景：全域智能驾驶终极形态 路径演进：\n城市NOA + 高速NOA 融合 → 点到点导航辅助驾驶 全场景策略统一、多任务协同调度 代表功能：\nPoint-to-Point Assist（PPA） 从家门口到停车位全过程导航驾驶 代表落地品牌：\n极越01、问界M9、智己L6、百度Apollo Max\n三、产品规划建议：按“能力演进 + 城市开通”分阶段部署 阶段 功能重点 依赖 用户价值 第一阶段 高速NOA全量+APA 高精地图（高速） 通勤高速、长途频繁使用 第二阶段 城市快速路+红绿灯通行 轻地图 + 感知能力 日常代驾体验升级 第三阶段 异形障碍、无保护转弯 BEV感知 + 策略学习 抢占长尾能力口碑 第四阶段 熟路线记忆NOA 端到端模型 + 用户数据 用户粘性 + 体验差异化 第五阶段 全域点到点NOA 多策略融合 + OTA升级 品牌“高阶智驾”标签 四、总结 L2++落地不再是“堆硬件”，而是围绕：\n对真实场景的理解 对边界工况的覆盖 对策略融合能力的稳定性 对用户可感知体验提升 进行系统规划与迭代。\n产品经理在规划过程中应把握两条主线：\n能力演进节奏（从高速 → 城市 → 全域） 城市开放节奏（从一线城市 → 固定通勤 → 全国覆盖） 落地路径应由用户场景反推产品能力模块，形成完整可视化路线图。\n",
+  "wordCount" : "159",
+  "inLanguage": "en",
+  "datePublished": "2024-02-15T00:00:00Z",
+  "dateModified": "2024-02-15T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/l2++%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      L2&#43;&#43; 智能驾驶典型场景落地路径研究
+    </h1>
+    <div class="post-meta"><span title='2024-02-15 00:00:00 +0000 UTC'>February 15, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>本篇文档主要分析落地场景和相应的技术路径</p>
+<h2 id="一l2典型落地场景总览">一、L2++典型落地场景总览<a hidden class="anchor" aria-hidden="true" href="#一l2典型落地场景总览">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>场景类型</th>
+          <th>场景示例</th>
+          <th>是否主流落地</th>
+          <th>代表功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速场景</td>
+          <td>高速跟车、变道超车、上下匝道</td>
+          <td>已广泛部署</td>
+          <td>NOA、ACC、ALC</td>
+      </tr>
+      <tr>
+          <td>城市快速路</td>
+          <td>红绿灯通行、左转右转、避让行人非机动车</td>
+          <td>城市NOA核心区域</td>
+          <td>城市NOA、TJP</td>
+      </tr>
+      <tr>
+          <td>泊车场景</td>
+          <td>车位搜索、自动泊入泊出、记忆泊车</td>
+          <td>商业化广泛</td>
+          <td>APA、RPA、VPA</td>
+      </tr>
+      <tr>
+          <td>通勤路径</td>
+          <td>自定义路线记忆、熟路线高阶自动驾驶</td>
+          <td>差异化亮点</td>
+          <td>通勤NOA、记忆行驶</td>
+      </tr>
+      <tr>
+          <td>高速/城市融合</td>
+          <td>点到点导航，全程自动辅助驾驶</td>
+          <td>探索中</td>
+          <td>全域NOA、PPA</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二典型场景落地路径分析">二、典型场景落地路径分析<a hidden class="anchor" aria-hidden="true" href="#二典型场景落地路径分析">#</a></h2>
+<h3 id="1-高速场景最成熟的l2落地入口">1️ 高速场景：最成熟的L2++落地入口<a hidden class="anchor" aria-hidden="true" href="#1-高速场景最成熟的l2落地入口">#</a></h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从ACC/LKA演进到NOA</li>
+<li>配合高精地图完成匝道上下、变道超车</li>
+<li>再演进为“无图NOA”</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>自动变道超车（ALC）</li>
+<li>自动上下匝道</li>
+<li>智能限速</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA</p>
+<hr>
+<h3 id="2-城市道路场景能力挑战最大战略重点场景">2️ 城市道路场景：能力挑战最大、战略重点场景<a hidden class="anchor" aria-hidden="true" href="#2-城市道路场景能力挑战最大战略重点场景">#</a></h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从城市主干道直行 → 红绿灯识别通行</li>
+<li>→ 支持交叉路口通行、无保护左转、避让行人等</li>
+<li>→ BEV感知+轻地图+规则策略并存</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>城市NOA</li>
+<li>红绿灯识别与响应</li>
+<li>异形障碍避让</li>
+<li>非保护转弯/礼让行人/加塞识别</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot</p>
+<hr>
+<h3 id="3-泊车类场景感知主导场景落地稳定">3️ 泊车类场景：感知主导场景、落地稳定<a hidden class="anchor" aria-hidden="true" href="#3-泊车类场景感知主导场景落地稳定">#</a></h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>APA → RPA → 记忆泊车 → 云图泊车</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>自动泊车（APA）</li>
+<li>远程控制泊车（RPA）</li>
+<li>记忆泊车（VPA）</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+蔚来APA、比亚迪DiPilot、上汽智己APA+、理想记忆泊车</p>
+<hr>
+<h3 id="4-通勤类场景用户粘性强的私域路径">4 通勤类场景：用户粘性强的私域路径<a hidden class="anchor" aria-hidden="true" href="#4-通勤类场景用户粘性强的私域路径">#</a></h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>用户固定路线记忆学习</li>
+<li>端到端策略模型持续训练</li>
+<li>地图自由化路径探索</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>通勤NOA</li>
+<li>用户驾驶偏好学习（并道习惯、速度设定等）</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+Momenta通勤模式、百度Apollo通勤助手、理想自定义通勤</p>
+<hr>
+<h3 id="5-高速城市融合场景全域智能驾驶终极形态">5️ 高速+城市融合场景：全域智能驾驶终极形态<a hidden class="anchor" aria-hidden="true" href="#5-高速城市融合场景全域智能驾驶终极形态">#</a></h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>城市NOA + 高速NOA 融合 → 点到点导航辅助驾驶</li>
+<li>全场景策略统一、多任务协同调度</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>Point-to-Point Assist（PPA）</li>
+<li>从家门口到停车位全过程导航驾驶</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+极越01、问界M9、智己L6、百度Apollo Max</p>
+<hr>
+<h2 id="三产品规划建议按能力演进--城市开通分阶段部署">三、产品规划建议：按“能力演进 + 城市开通”分阶段部署<a hidden class="anchor" aria-hidden="true" href="#三产品规划建议按能力演进--城市开通分阶段部署">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>阶段</th>
+          <th>功能重点</th>
+          <th>依赖</th>
+          <th>用户价值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>第一阶段</td>
+          <td>高速NOA全量+APA</td>
+          <td>高精地图（高速）</td>
+          <td>通勤高速、长途频繁使用</td>
+      </tr>
+      <tr>
+          <td>第二阶段</td>
+          <td>城市快速路+红绿灯通行</td>
+          <td>轻地图 + 感知能力</td>
+          <td>日常代驾体验升级</td>
+      </tr>
+      <tr>
+          <td>第三阶段</td>
+          <td>异形障碍、无保护转弯</td>
+          <td>BEV感知 + 策略学习</td>
+          <td>抢占长尾能力口碑</td>
+      </tr>
+      <tr>
+          <td>第四阶段</td>
+          <td>熟路线记忆NOA</td>
+          <td>端到端模型 + 用户数据</td>
+          <td>用户粘性 + 体验差异化</td>
+      </tr>
+      <tr>
+          <td>第五阶段</td>
+          <td>全域点到点NOA</td>
+          <td>多策略融合 + OTA升级</td>
+          <td>品牌“高阶智驾”标签</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四总结">四、总结<a hidden class="anchor" aria-hidden="true" href="#四总结">#</a></h2>
+<p>L2++落地不再是“堆硬件”，而是围绕：</p>
+<ul>
+<li>对<strong>真实场景的理解</strong></li>
+<li>对<strong>边界工况的覆盖</strong></li>
+<li>对<strong>策略融合能力的稳定性</strong></li>
+<li>对<strong>用户可感知体验提升</strong></li>
+</ul>
+<p>进行系统规划与迭代。</p>
+<p>产品经理在规划过程中应把握两条主线：</p>
+<ul>
+<li><strong>能力演进节奏</strong>（从高速 → 城市 → 全域）</li>
+<li><strong>城市开放节奏</strong>（从一线城市 → 固定通勤 → 全国覆盖）</li>
+</ul>
+<p>落地路径应由用户场景反推产品能力模块，形成完整可视化路线图。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

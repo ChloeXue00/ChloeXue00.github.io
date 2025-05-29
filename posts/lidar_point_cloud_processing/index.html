@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>激光点云处理（Lidar Point Cloud Processing） | </title>
+<meta name="keywords" content="">
+<meta name="description" content="激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧点云数据（point cloud），表示空间中障碍物的位置和形状。
+
+1. 什么是点云？
+点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。
+
+2. 点云数据结构
+
+  
+      
+          字段
+          描述
+      
+  
+  
+      
+          x, y, z
+          三维坐标
+      
+      
+          intensity
+          激光反射强度
+      
+      
+          ring
+          激光束编号（多线雷达）
+      
+      
+          timestamp
+          每个点的时间戳
+      
+      
+          reflectivity / ambient
+          可选，反映表面材质或亮度
+      
+  
+
+
+3. 常见处理流程
+3.1 点云预处理
+
+体素滤波（VoxelGrid）：降低点云密度，加快处理速度
+裁剪（CropBox）：去除远处或地面点，聚焦感兴趣区域
+时间同步：与IMU/GNSS同步，统一坐标系
+
+3.2 点云配准与融合
+
+ICP算法（Iterative Closest Point）：配准不同帧点云，构建地图
+NDT算法：用于鲁棒配准，适应点云局部稀疏问题
+多帧融合：提升障碍检测的完整性
+
+3.3 点云感知
+
+地面分割（Ground Segmentation）：识别并移除地面点
+聚类（Euclidean Clustering）：提取独立目标（车辆、行人）
+目标跟踪与识别：结合深度学习模型进行物体分类
+
+
+4. 使用工具与库
+
+  
+      
+          工具/库
+          说明
+      
+  
+  
+      
+          PCL (Point Cloud Library)
+          最主流的C&#43;&#43;点云处理库
+      
+      
+          Open3D
+          Python友好，支持可视化与处理
+      
+      
+          ROS &#43; sensor_msgs/PointCloud2
+          ROS中点云标准消息格式
+      
+      
+          rviz
+          可视化点云、障碍物、车辆模型
+      
+      
+          Autoware/Apollo
+          提供全套点云感知模块
+      
+  
+
+
+5. 示例：PCL聚类伪代码
+pcl::EuclideanClusterExtraction&lt;pcl::PointXYZ&gt; ec;
+ec.setClusterTolerance(0.5); // 50cm内为一类
+ec.setMinClusterSize(30);
+ec.setMaxClusterSize(2500);
+ec.setSearchMethod(tree);
+ec.setInputCloud(cloud_filtered);
+ec.extract(cluster_indices);
+
+推荐学习资料
+
+PCL官方文档
+Open3D教程
+Apollo / Autoware 点云处理模块源码分析
+Udacity Sensor Fusion Nanodegree
+">
+<meta name="author" content="">
+<link rel="canonical" href="/posts/lidar_point_cloud_processing/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/posts/lidar_point_cloud_processing/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="/posts/lidar_point_cloud_processing/">
+  <meta property="og:title" content="激光点云处理（Lidar Point Cloud Processing）">
+  <meta property="og:description" content="激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧点云数据（point cloud），表示空间中障碍物的位置和形状。
+1. 什么是点云？ 点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。
+2. 点云数据结构 字段 描述 x, y, z 三维坐标 intensity 激光反射强度 ring 激光束编号（多线雷达） timestamp 每个点的时间戳 reflectivity / ambient 可选，反映表面材质或亮度 3. 常见处理流程 3.1 点云预处理 体素滤波（VoxelGrid）：降低点云密度，加快处理速度 裁剪（CropBox）：去除远处或地面点，聚焦感兴趣区域 时间同步：与IMU/GNSS同步，统一坐标系 3.2 点云配准与融合 ICP算法（Iterative Closest Point）：配准不同帧点云，构建地图 NDT算法：用于鲁棒配准，适应点云局部稀疏问题 多帧融合：提升障碍检测的完整性 3.3 点云感知 地面分割（Ground Segmentation）：识别并移除地面点 聚类（Euclidean Clustering）：提取独立目标（车辆、行人） 目标跟踪与识别：结合深度学习模型进行物体分类 4. 使用工具与库 工具/库 说明 PCL (Point Cloud Library) 最主流的C&#43;&#43;点云处理库 Open3D Python友好，支持可视化与处理 ROS &#43; sensor_msgs/PointCloud2 ROS中点云标准消息格式 rviz 可视化点云、障碍物、车辆模型 Autoware/Apollo 提供全套点云感知模块 5. 示例：PCL聚类伪代码 pcl::EuclideanClusterExtraction&lt;pcl::PointXYZ&gt; ec; ec.setClusterTolerance(0.5); // 50cm内为一类 ec.setMinClusterSize(30); ec.setMaxClusterSize(2500); ec.setSearchMethod(tree); ec.setInputCloud(cloud_filtered); ec.extract(cluster_indices); 推荐学习资料 PCL官方文档 Open3D教程 Apollo / Autoware 点云处理模块源码分析 Udacity Sensor Fusion Nanodegree ">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-05-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-05-02T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="激光点云处理（Lidar Point Cloud Processing）">
+<meta name="twitter:description" content="激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧点云数据（point cloud），表示空间中障碍物的位置和形状。
+
+1. 什么是点云？
+点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。
+
+2. 点云数据结构
+
+  
+      
+          字段
+          描述
+      
+  
+  
+      
+          x, y, z
+          三维坐标
+      
+      
+          intensity
+          激光反射强度
+      
+      
+          ring
+          激光束编号（多线雷达）
+      
+      
+          timestamp
+          每个点的时间戳
+      
+      
+          reflectivity / ambient
+          可选，反映表面材质或亮度
+      
+  
+
+
+3. 常见处理流程
+3.1 点云预处理
+
+体素滤波（VoxelGrid）：降低点云密度，加快处理速度
+裁剪（CropBox）：去除远处或地面点，聚焦感兴趣区域
+时间同步：与IMU/GNSS同步，统一坐标系
+
+3.2 点云配准与融合
+
+ICP算法（Iterative Closest Point）：配准不同帧点云，构建地图
+NDT算法：用于鲁棒配准，适应点云局部稀疏问题
+多帧融合：提升障碍检测的完整性
+
+3.3 点云感知
+
+地面分割（Ground Segmentation）：识别并移除地面点
+聚类（Euclidean Clustering）：提取独立目标（车辆、行人）
+目标跟踪与识别：结合深度学习模型进行物体分类
+
+
+4. 使用工具与库
+
+  
+      
+          工具/库
+          说明
+      
+  
+  
+      
+          PCL (Point Cloud Library)
+          最主流的C&#43;&#43;点云处理库
+      
+      
+          Open3D
+          Python友好，支持可视化与处理
+      
+      
+          ROS &#43; sensor_msgs/PointCloud2
+          ROS中点云标准消息格式
+      
+      
+          rviz
+          可视化点云、障碍物、车辆模型
+      
+      
+          Autoware/Apollo
+          提供全套点云感知模块
+      
+  
+
+
+5. 示例：PCL聚类伪代码
+pcl::EuclideanClusterExtraction&lt;pcl::PointXYZ&gt; ec;
+ec.setClusterTolerance(0.5); // 50cm内为一类
+ec.setMinClusterSize(30);
+ec.setMaxClusterSize(2500);
+ec.setSearchMethod(tree);
+ec.setInputCloud(cloud_filtered);
+ec.extract(cluster_indices);
+
+推荐学习资料
+
+PCL官方文档
+Open3D教程
+Apollo / Autoware 点云处理模块源码分析
+Udacity Sensor Fusion Nanodegree
+">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "激光点云处理（Lidar Point Cloud Processing）",
+      "item": "/posts/lidar_point_cloud_processing/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "激光点云处理（Lidar Point Cloud Processing）",
+  "name": "激光点云处理（Lidar Point Cloud Processing）",
+  "description": "激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧点云数据（point cloud），表示空间中障碍物的位置和形状。\n1. 什么是点云？ 点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。\n2. 点云数据结构 字段 描述 x, y, z 三维坐标 intensity 激光反射强度 ring 激光束编号（多线雷达） timestamp 每个点的时间戳 reflectivity / ambient 可选，反映表面材质或亮度 3. 常见处理流程 3.1 点云预处理 体素滤波（VoxelGrid）：降低点云密度，加快处理速度 裁剪（CropBox）：去除远处或地面点，聚焦感兴趣区域 时间同步：与IMU/GNSS同步，统一坐标系 3.2 点云配准与融合 ICP算法（Iterative Closest Point）：配准不同帧点云，构建地图 NDT算法：用于鲁棒配准，适应点云局部稀疏问题 多帧融合：提升障碍检测的完整性 3.3 点云感知 地面分割（Ground Segmentation）：识别并移除地面点 聚类（Euclidean Clustering）：提取独立目标（车辆、行人） 目标跟踪与识别：结合深度学习模型进行物体分类 4. 使用工具与库 工具/库 说明 PCL (Point Cloud Library) 最主流的C++点云处理库 Open3D Python友好，支持可视化与处理 ROS + sensor_msgs/PointCloud2 ROS中点云标准消息格式 rviz 可视化点云、障碍物、车辆模型 Autoware/Apollo 提供全套点云感知模块 5. 示例：PCL聚类伪代码 pcl::EuclideanClusterExtraction\u0026lt;pcl::PointXYZ\u0026gt; ec; ec.setClusterTolerance(0.5); // 50cm内为一类 ec.setMinClusterSize(30); ec.setMaxClusterSize(2500); ec.setSearchMethod(tree); ec.setInputCloud(cloud_filtered); ec.extract(cluster_indices); 推荐学习资料 PCL官方文档 Open3D教程 Apollo / Autoware 点云处理模块源码分析 Udacity Sensor Fusion Nanodegree ",
+  "keywords": [
+    
+  ],
+  "articleBody": "激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧点云数据（point cloud），表示空间中障碍物的位置和形状。\n1. 什么是点云？ 点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。\n2. 点云数据结构 字段 描述 x, y, z 三维坐标 intensity 激光反射强度 ring 激光束编号（多线雷达） timestamp 每个点的时间戳 reflectivity / ambient 可选，反映表面材质或亮度 3. 常见处理流程 3.1 点云预处理 体素滤波（VoxelGrid）：降低点云密度，加快处理速度 裁剪（CropBox）：去除远处或地面点，聚焦感兴趣区域 时间同步：与IMU/GNSS同步，统一坐标系 3.2 点云配准与融合 ICP算法（Iterative Closest Point）：配准不同帧点云，构建地图 NDT算法：用于鲁棒配准，适应点云局部稀疏问题 多帧融合：提升障碍检测的完整性 3.3 点云感知 地面分割（Ground Segmentation）：识别并移除地面点 聚类（Euclidean Clustering）：提取独立目标（车辆、行人） 目标跟踪与识别：结合深度学习模型进行物体分类 4. 使用工具与库 工具/库 说明 PCL (Point Cloud Library) 最主流的C++点云处理库 Open3D Python友好，支持可视化与处理 ROS + sensor_msgs/PointCloud2 ROS中点云标准消息格式 rviz 可视化点云、障碍物、车辆模型 Autoware/Apollo 提供全套点云感知模块 5. 示例：PCL聚类伪代码 pcl::EuclideanClusterExtraction\u003cpcl::PointXYZ\u003e ec; ec.setClusterTolerance(0.5); // 50cm内为一类 ec.setMinClusterSize(30); ec.setMaxClusterSize(2500); ec.setSearchMethod(tree); ec.setInputCloud(cloud_filtered); ec.extract(cluster_indices); 推荐学习资料 PCL官方文档 Open3D教程 Apollo / Autoware 点云处理模块源码分析 Udacity Sensor Fusion Nanodegree ",
+  "wordCount" : "89",
+  "inLanguage": "en",
+  "datePublished": "2024-05-02T00:00:00Z",
+  "dateModified": "2024-05-02T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/lidar_point_cloud_processing/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      激光点云处理（Lidar Point Cloud Processing）
+    </h1>
+    <div class="post-meta"><span title='2024-05-02 00:00:00 +0000 UTC'>May 2, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧<strong>点云数据（point cloud）</strong>，表示空间中障碍物的位置和形状。</p>
+<hr>
+<h2 id="1-什么是点云">1. 什么是点云？<a hidden class="anchor" aria-hidden="true" href="#1-什么是点云">#</a></h2>
+<p>点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。</p>
+<hr>
+<h2 id="2-点云数据结构">2. 点云数据结构<a hidden class="anchor" aria-hidden="true" href="#2-点云数据结构">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>x, y, z</td>
+          <td>三维坐标</td>
+      </tr>
+      <tr>
+          <td>intensity</td>
+          <td>激光反射强度</td>
+      </tr>
+      <tr>
+          <td>ring</td>
+          <td>激光束编号（多线雷达）</td>
+      </tr>
+      <tr>
+          <td>timestamp</td>
+          <td>每个点的时间戳</td>
+      </tr>
+      <tr>
+          <td>reflectivity / ambient</td>
+          <td>可选，反映表面材质或亮度</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-常见处理流程">3. 常见处理流程<a hidden class="anchor" aria-hidden="true" href="#3-常见处理流程">#</a></h2>
+<h3 id="31-点云预处理">3.1 点云预处理<a hidden class="anchor" aria-hidden="true" href="#31-点云预处理">#</a></h3>
+<ul>
+<li><strong>体素滤波（VoxelGrid）</strong>：降低点云密度，加快处理速度</li>
+<li><strong>裁剪（CropBox）</strong>：去除远处或地面点，聚焦感兴趣区域</li>
+<li><strong>时间同步</strong>：与IMU/GNSS同步，统一坐标系</li>
+</ul>
+<h3 id="32-点云配准与融合">3.2 点云配准与融合<a hidden class="anchor" aria-hidden="true" href="#32-点云配准与融合">#</a></h3>
+<ul>
+<li><strong>ICP算法（Iterative Closest Point）</strong>：配准不同帧点云，构建地图</li>
+<li><strong>NDT算法</strong>：用于鲁棒配准，适应点云局部稀疏问题</li>
+<li><strong>多帧融合</strong>：提升障碍检测的完整性</li>
+</ul>
+<h3 id="33-点云感知">3.3 点云感知<a hidden class="anchor" aria-hidden="true" href="#33-点云感知">#</a></h3>
+<ul>
+<li><strong>地面分割（Ground Segmentation）</strong>：识别并移除地面点</li>
+<li><strong>聚类（Euclidean Clustering）</strong>：提取独立目标（车辆、行人）</li>
+<li><strong>目标跟踪与识别</strong>：结合深度学习模型进行物体分类</li>
+</ul>
+<hr>
+<h2 id="4-使用工具与库">4. 使用工具与库<a hidden class="anchor" aria-hidden="true" href="#4-使用工具与库">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>工具/库</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>PCL (Point Cloud Library)</strong></td>
+          <td>最主流的C++点云处理库</td>
+      </tr>
+      <tr>
+          <td><strong>Open3D</strong></td>
+          <td>Python友好，支持可视化与处理</td>
+      </tr>
+      <tr>
+          <td><strong>ROS + sensor_msgs/PointCloud2</strong></td>
+          <td>ROS中点云标准消息格式</td>
+      </tr>
+      <tr>
+          <td><strong>rviz</strong></td>
+          <td>可视化点云、障碍物、车辆模型</td>
+      </tr>
+      <tr>
+          <td><strong>Autoware/Apollo</strong></td>
+          <td>提供全套点云感知模块</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="5-示例pcl聚类伪代码">5. 示例：PCL聚类伪代码<a hidden class="anchor" aria-hidden="true" href="#5-示例pcl聚类伪代码">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>pcl<span style="color:#f92672">::</span>EuclideanClusterExtraction<span style="color:#f92672">&lt;</span>pcl<span style="color:#f92672">::</span>PointXYZ<span style="color:#f92672">&gt;</span> ec;
+</span></span><span style="display:flex;"><span>ec.setClusterTolerance(<span style="color:#ae81ff">0.5</span>); <span style="color:#75715e">// 50cm内为一类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>ec.setMinClusterSize(<span style="color:#ae81ff">30</span>);
+</span></span><span style="display:flex;"><span>ec.setMaxClusterSize(<span style="color:#ae81ff">2500</span>);
+</span></span><span style="display:flex;"><span>ec.setSearchMethod(tree);
+</span></span><span style="display:flex;"><span>ec.setInputCloud(cloud_filtered);
+</span></span><span style="display:flex;"><span>ec.extract(cluster_indices);
+</span></span></code></pre></div><hr>
+<h2 id="推荐学习资料">推荐学习资料<a hidden class="anchor" aria-hidden="true" href="#推荐学习资料">#</a></h2>
+<ul>
+<li><a href="https://pointclouds.org/documentation/">PCL官方文档</a></li>
+<li><a href="http://www.open3d.org/docs/">Open3D教程</a></li>
+<li>Apollo / Autoware 点云处理模块源码分析</li>
+<li>Udacity Sensor Fusion Nanodegree</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

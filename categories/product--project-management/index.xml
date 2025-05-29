@@ -364,6 +364,75 @@
 出口检测是所有导航联动的前提，必须先于导航联动上线。&lt;/p&gt;</description>
     </item>
     <item>
+      <title>智能驾驶功能开发中的典型问题汇总</title>
+      <link>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;p&gt;以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-一变道类问题nop--noa&#34;&gt;🛣️ 一、变道类问题（NOP / NOA）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;变道轨迹抖动 / 折线过多，影响车辆平顺性&lt;/li&gt;
+&lt;li&gt;动作触发延迟，导致错过变道时机&lt;/li&gt;
+&lt;li&gt;插队判断错误，未能正确识别目标车道间距&lt;/li&gt;
+&lt;li&gt;导航目标车道识别偏差，影响入口/出口变道&lt;/li&gt;
+&lt;li&gt;自主变道成功后未正确恢复至原始路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-二泊车类问题apa&#34;&gt;🅿️ 二、泊车类问题（APA）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;泊车位识别偏移，车辆偏离泊车线&lt;/li&gt;
+&lt;li&gt;倒车入位时轨迹溢出安全范围&lt;/li&gt;
+&lt;li&gt;APA 识别过程误将墙面、栏杆识别为车位&lt;/li&gt;
+&lt;li&gt;泊车起始位置不合理，导致 APA 无法生成可行轨迹&lt;/li&gt;
+&lt;li&gt;驻车后未触发自动切换 P 挡 / 驻车制动状态异常&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-三跟车类问题acc--tja&#34;&gt;🚘 三、跟车类问题（ACC / TJA）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;前车减速响应延迟，跟车距离拉近过快&lt;/li&gt;
+&lt;li&gt;误判静止物体为运动目标导致急刹&lt;/li&gt;
+&lt;li&gt;在拥堵工况中频繁启停，舒适性差&lt;/li&gt;
+&lt;li&gt;跟车目标丢失时未及时降级退出 ACC 状态&lt;/li&gt;
+&lt;li&gt;默认加速度 / 跟车间距配置过大或过小，体验不一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-四横纵向控制类问题lka--planning&#34;&gt;🛞 四、横纵向控制类问题（LKA / Planning）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;LKA 中车辆偏离车道线但未及时介入&lt;/li&gt;
+&lt;li&gt;弯道中曲率变化过快，导致控制器震荡&lt;/li&gt;
+&lt;li&gt;轨迹规划不连续，目标点抖动&lt;/li&gt;
+&lt;li&gt;控制指令变化陡峭，引发急转或急加速&lt;/li&gt;
+&lt;li&gt;转向指令与当前车速不匹配，导致过弯困难&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-五感知--状态识别类问题&#34;&gt;🧠 五、感知 &amp;amp; 状态识别类问题&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;静态障碍识别误报，影响轨迹生成&lt;/li&gt;
+&lt;li&gt;交通灯状态识别错误，导致刹停失败&lt;/li&gt;
+&lt;li&gt;车道线检测置信度低，影响路径规划&lt;/li&gt;
+&lt;li&gt;车辆定位误差大于可接受范围（&amp;gt; 0.5m）&lt;/li&gt;
+&lt;li&gt;上下匝道判断逻辑错误，导致路径漂移&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-六模块接口--策略交互类问题&#34;&gt;🧩 六、模块接口 / 策略交互类问题&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;感知与规划模块的坐标系不一致&lt;/li&gt;
+&lt;li&gt;置信度阈值设置不合理，导致过早/过晚触发切换&lt;/li&gt;
+&lt;li&gt;策略端参数配置未与实际功能同步（如最大变道时间）&lt;/li&gt;
+&lt;li&gt;轨迹下发频率与控制器采样周期不匹配&lt;/li&gt;
+&lt;li&gt;模块状态切换条件不一致，影响降级退出流程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-七用户体验--非功能性问题&#34;&gt;🧪 七、用户体验 / 非功能性问题&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;变道过程中方向盘突然介入，造成“吓人”体验&lt;/li&gt;
+&lt;li&gt;倒车过程中音响提示与车速不一致&lt;/li&gt;
+&lt;li&gt;自动泊车未显示进度/状态信息，缺乏可感知反馈&lt;/li&gt;
+&lt;li&gt;能力触发门槛过高，用户难以体验完整流程&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
       <title>需求分析与功能设计</title>
       <link>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
@@ -490,6 +559,230 @@
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>模块分工与接口定义表</title>
+      <link>/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</link>
+      <pubDate>Sun, 21 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</guid>
+      <description>&lt;h1 id=&#34;模块通信接口定义文档感知--规划--控制&#34;&gt;模块通信接口定义文档（感知 / 规划 / 控制）&lt;/h1&gt;
+&lt;p&gt;本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。&lt;/p&gt;
+&lt;h1 id=&#34;模块分工与接口定义表感知--规划--控制&#34;&gt;模块分工与接口定义表（感知 / 规划 / 控制）&lt;/h1&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;模块&lt;/th&gt;
+          &lt;th&gt;主要职责&lt;/th&gt;
+          &lt;th&gt;输入接口&lt;/th&gt;
+          &lt;th&gt;输出接口&lt;/th&gt;
+          &lt;th&gt;依赖参数 / 配置&lt;/th&gt;
+          &lt;th&gt;典型异常情况&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;感知模块&lt;/td&gt;
+          &lt;td&gt;提供环境建图、障碍物检测、车道线识别等基础信息&lt;/td&gt;
+          &lt;td&gt;摄像头、雷达、超声波、IMU 原始数据&lt;/td&gt;
+          &lt;td&gt;- 障碍物列表&lt;!-- raw HTML omitted --&gt;- 车道线模型&lt;!-- raw HTML omitted --&gt;- 可通行区域Mask&lt;!-- raw HTML omitted --&gt;- 动态物体预测轨迹&lt;/td&gt;
+          &lt;td&gt;感知置信度阈值&lt;!-- raw HTML omitted --&gt;障碍物融合策略&lt;/td&gt;
+          &lt;td&gt;静态物体误识别&lt;!-- raw HTML omitted --&gt;车道线断裂&lt;!-- raw HTML omitted --&gt;预测轨迹跳变&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;规划模块&lt;/td&gt;
+          &lt;td&gt;基于感知结果和导航目标，生成轨迹并动态调整行为策略&lt;/td&gt;
+          &lt;td&gt;- 当前车辆状态&lt;!-- raw HTML omitted --&gt;- 障碍物列表&lt;!-- raw HTML omitted --&gt;- 可通行区域&lt;!-- raw HTML omitted --&gt;- 全局路径&lt;/td&gt;
+          &lt;td&gt;- 局部轨迹（轨迹点序列）&lt;!-- raw HTML omitted --&gt;- 行为决策（变道 / 跟车 / 停止）&lt;/td&gt;
+          &lt;td&gt;最远预测距离&lt;!-- raw HTML omitted --&gt;轨迹重规划频率&lt;!-- raw HTML omitted --&gt;变道策略参数&lt;/td&gt;
+          &lt;td&gt;轨迹折线过多&lt;!-- raw HTML omitted --&gt;变道触发不合理&lt;!-- raw HTML omitted --&gt;变道后不恢复原车道&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;控制模块&lt;/td&gt;
+          &lt;td&gt;接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行&lt;/td&gt;
+          &lt;td&gt;- 规划轨迹&lt;!-- raw HTML omitted --&gt;- 当前车速 / 横摆角&lt;!-- raw HTML omitted --&gt;- 控制目标点&lt;/td&gt;
+          &lt;td&gt;- 方向盘角度&lt;!-- raw HTML omitted --&gt;- 加速度 / 油门开度&lt;!-- raw HTML omitted --&gt;- 制动指令&lt;/td&gt;
+          &lt;td&gt;控制频率&lt;!-- raw HTML omitted --&gt;控制器类型（PID/MPC）&lt;!-- raw HTML omitted --&gt;跟踪误差阈值&lt;/td&gt;
+          &lt;td&gt;指令跳变&lt;!-- raw HTML omitted --&gt;横向控制震荡&lt;!-- raw HTML omitted --&gt;刹车响应滞后&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-模块功能分工&#34;&gt;1. 模块功能分工&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;模块&lt;/th&gt;
+          &lt;th&gt;主要职责&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;感知模块&lt;/td&gt;
+          &lt;td&gt;环境建图、车道线识别、障碍物检测与跟踪&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;规划模块&lt;/td&gt;
+          &lt;td&gt;行为决策（如变道、跟车）、轨迹生成&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;控制模块&lt;/td&gt;
+          &lt;td&gt;控制命令输出（转向、加减速），完成车辆运动控制&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-模块间通信接口定义&#34;&gt;2. 模块间通信接口定义&lt;/h2&gt;
+&lt;h3 id=&#34;-21-感知--规划&#34;&gt;🔹 2.1 感知 → 规划&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;接口名称&lt;/th&gt;
+          &lt;th&gt;数据类型&lt;/th&gt;
+          &lt;th&gt;发布频率&lt;/th&gt;
+          &lt;th&gt;数据字段示例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/perception/obstacles&lt;/td&gt;
+          &lt;td&gt;ObstacleArray&lt;/td&gt;
+          &lt;td&gt;20 Hz&lt;/td&gt;
+          &lt;td&gt;id, position(x,y), velocity, type, confidence&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/perception/lane&lt;/td&gt;
+          &lt;td&gt;LaneModel&lt;/td&gt;
+          &lt;td&gt;20 Hz&lt;/td&gt;
+          &lt;td&gt;lane_id, coeffs(a,b,c), confidence&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/perception/area&lt;/td&gt;
+          &lt;td&gt;DrivableArea&lt;/td&gt;
+          &lt;td&gt;10 Hz&lt;/td&gt;
+          &lt;td&gt;polygon_mask, timestamp&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;-22-规划--控制&#34;&gt;🔹 2.2 规划 → 控制&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;接口名称&lt;/th&gt;
+          &lt;th&gt;数据类型&lt;/th&gt;
+          &lt;th&gt;发布频率&lt;/th&gt;
+          &lt;th&gt;数据字段示例&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/planning/trajectory&lt;/td&gt;
+          &lt;td&gt;Trajectory&lt;/td&gt;
+          &lt;td&gt;50 Hz&lt;/td&gt;
+          &lt;td&gt;points[x,y,v,acc,yaw], timestamp&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/planning/behavior&lt;/td&gt;
+          &lt;td&gt;BehaviorState&lt;/td&gt;
+          &lt;td&gt;10 Hz&lt;/td&gt;
+          &lt;td&gt;state_type (lane_following, lane_change, stop), duration&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;-23-感知--控制直接辅助控制冗余通道&#34;&gt;🔹 2.3 感知 → 控制（直接辅助控制冗余通道）&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;接口名称&lt;/th&gt;
+          &lt;th&gt;数据类型&lt;/th&gt;
+          &lt;th&gt;发布频率&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/perception/yaw_rate&lt;/td&gt;
+          &lt;td&gt;Float32&lt;/td&gt;
+          &lt;td&gt;100 Hz&lt;/td&gt;
+          &lt;td&gt;高频率反馈用于横向控制辅助&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/imu/data&lt;/td&gt;
+          &lt;td&gt;IMUData&lt;/td&gt;
+          &lt;td&gt;100 Hz&lt;/td&gt;
+          &lt;td&gt;惯性导航传感器数据&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-配置参数依赖项&#34;&gt;3. 配置参数依赖项&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;模块&lt;/th&gt;
+          &lt;th&gt;参数名称&lt;/th&gt;
+          &lt;th&gt;描述&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;感知&lt;/td&gt;
+          &lt;td&gt;lane_conf_threshold&lt;/td&gt;
+          &lt;td&gt;车道线识别的最低置信度&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;规划&lt;/td&gt;
+          &lt;td&gt;lane_change_timeout&lt;/td&gt;
+          &lt;td&gt;变道超时时间设置&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;控制&lt;/td&gt;
+          &lt;td&gt;lateral_ctrl_gain&lt;/td&gt;
+          &lt;td&gt;横向 PID 控制器增益参数&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-常见接口问题与调试建议&#34;&gt;4. 常见接口问题与调试建议&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;问题描述&lt;/th&gt;
+          &lt;th&gt;可能原因&lt;/th&gt;
+          &lt;th&gt;调试建议&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;轨迹点跳变 / 抖动&lt;/td&gt;
+          &lt;td&gt;感知误差大，置信度低&lt;/td&gt;
+          &lt;td&gt;检查感知数据时间同步与滤波器配置&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;控制器响应滞后&lt;/td&gt;
+          &lt;td&gt;轨迹点更新频率低&lt;/td&gt;
+          &lt;td&gt;提高轨迹发布频率，调整控制器采样率&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;行为状态误判（频繁进入lane_change）&lt;/td&gt;
+          &lt;td&gt;规则配置阈值过低 / 误判插队&lt;/td&gt;
+          &lt;td&gt;优化状态机转移条件，结合多维输入决策&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-接口格式示例ros-message&#34;&gt;5. 接口格式示例（ROS Message）&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Trajectory.msg&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Header header
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TrajectoryPoint[] points
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# TrajectoryPoint.msg&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 v
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 acc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 yaw
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;p&gt;本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

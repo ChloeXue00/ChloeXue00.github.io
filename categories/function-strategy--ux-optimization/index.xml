@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Function Strategy &amp; UX Optimization on </title>
+    <link>/categories/function-strategy--ux-optimization/</link>
+    <description>Recent content in Function Strategy &amp; UX Optimization on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 15 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/categories/function-strategy--ux-optimization/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>L2&#43;&#43; 智能驾驶典型场景落地路径研究</title>
+      <link>/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</link>
+      <pubDate>Thu, 15 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</guid>
+      <description>&lt;p&gt;本篇文档主要分析落地场景和相应的技术路径&lt;/p&gt;
+&lt;h2 id=&#34;一l2典型落地场景总览&#34;&gt;一、L2++典型落地场景总览&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;场景类型&lt;/th&gt;
+          &lt;th&gt;场景示例&lt;/th&gt;
+          &lt;th&gt;是否主流落地&lt;/th&gt;
+          &lt;th&gt;代表功能&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;高速场景&lt;/td&gt;
+          &lt;td&gt;高速跟车、变道超车、上下匝道&lt;/td&gt;
+          &lt;td&gt;已广泛部署&lt;/td&gt;
+          &lt;td&gt;NOA、ACC、ALC&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;城市快速路&lt;/td&gt;
+          &lt;td&gt;红绿灯通行、左转右转、避让行人非机动车&lt;/td&gt;
+          &lt;td&gt;城市NOA核心区域&lt;/td&gt;
+          &lt;td&gt;城市NOA、TJP&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;泊车场景&lt;/td&gt;
+          &lt;td&gt;车位搜索、自动泊入泊出、记忆泊车&lt;/td&gt;
+          &lt;td&gt;商业化广泛&lt;/td&gt;
+          &lt;td&gt;APA、RPA、VPA&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;通勤路径&lt;/td&gt;
+          &lt;td&gt;自定义路线记忆、熟路线高阶自动驾驶&lt;/td&gt;
+          &lt;td&gt;差异化亮点&lt;/td&gt;
+          &lt;td&gt;通勤NOA、记忆行驶&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;高速/城市融合&lt;/td&gt;
+          &lt;td&gt;点到点导航，全程自动辅助驾驶&lt;/td&gt;
+          &lt;td&gt;探索中&lt;/td&gt;
+          &lt;td&gt;全域NOA、PPA&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二典型场景落地路径分析&#34;&gt;二、典型场景落地路径分析&lt;/h2&gt;
+&lt;h3 id=&#34;1-高速场景最成熟的l2落地入口&#34;&gt;1️ 高速场景：最成熟的L2++落地入口&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;路径演进：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从ACC/LKA演进到NOA&lt;/li&gt;
+&lt;li&gt;配合高精地图完成匝道上下、变道超车&lt;/li&gt;
+&lt;li&gt;再演进为“无图NOA”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表功能：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自动变道超车（ALC）&lt;/li&gt;
+&lt;li&gt;自动上下匝道&lt;/li&gt;
+&lt;li&gt;智能限速&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表落地品牌：&lt;/strong&gt;&lt;br&gt;
+蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;2-城市道路场景能力挑战最大战略重点场景&#34;&gt;2️ 城市道路场景：能力挑战最大、战略重点场景&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;路径演进：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从城市主干道直行 → 红绿灯识别通行&lt;/li&gt;
+&lt;li&gt;→ 支持交叉路口通行、无保护左转、避让行人等&lt;/li&gt;
+&lt;li&gt;→ BEV感知+轻地图+规则策略并存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表功能：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;城市NOA&lt;/li&gt;
+&lt;li&gt;红绿灯识别与响应&lt;/li&gt;
+&lt;li&gt;异形障碍避让&lt;/li&gt;
+&lt;li&gt;非保护转弯/礼让行人/加塞识别&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表落地品牌：&lt;/strong&gt;&lt;br&gt;
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;3-泊车类场景感知主导场景落地稳定&#34;&gt;3️ 泊车类场景：感知主导场景、落地稳定&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;路径演进：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;APA → RPA → 记忆泊车 → 云图泊车&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表功能：&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

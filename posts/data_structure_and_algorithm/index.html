@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>数据结构与算法(自动驾驶应用方向) | </title>
+<meta name="keywords" content="">
+<meta name="description" content="数据结构与算法（自动驾驶应用方向）
+在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对数据的高效组织和计算方法的选择。
+
+2. 常见数据结构（及自动驾驶应用）
+
+  
+      
+          数据结构
+          描述
+          应用示例
+      
+  
+  
+      
+          数组 / 向量
+          连续存储，支持随机访问
+          储存历史轨迹点、车辆状态序列
+      
+      
+          链表 / 环形队列
+          灵活插入/删除
+          控制器中缓存最近速度或传感器数据
+      
+      
+          栈 / 队列
+          先进后出 / 先进先出
+          控制状态切换、命令排队处理
+      
+      
+          哈希表（Hash Map）
+          快速查找
+          建图中障碍物记录，传感器缓存索引
+      
+      
+          堆（Heap）
+          优先级队列
+          A*/Dijkstra路径搜索中寻找最短路径
+      
+      
+          树 / 四叉树 / 八叉树
+          分层组织空间
+          空间分割（如QuadTree用于2D路径规划）
+      
+      
+          图（Graph）
+          节点&#43;边
+          路径规划地图、任务依赖图等
+      
+  
+
+
+3. 算法在自动驾驶中的典型应用
+3.1 搜索与路径规划算法
+
+  
+      
+          算法
+          应用
+      
+  
+  
+      
+          A*
+          地图中的最短路径搜索
+      
+      
+          Dijkstra
+          全局路径规划
+      
+      
+          RRT/RRT*
+          采样路径规划，适用于复杂动态场景
+      
+  
+
+3.2 数学优化类算法
+
+  
+      
+          算法
+          应用
+      
+  
+  
+      
+          MPC（Model Predictive Control）
+          控制指令生成，预测未来行为
+      
+      
+          最小均方（LMS）/最小二乘（LS）
+          滤波器设计，状态估计等
+      
+  
+
+3.3 搜索结构加速
+
+  
+      
+          技术
+          描述
+      
+  
+  
+      
+          KD-Tree
+          快速搜索最近邻（如点云比对）
+      
+      
+          Hashing
+          快速定位地图块、路段编号
+      
+  
+
+
+🧪 4. 示例：A* 路径规划（伪代码）
+def A_star(start, goal, map):
+    open_list = PriorityQueue()
+    open_list.put(start)
+    while not open_list.empty():
+        current = open_list.get()
+        if current == goal:
+            return reconstruct_path()
+        for neighbor in get_neighbors(current):
+            if not visited(neighbor):
+                cost = calculate_cost(current, neighbor)
+                open_list.put(neighbor, cost)
+
+📘 推荐学习资料
+
+《算法图解》：通俗易懂的入门书
+《数据结构与算法分析》：理论&#43;实现
+LeetCode 专题：图、堆、树、搜索优化
+ROS Navigation Stack 源码分析
+">
+<meta name="author" content="">
+<link rel="canonical" href="/posts/data_structure_and_algorithm/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/posts/data_structure_and_algorithm/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="/posts/data_structure_and_algorithm/">
+  <meta property="og:title" content="数据结构与算法(自动驾驶应用方向)">
+  <meta property="og:description" content="数据结构与算法（自动驾驶应用方向） 在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对数据的高效组织和计算方法的选择。
+2. 常见数据结构（及自动驾驶应用） 数据结构 描述 应用示例 数组 / 向量 连续存储，支持随机访问 储存历史轨迹点、车辆状态序列 链表 / 环形队列 灵活插入/删除 控制器中缓存最近速度或传感器数据 栈 / 队列 先进后出 / 先进先出 控制状态切换、命令排队处理 哈希表（Hash Map） 快速查找 建图中障碍物记录，传感器缓存索引 堆（Heap） 优先级队列 A*/Dijkstra路径搜索中寻找最短路径 树 / 四叉树 / 八叉树 分层组织空间 空间分割（如QuadTree用于2D路径规划） 图（Graph） 节点&#43;边 路径规划地图、任务依赖图等 3. 算法在自动驾驶中的典型应用 3.1 搜索与路径规划算法 算法 应用 A* 地图中的最短路径搜索 Dijkstra 全局路径规划 RRT/RRT* 采样路径规划，适用于复杂动态场景 3.2 数学优化类算法 算法 应用 MPC（Model Predictive Control） 控制指令生成，预测未来行为 最小均方（LMS）/最小二乘（LS） 滤波器设计，状态估计等 3.3 搜索结构加速 技术 描述 KD-Tree 快速搜索最近邻（如点云比对） Hashing 快速定位地图块、路段编号 🧪 4. 示例：A* 路径规划（伪代码） def A_star(start, goal, map): open_list = PriorityQueue() open_list.put(start) while not open_list.empty(): current = open_list.get() if current == goal: return reconstruct_path() for neighbor in get_neighbors(current): if not visited(neighbor): cost = calculate_cost(current, neighbor) open_list.put(neighbor, cost) 📘 推荐学习资料 《算法图解》：通俗易懂的入门书 《数据结构与算法分析》：理论&#43;实现 LeetCode 专题：图、堆、树、搜索优化 ROS Navigation Stack 源码分析 ">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-05-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-05-02T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构与算法(自动驾驶应用方向)">
+<meta name="twitter:description" content="数据结构与算法（自动驾驶应用方向）
+在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对数据的高效组织和计算方法的选择。
+
+2. 常见数据结构（及自动驾驶应用）
+
+  
+      
+          数据结构
+          描述
+          应用示例
+      
+  
+  
+      
+          数组 / 向量
+          连续存储，支持随机访问
+          储存历史轨迹点、车辆状态序列
+      
+      
+          链表 / 环形队列
+          灵活插入/删除
+          控制器中缓存最近速度或传感器数据
+      
+      
+          栈 / 队列
+          先进后出 / 先进先出
+          控制状态切换、命令排队处理
+      
+      
+          哈希表（Hash Map）
+          快速查找
+          建图中障碍物记录，传感器缓存索引
+      
+      
+          堆（Heap）
+          优先级队列
+          A*/Dijkstra路径搜索中寻找最短路径
+      
+      
+          树 / 四叉树 / 八叉树
+          分层组织空间
+          空间分割（如QuadTree用于2D路径规划）
+      
+      
+          图（Graph）
+          节点&#43;边
+          路径规划地图、任务依赖图等
+      
+  
+
+
+3. 算法在自动驾驶中的典型应用
+3.1 搜索与路径规划算法
+
+  
+      
+          算法
+          应用
+      
+  
+  
+      
+          A*
+          地图中的最短路径搜索
+      
+      
+          Dijkstra
+          全局路径规划
+      
+      
+          RRT/RRT*
+          采样路径规划，适用于复杂动态场景
+      
+  
+
+3.2 数学优化类算法
+
+  
+      
+          算法
+          应用
+      
+  
+  
+      
+          MPC（Model Predictive Control）
+          控制指令生成，预测未来行为
+      
+      
+          最小均方（LMS）/最小二乘（LS）
+          滤波器设计，状态估计等
+      
+  
+
+3.3 搜索结构加速
+
+  
+      
+          技术
+          描述
+      
+  
+  
+      
+          KD-Tree
+          快速搜索最近邻（如点云比对）
+      
+      
+          Hashing
+          快速定位地图块、路段编号
+      
+  
+
+
+🧪 4. 示例：A* 路径规划（伪代码）
+def A_star(start, goal, map):
+    open_list = PriorityQueue()
+    open_list.put(start)
+    while not open_list.empty():
+        current = open_list.get()
+        if current == goal:
+            return reconstruct_path()
+        for neighbor in get_neighbors(current):
+            if not visited(neighbor):
+                cost = calculate_cost(current, neighbor)
+                open_list.put(neighbor, cost)
+
+📘 推荐学习资料
+
+《算法图解》：通俗易懂的入门书
+《数据结构与算法分析》：理论&#43;实现
+LeetCode 专题：图、堆、树、搜索优化
+ROS Navigation Stack 源码分析
+">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "数据结构与算法(自动驾驶应用方向)",
+      "item": "/posts/data_structure_and_algorithm/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "数据结构与算法(自动驾驶应用方向)",
+  "name": "数据结构与算法(自动驾驶应用方向)",
+  "description": "数据结构与算法（自动驾驶应用方向） 在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对数据的高效组织和计算方法的选择。\n2. 常见数据结构（及自动驾驶应用） 数据结构 描述 应用示例 数组 / 向量 连续存储，支持随机访问 储存历史轨迹点、车辆状态序列 链表 / 环形队列 灵活插入/删除 控制器中缓存最近速度或传感器数据 栈 / 队列 先进后出 / 先进先出 控制状态切换、命令排队处理 哈希表（Hash Map） 快速查找 建图中障碍物记录，传感器缓存索引 堆（Heap） 优先级队列 A*/Dijkstra路径搜索中寻找最短路径 树 / 四叉树 / 八叉树 分层组织空间 空间分割（如QuadTree用于2D路径规划） 图（Graph） 节点+边 路径规划地图、任务依赖图等 3. 算法在自动驾驶中的典型应用 3.1 搜索与路径规划算法 算法 应用 A* 地图中的最短路径搜索 Dijkstra 全局路径规划 RRT/RRT* 采样路径规划，适用于复杂动态场景 3.2 数学优化类算法 算法 应用 MPC（Model Predictive Control） 控制指令生成，预测未来行为 最小均方（LMS）/最小二乘（LS） 滤波器设计，状态估计等 3.3 搜索结构加速 技术 描述 KD-Tree 快速搜索最近邻（如点云比对） Hashing 快速定位地图块、路段编号 🧪 4. 示例：A* 路径规划（伪代码） def A_star(start, goal, map): open_list = PriorityQueue() open_list.put(start) while not open_list.empty(): current = open_list.get() if current == goal: return reconstruct_path() for neighbor in get_neighbors(current): if not visited(neighbor): cost = calculate_cost(current, neighbor) open_list.put(neighbor, cost) 📘 推荐学习资料 《算法图解》：通俗易懂的入门书 《数据结构与算法分析》：理论+实现 LeetCode 专题：图、堆、树、搜索优化 ROS Navigation Stack 源码分析 ",
+  "keywords": [
+    
+  ],
+  "articleBody": "数据结构与算法（自动驾驶应用方向） 在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对数据的高效组织和计算方法的选择。\n2. 常见数据结构（及自动驾驶应用） 数据结构 描述 应用示例 数组 / 向量 连续存储，支持随机访问 储存历史轨迹点、车辆状态序列 链表 / 环形队列 灵活插入/删除 控制器中缓存最近速度或传感器数据 栈 / 队列 先进后出 / 先进先出 控制状态切换、命令排队处理 哈希表（Hash Map） 快速查找 建图中障碍物记录，传感器缓存索引 堆（Heap） 优先级队列 A*/Dijkstra路径搜索中寻找最短路径 树 / 四叉树 / 八叉树 分层组织空间 空间分割（如QuadTree用于2D路径规划） 图（Graph） 节点+边 路径规划地图、任务依赖图等 3. 算法在自动驾驶中的典型应用 3.1 搜索与路径规划算法 算法 应用 A* 地图中的最短路径搜索 Dijkstra 全局路径规划 RRT/RRT* 采样路径规划，适用于复杂动态场景 3.2 数学优化类算法 算法 应用 MPC（Model Predictive Control） 控制指令生成，预测未来行为 最小均方（LMS）/最小二乘（LS） 滤波器设计，状态估计等 3.3 搜索结构加速 技术 描述 KD-Tree 快速搜索最近邻（如点云比对） Hashing 快速定位地图块、路段编号 🧪 4. 示例：A* 路径规划（伪代码） def A_star(start, goal, map): open_list = PriorityQueue() open_list.put(start) while not open_list.empty(): current = open_list.get() if current == goal: return reconstruct_path() for neighbor in get_neighbors(current): if not visited(neighbor): cost = calculate_cost(current, neighbor) open_list.put(neighbor, cost) 📘 推荐学习资料 《算法图解》：通俗易懂的入门书 《数据结构与算法分析》：理论+实现 LeetCode 专题：图、堆、树、搜索优化 ROS Navigation Stack 源码分析 ",
+  "wordCount" : "118",
+  "inLanguage": "en",
+  "datePublished": "2024-05-02T00:00:00Z",
+  "dateModified": "2024-05-02T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/data_structure_and_algorithm/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      数据结构与算法(自动驾驶应用方向)
+    </h1>
+    <div class="post-meta"><span title='2024-05-02 00:00:00 +0000 UTC'>May 2, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="数据结构与算法自动驾驶应用方向">数据结构与算法（自动驾驶应用方向）<a hidden class="anchor" aria-hidden="true" href="#数据结构与算法自动驾驶应用方向">#</a></h1>
+<p>在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对<strong>数据的高效组织和计算方法的选择</strong>。</p>
+<hr>
+<h2 id="2-常见数据结构及自动驾驶应用">2. 常见数据结构（及自动驾驶应用）<a hidden class="anchor" aria-hidden="true" href="#2-常见数据结构及自动驾驶应用">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>数据结构</th>
+          <th>描述</th>
+          <th>应用示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>数组 / 向量</strong></td>
+          <td>连续存储，支持随机访问</td>
+          <td>储存历史轨迹点、车辆状态序列</td>
+      </tr>
+      <tr>
+          <td><strong>链表 / 环形队列</strong></td>
+          <td>灵活插入/删除</td>
+          <td>控制器中缓存最近速度或传感器数据</td>
+      </tr>
+      <tr>
+          <td><strong>栈 / 队列</strong></td>
+          <td>先进后出 / 先进先出</td>
+          <td>控制状态切换、命令排队处理</td>
+      </tr>
+      <tr>
+          <td><strong>哈希表（Hash Map）</strong></td>
+          <td>快速查找</td>
+          <td>建图中障碍物记录，传感器缓存索引</td>
+      </tr>
+      <tr>
+          <td><strong>堆（Heap）</strong></td>
+          <td>优先级队列</td>
+          <td>A*/Dijkstra路径搜索中寻找最短路径</td>
+      </tr>
+      <tr>
+          <td><strong>树 / 四叉树 / 八叉树</strong></td>
+          <td>分层组织空间</td>
+          <td>空间分割（如QuadTree用于2D路径规划）</td>
+      </tr>
+      <tr>
+          <td><strong>图（Graph）</strong></td>
+          <td>节点+边</td>
+          <td>路径规划地图、任务依赖图等</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-算法在自动驾驶中的典型应用">3. 算法在自动驾驶中的典型应用<a hidden class="anchor" aria-hidden="true" href="#3-算法在自动驾驶中的典型应用">#</a></h2>
+<h3 id="31-搜索与路径规划算法">3.1 搜索与路径规划算法<a hidden class="anchor" aria-hidden="true" href="#31-搜索与路径规划算法">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>A*</strong></td>
+          <td>地图中的最短路径搜索</td>
+      </tr>
+      <tr>
+          <td><strong>Dijkstra</strong></td>
+          <td>全局路径规划</td>
+      </tr>
+      <tr>
+          <td><strong>RRT/RRT*</strong></td>
+          <td>采样路径规划，适用于复杂动态场景</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-数学优化类算法">3.2 数学优化类算法<a hidden class="anchor" aria-hidden="true" href="#32-数学优化类算法">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>MPC（Model Predictive Control）</strong></td>
+          <td>控制指令生成，预测未来行为</td>
+      </tr>
+      <tr>
+          <td><strong>最小均方（LMS）/最小二乘（LS）</strong></td>
+          <td>滤波器设计，状态估计等</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-搜索结构加速">3.3 搜索结构加速<a hidden class="anchor" aria-hidden="true" href="#33-搜索结构加速">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>技术</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>KD-Tree</td>
+          <td>快速搜索最近邻（如点云比对）</td>
+      </tr>
+      <tr>
+          <td>Hashing</td>
+          <td>快速定位地图块、路段编号</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-4-示例a-路径规划伪代码">🧪 4. 示例：A* 路径规划（伪代码）<a hidden class="anchor" aria-hidden="true" href="#-4-示例a-路径规划伪代码">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">A_star</span>(start, goal, map):
+</span></span><span style="display:flex;"><span>    open_list <span style="color:#f92672">=</span> PriorityQueue()
+</span></span><span style="display:flex;"><span>    open_list<span style="color:#f92672">.</span>put(start)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> open_list<span style="color:#f92672">.</span>empty():
+</span></span><span style="display:flex;"><span>        current <span style="color:#f92672">=</span> open_list<span style="color:#f92672">.</span>get()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> current <span style="color:#f92672">==</span> goal:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> reconstruct_path()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> neighbor <span style="color:#f92672">in</span> get_neighbors(current):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> visited(neighbor):
+</span></span><span style="display:flex;"><span>                cost <span style="color:#f92672">=</span> calculate_cost(current, neighbor)
+</span></span><span style="display:flex;"><span>                open_list<span style="color:#f92672">.</span>put(neighbor, cost)
+</span></span></code></pre></div><hr>
+<h2 id="-推荐学习资料">📘 推荐学习资料<a hidden class="anchor" aria-hidden="true" href="#-推荐学习资料">#</a></h2>
+<ul>
+<li>《算法图解》：通俗易懂的入门书</li>
+<li>《数据结构与算法分析》：理论+实现</li>
+<li>LeetCode 专题：图、堆、树、搜索优化</li>
+<li>ROS Navigation Stack 源码分析</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>
