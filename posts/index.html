@@ -315,10 +315,10 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </h2>
   </header>
   <section class="entry-content">
-    <p><p>在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。我们采用 <strong>四叉树结构（QuadTree）</strong> 对占用图进行递归划分，再对空闲区域构建 <strong>凸包（Convex Hull）</strong>，生成**连接图（Connectivity Graph）**从而生成可用于路径规划的安全走廊（Safe Corridor）。</p>
+    <p><p>在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。这里我采用 <strong>四叉树结构（QuadTree）</strong> 对占用图进行递归划分，再对空闲区域构建 <strong>凸包（Convex Hull）</strong>，生成**连接图（Connectivity Graph）**从而生成可用于路径规划的安全走廊（Safe Corridor）。</p>
 <hr>
 <h2 id="一构建思路概览">一、构建思路概览</h2>
-<p>我们参考了项目中 <code>connective_quadtree.py</code> 和 <code>corridor_algorithm.py</code> 中的实现，思路如下：</p>
+<p>参考了项目中 <code>connective_quadtree.py</code> 和 <code>corridor_algorithm.py</code> 中的实现，思路如下：</p>
 <pre tabindex="0"><code>1. 输入原始占用图（Occupancy Grid）
 2. 使用 QuadTreeNode 递归划分空间, 根据RGB颜色判断：
     - 若区域为空（全白[255,255,255]或者接近全白）：标记为“自由区域”
