@@ -1795,6 +1795,116 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
+      <link>/posts/build_llm_from_scratch/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/build_llm_from_scratch/</guid>
+      <description>&lt;h1 id=&#34;从-0-搭建一个-llm-全流程&#34;&gt;从 0 搭建一个 LLM 全流程&lt;/h1&gt;
+&lt;h2 id=&#34;阶段划分&#34;&gt;阶段划分&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;阶段&lt;/th&gt;
+          &lt;th&gt;目标&lt;/th&gt;
+          &lt;th&gt;产出物&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1 数据准备&lt;/td&gt;
+          &lt;td&gt;语料收集/清洗&lt;/td&gt;
+          &lt;td&gt;预训练数据集&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2 模型架构设计&lt;/td&gt;
+          &lt;td&gt;Transformer模型构建&lt;/td&gt;
+          &lt;td&gt;初始模型结构&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;3 预训练（PTM）&lt;/td&gt;
+          &lt;td&gt;学会语言知识&lt;/td&gt;
+          &lt;td&gt;基础大模型&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;4 SFT（指令微调）&lt;/td&gt;
+          &lt;td&gt;学会理解和执行指令&lt;/td&gt;
+          &lt;td&gt;SFT后模型&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;5 DPO / RLHF&lt;/td&gt;
+          &lt;td&gt;优化为人喜欢的风格&lt;/td&gt;
+          &lt;td&gt;对齐后的模型&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;6 部署优化&lt;/td&gt;
+          &lt;td&gt;推理优化、上线&lt;/td&gt;
+          &lt;td&gt;可用API/产品&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;1-数据准备&#34;&gt;1 数据准备&lt;/h2&gt;
+&lt;h3 id=&#34;语料收集&#34;&gt;语料收集&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等）&lt;/li&gt;
+&lt;li&gt;开源数据集（The Pile, C4, OSCAR, OpenWebText 等）&lt;/li&gt;
+&lt;li&gt;自建爬虫抓取数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;清洗与处理&#34;&gt;清洗与处理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;去噪（去广告、去低质量段落）&lt;/li&gt;
+&lt;li&gt;去重（SHA去重）&lt;/li&gt;
+&lt;li&gt;分词（如 sentencepiece, BPE）&lt;/li&gt;
+&lt;li&gt;数据格式转换（jsonl, tsv）&lt;/li&gt;
+&lt;li&gt;长度过滤（过短/过长段落丢弃）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;产出物：Tokenized corpus，准备供模型训练。&lt;/p&gt;
+&lt;h2 id=&#34;2-模型架构设计&#34;&gt;2 模型架构设计&lt;/h2&gt;
+&lt;p&gt;核心：Transformer 解码器架构（GPT类模型）&lt;/p&gt;
+&lt;h3 id=&#34;推荐开源实现&#34;&gt;推荐开源实现&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Huggingface Transformers&lt;/li&gt;
+&lt;li&gt;nanoGPT&lt;/li&gt;
+&lt;li&gt;Megatron-LM&lt;/li&gt;
+&lt;li&gt;GPT-NeoX / GPT-J&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;模型设计参数&#34;&gt;模型设计参数&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;参数&lt;/th&gt;
+          &lt;th&gt;典型值（GPT-3 类模型）&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;hidden_dim&lt;/td&gt;
+          &lt;td&gt;12288&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;n_layers&lt;/td&gt;
+          &lt;td&gt;96&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;n_heads&lt;/td&gt;
+          &lt;td&gt;96&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;vocab_size&lt;/td&gt;
+          &lt;td&gt;50k&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;max_position_embeddings&lt;/td&gt;
+          &lt;td&gt;2048&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;activation&lt;/td&gt;
+          &lt;td&gt;GELU&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;如果从小模型做起，1亿～3亿参数是初学者可训练范围。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
       <link>/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</guid>

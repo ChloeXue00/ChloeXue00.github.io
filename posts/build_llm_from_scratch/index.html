@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="从 0 搭建一个 LLM 全流程
+阶段划分
+
+  
+      
+          阶段
+          目标
+          产出物
+      
+  
+  
+      
+          1 数据准备
+          语料收集/清洗
+          预训练数据集
+      
+      
+          2 模型架构设计
+          Transformer模型构建
+          初始模型结构
+      
+      
+          3 预训练（PTM）
+          学会语言知识
+          基础大模型
+      
+      
+          4 SFT（指令微调）
+          学会理解和执行指令
+          SFT后模型
+      
+      
+          5 DPO / RLHF
+          优化为人喜欢的风格
+          对齐后的模型
+      
+      
+          6 部署优化
+          推理优化、上线
+          可用API/产品
+      
+  
+
+1 数据准备
+语料收集
+
+Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等）
+开源数据集（The Pile, C4, OSCAR, OpenWebText 等）
+自建爬虫抓取数据
+
+清洗与处理
+
+去噪（去广告、去低质量段落）
+去重（SHA去重）
+分词（如 sentencepiece, BPE）
+数据格式转换（jsonl, tsv）
+长度过滤（过短/过长段落丢弃）
+
+产出物：Tokenized corpus，准备供模型训练。
+2 模型架构设计
+核心：Transformer 解码器架构（GPT类模型）
+推荐开源实现
+
+Huggingface Transformers
+nanoGPT
+Megatron-LM
+GPT-NeoX / GPT-J
+
+模型设计参数
+
+  
+      
+          参数
+          典型值（GPT-3 类模型）
+      
+  
+  
+      
+          hidden_dim
+          12288
+      
+      
+          n_layers
+          96
+      
+      
+          n_heads
+          96
+      
+      
+          vocab_size
+          50k
+      
+      
+          max_position_embeddings
+          2048
+      
+      
+          activation
+          GELU
+      
+  
+
+如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
+<meta name="author" content="">
+<link rel="canonical" href="/posts/build_llm_from_scratch/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/posts/build_llm_from_scratch/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="/posts/build_llm_from_scratch/">
+  <meta property="og:description" content="从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。
+2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）
+推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="从 0 搭建一个 LLM 全流程
+阶段划分
+
+  
+      
+          阶段
+          目标
+          产出物
+      
+  
+  
+      
+          1 数据准备
+          语料收集/清洗
+          预训练数据集
+      
+      
+          2 模型架构设计
+          Transformer模型构建
+          初始模型结构
+      
+      
+          3 预训练（PTM）
+          学会语言知识
+          基础大模型
+      
+      
+          4 SFT（指令微调）
+          学会理解和执行指令
+          SFT后模型
+      
+      
+          5 DPO / RLHF
+          优化为人喜欢的风格
+          对齐后的模型
+      
+      
+          6 部署优化
+          推理优化、上线
+          可用API/产品
+      
+  
+
+1 数据准备
+语料收集
+
+Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等）
+开源数据集（The Pile, C4, OSCAR, OpenWebText 等）
+自建爬虫抓取数据
+
+清洗与处理
+
+去噪（去广告、去低质量段落）
+去重（SHA去重）
+分词（如 sentencepiece, BPE）
+数据格式转换（jsonl, tsv）
+长度过滤（过短/过长段落丢弃）
+
+产出物：Tokenized corpus，准备供模型训练。
+2 模型架构设计
+核心：Transformer 解码器架构（GPT类模型）
+推荐开源实现
+
+Huggingface Transformers
+nanoGPT
+Megatron-LM
+GPT-NeoX / GPT-J
+
+模型设计参数
+
+  
+      
+          参数
+          典型值（GPT-3 类模型）
+      
+  
+  
+      
+          hidden_dim
+          12288
+      
+      
+          n_layers
+          96
+      
+      
+          n_heads
+          96
+      
+      
+          vocab_size
+          50k
+      
+      
+          max_position_embeddings
+          2048
+      
+      
+          activation
+          GELU
+      
+  
+
+如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "",
+      "item": "/posts/build_llm_from_scratch/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "name": "",
+  "description": "从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。\n2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）\n推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。\n2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）\n推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。\n3 预训练（PTM阶段） 训练目标 Causal Language Modeling → 预测下一个token\nInput: \"The quick brown fox jumps over the lazy\" Target: \"dog\" 工具栈推荐 Trainer: Huggingface Trainer / DeepSpeed / Megatron-LM Trainer Optimizer: AdamW + CosineDecay LR Distributed: DeepSpeed ZeRO Stage 2 or Stage 3 Mixed Precision: FP16 or BF16 训练配置示例 batch_size: 1024 learning_rate: 1e-4 warmup_steps: 10000 total_steps: 500000 gradient_accumulation_steps: 8 fp16: true 注意：数据吞吐瓶颈是常见问题，DataLoader 优化很重要。\n产出物：初步学会语言的大模型 Checkpoint。\n4 SFT（指令微调） 数据集 FLAN / SuperNI\nOpenAssistant / Dolly / ShareGPT\n自行构造（指令 + 回答对）\n训练方式 监督学习：CrossEntropy loss\n普通 fine-tune 即可，不需要 RL\nPrompt设计 Instruction: Translate the following sentence into French. Input: “Good morning.” Response: “Bonjour.” 产出物：能理解指令的模型。 5 DPO / RLHF DPO 数据格式：prompt + positive_answer + negative_answer 优化 loss：DPO loss（对比学习 loss） RLHF 收集人类打分 → 训练 Reward Model\nPPO 训练 base model\n工具：TRL PPOTrainer / RLHF RLlib 产出物：对齐人偏好的模型，正式上线版本。\n6 部署优化 Quantization GPTQ / AWQ / LLM.int8 → 把模型压缩到 INT8 / INT4 推理\n开源工具：AutoGPTQ, llama.cpp, exllama\nServing vLLM（高性能批推理）\nTGI (Text Generation Inference, Huggingface)\nllama.cpp（轻量 CPU/GPU 本地推理）\n总结 Data Collection → Data Cleaning → Tokenization → PTM → SFT → DPO / RLHF → Deployment\n工程化开源项目\n项目名 特点 nanoGPT 极简 GPT 训练 GPT-NeoX 大规模 GPT 训练 Huggingface Transformers 最全生态 Huggingface TRL RLHF/DPO 支持 Megatron-LM 超大规模 GPT 支持 vLLM 高性能推理框架 llama.cpp 轻量 CPU/GPU 推理 Huggingface Transformers → 有大量预训练模型可以直接用\nGPT-NeoX → 社区有预训练模型可以直接用（HF Hub 上 GPT-NeoX 20B 等）\nMegatron-LM → 通常需要自己训练 or 企业内部使用，公开模型少\nllama.cpp → 本身不负责训练，负责部署，加载 LLaMA / Qwen / Mistral 等现有预训练模型\nnanoGPT → 教学用途，自己训练的小模型，一般不直接产品化用\nTRL → 用已有模型进行 DPO / RLHF 优化，不负责训练 base model\nvLLM → 用已有 Transformers 模型做高性能推理，不负责训练\n从0-1 搭建一个tiny大模型的问题：\ntokenizer 怎么设计\npretraining loss 怎么定义\noptimizer / lr scheduler 怎么调\n数据 pipeline 怎么做\nfp16 / bf16 mixed precision 怎么踩过坑\ncheckpoint 怎么存，推理 latency 怎么评估\ntiny model 的 scaling law 有啥观察\n过拟合现象怎么处理\ntraining curve\n参数配置\n参数 推荐值（示例） vocab_size 50k n_layers 6 - 12 n_heads 6 - 12 hidden_dim 512 - 1024 max_position_embeddings 512 - 1024 total_params 50M - 100M 训练工具链 nanoGPT or Huggingface Transformers + Trainer ",
+  "wordCount" : "399",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/build_llm_from_scratch/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="从-0-搭建一个-llm-全流程">从 0 搭建一个 LLM 全流程<a hidden class="anchor" aria-hidden="true" href="#从-0-搭建一个-llm-全流程">#</a></h1>
+<h2 id="阶段划分">阶段划分<a hidden class="anchor" aria-hidden="true" href="#阶段划分">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>阶段</th>
+          <th>目标</th>
+          <th>产出物</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1 数据准备</td>
+          <td>语料收集/清洗</td>
+          <td>预训练数据集</td>
+      </tr>
+      <tr>
+          <td>2 模型架构设计</td>
+          <td>Transformer模型构建</td>
+          <td>初始模型结构</td>
+      </tr>
+      <tr>
+          <td>3 预训练（PTM）</td>
+          <td>学会语言知识</td>
+          <td>基础大模型</td>
+      </tr>
+      <tr>
+          <td>4 SFT（指令微调）</td>
+          <td>学会理解和执行指令</td>
+          <td>SFT后模型</td>
+      </tr>
+      <tr>
+          <td>5 DPO / RLHF</td>
+          <td>优化为人喜欢的风格</td>
+          <td>对齐后的模型</td>
+      </tr>
+      <tr>
+          <td>6 部署优化</td>
+          <td>推理优化、上线</td>
+          <td>可用API/产品</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="1-数据准备">1 数据准备<a hidden class="anchor" aria-hidden="true" href="#1-数据准备">#</a></h2>
+<h3 id="语料收集">语料收集<a hidden class="anchor" aria-hidden="true" href="#语料收集">#</a></h3>
+<ul>
+<li>Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等）</li>
+<li>开源数据集（The Pile, C4, OSCAR, OpenWebText 等）</li>
+<li>自建爬虫抓取数据</li>
+</ul>
+<h3 id="清洗与处理">清洗与处理<a hidden class="anchor" aria-hidden="true" href="#清洗与处理">#</a></h3>
+<ul>
+<li>去噪（去广告、去低质量段落）</li>
+<li>去重（SHA去重）</li>
+<li>分词（如 sentencepiece, BPE）</li>
+<li>数据格式转换（jsonl, tsv）</li>
+<li>长度过滤（过短/过长段落丢弃）</li>
+</ul>
+<p>产出物：Tokenized corpus，准备供模型训练。</p>
+<h2 id="2-模型架构设计">2 模型架构设计<a hidden class="anchor" aria-hidden="true" href="#2-模型架构设计">#</a></h2>
+<p>核心：Transformer 解码器架构（GPT类模型）</p>
+<h3 id="推荐开源实现">推荐开源实现<a hidden class="anchor" aria-hidden="true" href="#推荐开源实现">#</a></h3>
+<ul>
+<li>Huggingface Transformers</li>
+<li>nanoGPT</li>
+<li>Megatron-LM</li>
+<li>GPT-NeoX / GPT-J</li>
+</ul>
+<h3 id="模型设计参数">模型设计参数<a hidden class="anchor" aria-hidden="true" href="#模型设计参数">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>典型值（GPT-3 类模型）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>hidden_dim</td>
+          <td>12288</td>
+      </tr>
+      <tr>
+          <td>n_layers</td>
+          <td>96</td>
+      </tr>
+      <tr>
+          <td>n_heads</td>
+          <td>96</td>
+      </tr>
+      <tr>
+          <td>vocab_size</td>
+          <td>50k</td>
+      </tr>
+      <tr>
+          <td>max_position_embeddings</td>
+          <td>2048</td>
+      </tr>
+      <tr>
+          <td>activation</td>
+          <td>GELU</td>
+      </tr>
+  </tbody>
+</table>
+<p>如果从小模型做起，1亿～3亿参数是初学者可训练范围。</p>
+<h2 id="3-预训练ptm阶段">3 预训练（PTM阶段）<a hidden class="anchor" aria-hidden="true" href="#3-预训练ptm阶段">#</a></h2>
+<h3 id="训练目标">训练目标<a hidden class="anchor" aria-hidden="true" href="#训练目标">#</a></h3>
+<p>Causal Language Modeling → 预测下一个token</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>Input: &#34;The quick brown fox jumps over the lazy&#34;
+</span></span><span style="display:flex;"><span>Target: &#34;dog&#34;
+</span></span></code></pre></div><h3 id="工具栈推荐">工具栈推荐<a hidden class="anchor" aria-hidden="true" href="#工具栈推荐">#</a></h3>
+<ul>
+<li>Trainer: Huggingface Trainer / DeepSpeed / Megatron-LM Trainer</li>
+<li>Optimizer: AdamW + CosineDecay LR</li>
+<li>Distributed: DeepSpeed ZeRO Stage 2 or Stage 3</li>
+<li>Mixed Precision: FP16 or BF16</li>
+</ul>
+<h3 id="训练配置示例">训练配置示例<a hidden class="anchor" aria-hidden="true" href="#训练配置示例">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">batch_size</span>: <span style="color:#ae81ff">1024</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">learning_rate</span>: <span style="color:#ae81ff">1e-4</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">warmup_steps</span>: <span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">total_steps</span>: <span style="color:#ae81ff">500000</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">gradient_accumulation_steps</span>: <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fp16</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><p>注意：数据吞吐瓶颈是常见问题，DataLoader 优化很重要。</p>
+<p>产出物：初步学会语言的大模型 Checkpoint。</p>
+<h2 id="4-sft指令微调">4 SFT（指令微调）<a hidden class="anchor" aria-hidden="true" href="#4-sft指令微调">#</a></h2>
+<h3 id="数据集">数据集<a hidden class="anchor" aria-hidden="true" href="#数据集">#</a></h3>
+<ul>
+<li>
+<p>FLAN / SuperNI</p>
+</li>
+<li>
+<p>OpenAssistant / Dolly / ShareGPT</p>
+</li>
+<li>
+<p>自行构造（指令 + 回答对）</p>
+</li>
+</ul>
+<h3 id="训练方式">训练方式<a hidden class="anchor" aria-hidden="true" href="#训练方式">#</a></h3>
+<ul>
+<li>
+<p>监督学习：CrossEntropy loss</p>
+</li>
+<li>
+<p>普通 fine-tune 即可，不需要 RL</p>
+</li>
+</ul>
+<h3 id="prompt设计">Prompt设计<a hidden class="anchor" aria-hidden="true" href="#prompt设计">#</a></h3>
+<ul>
+<li>Instruction: Translate the following sentence into French.</li>
+<li>Input: &ldquo;Good morning.&rdquo;</li>
+<li>Response: &ldquo;Bonjour.&rdquo;
+产出物：能理解指令的模型。</li>
+</ul>
+<h2 id="5-dpo--rlhf">5 DPO / RLHF<a hidden class="anchor" aria-hidden="true" href="#5-dpo--rlhf">#</a></h2>
+<h3 id="dpo">DPO<a hidden class="anchor" aria-hidden="true" href="#dpo">#</a></h3>
+<ul>
+<li>数据格式：prompt + positive_answer + negative_answer</li>
+<li>优化 loss：DPO loss（对比学习 loss）</li>
+</ul>
+<h3 id="rlhf">RLHF<a hidden class="anchor" aria-hidden="true" href="#rlhf">#</a></h3>
+<ul>
+<li>
+<p>收集人类打分 → 训练 Reward Model</p>
+</li>
+<li>
+<p>PPO 训练 base model</p>
+</li>
+<li>
+<p>工具：TRL PPOTrainer / RLHF RLlib
+产出物：对齐人偏好的模型，正式上线版本。</p>
+</li>
+</ul>
+<h2 id="6-部署优化">6 部署优化<a hidden class="anchor" aria-hidden="true" href="#6-部署优化">#</a></h2>
+<h3 id="quantization">Quantization<a hidden class="anchor" aria-hidden="true" href="#quantization">#</a></h3>
+<ul>
+<li>
+<p>GPTQ / AWQ / LLM.int8 → 把模型压缩到 INT8 / INT4 推理</p>
+</li>
+<li>
+<p>开源工具：AutoGPTQ, llama.cpp, exllama</p>
+</li>
+</ul>
+<h2 id="serving">Serving<a hidden class="anchor" aria-hidden="true" href="#serving">#</a></h2>
+<ul>
+<li>
+<p>vLLM（高性能批推理）</p>
+</li>
+<li>
+<p>TGI (Text Generation Inference, Huggingface)</p>
+</li>
+<li>
+<p>llama.cpp（轻量 CPU/GPU 本地推理）</p>
+</li>
+</ul>
+<p>总结
+Data Collection → Data Cleaning → Tokenization → PTM → SFT → DPO / RLHF → Deployment</p>
+<p>工程化开源项目</p>
+<table>
+  <thead>
+      <tr>
+          <th>项目名</th>
+          <th>特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>nanoGPT</td>
+          <td>极简 GPT 训练</td>
+      </tr>
+      <tr>
+          <td>GPT-NeoX</td>
+          <td>大规模 GPT 训练</td>
+      </tr>
+      <tr>
+          <td>Huggingface Transformers</td>
+          <td>最全生态</td>
+      </tr>
+      <tr>
+          <td>Huggingface TRL</td>
+          <td>RLHF/DPO 支持</td>
+      </tr>
+      <tr>
+          <td>Megatron-LM</td>
+          <td>超大规模 GPT 支持</td>
+      </tr>
+      <tr>
+          <td>vLLM</td>
+          <td>高性能推理框架</td>
+      </tr>
+      <tr>
+          <td>llama.cpp</td>
+          <td>轻量 CPU/GPU 推理</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>
+<p>Huggingface Transformers → 有大量预训练模型可以直接用</p>
+</li>
+<li>
+<p>GPT-NeoX → 社区有预训练模型可以直接用（HF Hub 上 GPT-NeoX 20B 等）</p>
+</li>
+<li>
+<p>Megatron-LM → 通常需要自己训练 or 企业内部使用，公开模型少</p>
+</li>
+<li>
+<p>llama.cpp → 本身不负责训练，负责部署，加载 LLaMA / Qwen / Mistral 等现有预训练模型</p>
+</li>
+<li>
+<p>nanoGPT → 教学用途，自己训练的小模型，一般不直接产品化用</p>
+</li>
+<li>
+<p>TRL → 用已有模型进行 DPO / RLHF 优化，不负责训练 base model</p>
+</li>
+<li>
+<p>vLLM → 用已有 Transformers 模型做高性能推理，不负责训练</p>
+</li>
+<li>
+<p>从0-1 搭建一个tiny大模型的问题：</p>
+</li>
+<li>
+<p>tokenizer 怎么设计</p>
+</li>
+<li>
+<p>pretraining loss 怎么定义</p>
+</li>
+<li>
+<p>optimizer / lr scheduler 怎么调</p>
+</li>
+<li>
+<p>数据 pipeline 怎么做</p>
+</li>
+<li>
+<p>fp16 / bf16 mixed precision 怎么踩过坑</p>
+</li>
+<li>
+<p>checkpoint 怎么存，推理 latency 怎么评估</p>
+</li>
+<li>
+<p>tiny model 的 scaling law 有啥观察</p>
+</li>
+<li>
+<p>过拟合现象怎么处理</p>
+</li>
+<li>
+<p>training curve</p>
+</li>
+<li>
+<p>参数配置</p>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>推荐值（示例）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>vocab_size</td>
+          <td>50k</td>
+      </tr>
+      <tr>
+          <td>n_layers</td>
+          <td>6 - 12</td>
+      </tr>
+      <tr>
+          <td>n_heads</td>
+          <td>6 - 12</td>
+      </tr>
+      <tr>
+          <td>hidden_dim</td>
+          <td>512 - 1024</td>
+      </tr>
+      <tr>
+          <td>max_position_embeddings</td>
+          <td>512 - 1024</td>
+      </tr>
+      <tr>
+          <td>total_params</td>
+          <td>50M - 100M</td>
+      </tr>
+      <tr>
+          <td>训练工具链 nanoGPT or Huggingface Transformers + Trainer</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>
