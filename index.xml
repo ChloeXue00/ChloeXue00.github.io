@@ -14,6 +14,7 @@
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
       <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
+&lt;p&gt;NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,&lt;/p&gt;
 &lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一设计目标&#34;&gt;一、设计目标&lt;/h2&gt;
@@ -81,7 +82,7 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;启动 → 是否满足最低NOP开启条件？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 是 → 判断导航是否同步？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 是 → 进入巡航状态（车道保持 + 跟车）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车慢？侧后空？→ 变道触发
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 导航出口匹配？提前变道？→ 出口准备
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 否 → 保持手动驾驶或提示同步失败
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 否 → 禁用NOP，提示“条件不满足”
@@ -624,6 +625,49 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;为什么选择 ResNet 而不是简单 CNN：&lt;/p&gt;</description>
     </item>
     <item>
+      <title>自动驾驶行业技术分析</title>
+      <link>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</link>
+      <pubDate>Thu, 20 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</guid>
+      <description>&lt;h1 id=&#34;1研究目的&#34;&gt;1.研究目的&lt;/h1&gt;
+&lt;p&gt;本篇报告主要围绕这几个问题展开:&lt;/p&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;#1%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA&#34;&gt;背景与研究动机&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2%E8%87%AA%E9%A9%BE%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%E4%B8%BB%E6%94%BB%E7%9B%AE%E6%A0%87&#34;&gt;自驾技术发展方向/主攻目标&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94&#34;&gt;自动驾驶方案提供商的技术方案对比&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4%E5%B8%82%E5%9C%BA%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%BD%9C%E5%9C%A8%E7%9A%84%E5%B8%82%E5%9C%BA&#34;&gt;市场大小和未被开发的市场&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98%E5%92%8C%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF&#34;&gt;技术趋势和突破点&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;（部分信息可能覆盖不全，主要在于部分公司信息不够公开，需要进一步调研或者查看行业报告或第三方分析）&lt;/p&gt;
+&lt;h1 id=&#34;1-背景与研究动机&#34;&gt;1. 背景与研究动机&lt;/h1&gt;
+&lt;p&gt;行业趋势:
+地图: 对于高精度地图的鲜度依赖过高,导致城市路段的辅助驾驶进度难以继续,出于安全冗余的考虑，目前业内更认可的作法是“重感知、轻地图”的路线。
+小鹏汽车和智己汽车（合作方为Momenta），目前都已经从研发端切换到“重感知”的路线上，并且试图摆脱对高精地图的依赖。
+但如果没有高精地图，车辆行驶到路口时，系统需要依靠感知和计算作出正确判断。目前，毫末是通过迁移学习领域中的混合迁移训练方法，将仿真数据和真实数据进行混合训练，从而提高红绿灯识别度。此外，还通过用Transformer做时间和空间上的前融合方式，解决“空间感知碎片化”和“时间感知不连续”的问题，有效识别城市道路车道线。&lt;/p&gt;
+&lt;h1 id=&#34;2自驾技术发展方向主攻目标&#34;&gt;2.自驾技术发展方向、主攻目标&lt;/h1&gt;
+&lt;h2 id=&#34;21城市无图noa导航辅助驾驶&#34;&gt;2.1城市无图NOA（导航辅助驾驶）&lt;/h2&gt;
+&lt;p&gt;随着智能驾驶技术的不断突破和消费者需求的日益升级，从L2等级到更高级的L2++自动驾驶辅助系统正逐步扩展至各类车型。&lt;/p&gt;
+&lt;p&gt;无图NOA 是“感知驱动的决策规划系统”，感知是输入，决策规划是核心，本质是完整的智能驾驶决策架构，它的核心目标是：&lt;strong&gt;在没有高精地图的情况下，仅凭车辆自身感知，实时理解环境并做出安全、合理的驾驶决策。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高速和城市NOA（导航辅助驾驶），以及APA（自动泊车）等功能的渗透率不断提升,城市NOA已成为高阶智能驾驶技术的重要发展方向，而第三方智驾供应商在其中扮演着至关重要的角色。&lt;/p&gt;
+&lt;p&gt;Momenta、HUAWEIinside（华为Hi模式）、Bosch+WeRide（博世+文远知行）、Apollo（百度自动驾驶平台）和深圳元戎启行科技有限公司这五家供应商是无图NOA方案战场中的主要玩家。&lt;/p&gt;
+&lt;h3 id=&#34;22无图化noa实现方式&#34;&gt;2.2无图化NOA实现方式&lt;/h3&gt;
+&lt;p&gt;无图方案不是完全摒弃高精地图，下游轨迹预测/规控仍然依赖&lt;strong&gt;高精地图&lt;/strong&gt;的输入。『无图』实际指的是不再依赖厂商提供的高精地图，转而使用车载算法实时感知的『局部在线高精地图』。&lt;/p&gt;
+&lt;p&gt;因此无图方案的核心在于&lt;strong&gt;实时在线地图&lt;/strong&gt;构建的准确性，从技术层面来讲，正常情况下无图的上限就是有图；而在传统高精地图更新不及时的区域（比如施工路段、道路重构路段等），无图方案是更有优势的。在线高精地图的发展也有两年多了，无图一直致力于从『能用』走向『好用』。&lt;/p&gt;
+&lt;p&gt;底图绘制设备：包含摄像头、高精度GPS、高精度IMU，及用于深度学习和SLAM的计算芯片，并对搭载的传感器设置高精度的时间同步，整套设备价格在1000美金左右。Momenta不会对产品进行单独的售卖，而选择和主机厂、出租车队、物流车队等合作，或将传感器设备搭载在自有测试车队上完成底图绘制；&lt;/p&gt;
+&lt;p&gt;地图更新设备：地图更新设备的成本相较底图绘制设备，要低很多。Momenta将更新设备分为后装和前装两种方式进行部署。后装方式，即将众包更新方案搭载在Momenta后装产品设备“途铃”，完成地图更新。前装方式是Momenta将通过与主机厂合作共同研发“定位盒子”，并搭载Momenta地图更新方案。&lt;/p&gt;
+&lt;p&gt;相关工作
+Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Mapping&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.05352v1&lt;/p&gt;
+&lt;p&gt;阿里巴巴和西交团队的工作：高精地图（HD地图）对于自动驾驶汽车的精确导航和决策至关重要，但其创建和维护带来了巨大的成本和及时性挑战。使用车载传感器在线构建高精地图已成为一种有前景的解决方案；然而，由于遮挡和恶劣天气，这些方法可能会受到不完整数据的阻碍。本文提出了PriorDrive框架，通过利用先验地图的力量来解决这些局限性，显著提高了在线高精地图构建的鲁棒性和准确性。我们的方法整合了各种先前的地图，如OpenStreetMap的标准定义地图（SD地图）、供应商过时的高精地图以及来自历史车辆数据的本地构建地图。为了将这些先验信息有效地编码到在线见图模型中，PriorDrive提出了一种混合先验表示（HPQuery），该表示对不同地图元素的表示进行了标准化。PriorDrive的核心是统一矢量编码器（UVE），它采用双编码机制来处理矢量数据。矢量内编码器捕获细粒度的局部特征，而矢量间编码器集成全局上下文。此外提出了一种segment-level和point-level的预训练策略，使UVE能够学习矢量数据的先验分布，从而提高编码器的泛化能力和性能。通过对nuScenes数据集的广泛测试，PriorDrive与各种在线地图模型高度兼容，并大大提高了地图预测能力。通过PriorDrive框架整合先前的地图，为单一感知数据的挑战提供了一个强大的解决方案，为更可靠的自动驾驶汽车导航铺平了道路。&lt;/p&gt;
+&lt;p&gt;Neural HD Map Generation from Multiple Vectorized Tiles Locally Produced by Autonomous Vehicles&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.03445v1&lt;/p&gt;
+&lt;p&gt;高精地图厂商四维图新的工作：高精地图是自动驾驶系统的基本组成部分，因为它可以提供有关驾驶场景的精确环境信息。最近关于矢量化地图生成的工作，车辆运行一次只能在自车周围生成65%的局部地图元素，这就留下了一个难题，即如何在高质量标准下构建投影在世界坐标系中的全局高精地图。为了解决这个问题，我们将GNMap作为一个端到端的生成神经网络来自动构建具有多个矢量化图块的高精地图，这些图块是由自动驾驶汽车通过多次旅行在本地生成的。它利用多层和基于注意力的自动编码器作为共享网络，其中的参数是从两个不同的任务（即分别进行预训练和微调）中学习的，以确保生成的映射的完整性和元素类别的正确性。对真实世界的数据集进行了大量的定性评估，实验结果表明，GNMap可以超过SOTA方法5%以上的F1分数，只需少量手动修改即可达到工业使用水平。我们已经在有限公司Navinfo公司部署了它，作为自动构建自动驾驶系统高精地图的不可或缺的软件。&lt;/p&gt;
+&lt;p&gt;Enhancing Vectorized Map Perception with Historical Rasterized Maps（ECCV2024）&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.00620v1&lt;/p&gt;
+&lt;p&gt;开源链接：https://github.com/HXMap/HRMapNet&lt;/p&gt;
+&lt;p&gt;无图NOA以来，研究人员focus在端到端的在线矢量地图构建上，该技术在鸟瞰图（BEV）空间中实现，希望能够替代传统成本较高的离线高精（HD）地图。但是当前方法在恶劣环境下的准确性和鲁棒性很容易受限。为此本文提出了HRMapNet，其利用低成本的历史光栅化地图来增强在线矢量化地图的感知能力。历史光栅化地图来源于先前预测的结果，因此可以提供当前帧一定的先验信息。为了充分利用历史地图，作者设计了两个模块来增强BEV特征和地图元素的查询。对于BEV特征，本文设计了特征聚合模块，以编码图像和历史地图的特征。对于地图元素的查询，则设计了一个查询初始化模块，以赋予查询从历史地图中得到的先验信息。这两个模块对于在在线感知中利用地图信息至关重要。HRMapNet能够与大多数现有的在线矢量化地图感知方法集成。问鼎nuScenes和Argoverse 2 SOTA。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>智能驾驶功能版本节奏管理经验总结</title>
       <link>/posts/adas-feature-roadmap/</link>
       <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
@@ -1003,11 +1047,11 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;p&gt;我们通常使用连续动作空间来控制机器人，例如：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>LKA（车道保持辅助）策略设计与问题集</title>
+      <title>LKA（车道保持辅助）策略设计</title>
       <link>/posts/lka_strategy/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
       <guid>/posts/lka_strategy/</guid>
-      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
+      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号等内容</description>
     </item>
     <item>
       <title>智能驾驶功能开发中的典型问题汇总</title>
@@ -1909,6 +1953,352 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;如果从小模型做起，1亿～3亿参数是初学者可训练范围。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</guid>
+      <description>&lt;h1 id=&#34;apollo百度自动驾驶平台&#34;&gt;Apollo（百度自动驾驶平台）&lt;/h1&gt;
+&lt;p&gt;优势: 拥有庞大的数据积累和强大的AI能力，开放平台生态丰富
+典型客户: 与多家车企合作，如红旗、威马等
+定位方向: 自动驾驶开放平台提供商
+感知方案: 多传感器融合，强调高精地图与定位
+成本区间: 中等，面向多种车型
+技术路线 / 模型结构: 采用两段式端到端架构，感知和决策规划分为两段网络，通过隐式传递和联合训练实现端到端无人驾驶
+潜在短板/难点: 系统复杂度高，对硬件算力要求高，前期投入大&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</guid>
+      <description>&lt;h1 id=&#34;boschweride博世文远知行&#34;&gt;Bosch+WeRide（博世+文远知行）&lt;/h1&gt;
+&lt;p&gt;优势: 博世在汽车零部件供应方面的优势与文远知行的自动驾驶技术相结合，具备量产能力和技术积累
+典型客户: 未公开
+定位方向: 自动驾驶技术提供商与Tier 1供应商合作模式
+感知方案: 主要依赖摄像头、毫米波雷达，计划引入激光雷达以增强感知能力
+成本区间: 中等，面向主流车型
+技术路线 / 模型结构: 计划于2025年量产两段式端到端方案，后续过渡到一段式端到端方案
+潜在短板/难点: 未公开&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</guid>
+      <description>&lt;h1 id=&#34;cruise&#34;&gt;Cruise&lt;/h1&gt;
+&lt;p&gt;优势: 背靠通用汽车，在车辆集成和量产部署上有优势
+典型客户: Robotaxi
+定位方向: Robotaxi自动驾驶方案供应商
+感知方案: 多摄像头、雷达+激光雷达
+技术路线 / 模型结构: 模块化堆栈；MLP和CNN结合的预测模型+强化学习微调
+潜在短板/难点: 目前运营区域有限，且主要在温和天气条件下，突发情况或者较差天气下可能表现不稳定。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</guid>
+      <description>&lt;h1 id=&#34;huaweiinside华为hi模式&#34;&gt;HUAWEIinside（华为Hi模式）&lt;/h1&gt;
+&lt;p&gt;优势: 强大的技术研发能力，深厚的ICT背景，提供全栈智能驾驶解决方案
+典型客户: 与多家车企合作，如北汽、长安、广汽等
+定位方向: 华为与车企共同定义、联合开发；&lt;/p&gt;
+&lt;p&gt;感知方案: 多传感器融合，包括摄像头、毫米波雷达和激光雷达
+成本区间: 高，中高端车型为主
+技术路线 / 模型结构: 采用两段式端到端架构，ADS 3.0中引入GOD大模型进行感知，PDP网络进行决策规划，并加入本能安全网络
+潜在短板/难点: 系统复杂度高，对硬件算力要求高，前期投入大&lt;/p&gt;
+&lt;p&gt;华为通过&lt;a href=&#34;https://zhida.zhihu.com/search?content_id=240143038&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=GOD&amp;amp;zhida_source=entity&#34;&gt;GOD&lt;/a&gt; 和&lt;a href=&#34;https://zhida.zhihu.com/search?content_id=240143038&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=RCR&amp;amp;zhida_source=entity&#34;&gt;RCR&lt;/a&gt; 两个关键算法实现了对物和路的实时感知。 GOD2.0 网络实现了高达&lt;strong&gt;99.9%的通用障碍物识别率&lt;/strong&gt;，其中包括白名单外异形物体和细致分类；RCR 2.0 通过道路拓扑推理实现了导航地图和实际场景的匹配，解决了没有高精度地图的关键问题。&lt;/p&gt;
+&lt;p&gt;GOD网络(全称General Obstacle Detection，&lt;strong&gt;通用障碍物检测&lt;/strong&gt;)，实现障碍物精确识别。即使前方障碍物在BEV的白名单之外，在GOD网络的帮助下，智能驾驶系统依然可以识别和规避它，并充分利用了激光雷达的探测能力，轻松获取空间的信息。&lt;/p&gt;
+&lt;p&gt;RCR 2.0网路，也就是道路&lt;a href=&#34;https://zhida.zhihu.com/search?content_id=621955688&amp;amp;content_type=Answer&amp;amp;match_order=1&amp;amp;q=%E6%8B%93%E6%89%91%E6%8E%A8%E7%90%86&amp;amp;zhida_source=entity&#34;&gt;拓扑推理&lt;/a&gt;网络，也可以实现导航地图与现实世界的匹配，通过视觉算法技术，确定车辆行驶在车道内，并且根据人类使用的SD导航地图提供的路线信息以及路口视觉感知信息，RCR来推理路口车道之间的关系，从而实现&lt;a href=&#34;https://zhida.zhihu.com/search?content_id=621955688&amp;amp;content_type=Answer&amp;amp;match_order=1&amp;amp;q=%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9&amp;amp;zhida_source=entity&#34;&gt;领航辅助&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</guid>
+      <description>&lt;h1 id=&#34;mobileye&#34;&gt;mobileye&lt;/h1&gt;
+&lt;p&gt;优势: 在视觉感知特别是识别交通标志、车道线方面有深厚积累；
+定位方向: 芯片+算法一体化
+感知方案: “True Redundancy”，即双路径感知：一套纯视觉感知全栈，另一套独立的雷达+激光雷达感知全栈，最终在决策层融合
+技术路线 / 模型结构: L2—&amp;gt;L4
+形式化验证+RSS安全模型
+潜在短板/难点: L4项目进展相对封闭缓慢；
+作为供应商需要兼顾通用方案的适配性，性能上不如自研方案调优；在端到端进展相对保守&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</guid>
+      <description>&lt;h1 id=&#34;momenta&#34;&gt;Momenta&lt;/h1&gt;
+&lt;p&gt;优势: 海量数据，量产交付经验；
+算法领先、支持模块输出
+典型客户: 上汽集团、通用汽车、奔驰、丰田、比亚迪
+定位方向: 打造自动驾驶大脑，数据驱动算法迭代/高阶城市NOA 模块化交付
+感知方案: 多传感器融合
+成本区间: ¥1.5-2万
+技术路线 / 模型结构: BEV + Transformer + OccNet
+端到端大模型+数据驱动
+MSD（Momenta self driving）支持L2++到L4
+Mpilot实现L2/L2+驾驶辅助功能
+潜在短板/难点: 方案价不低，难下放到中低端车型&lt;/p&gt;
+&lt;p&gt;在高阶智驾的NOA的竞争中，据统计，Momenta已经获得了市场六成占有率的结果。&lt;/p&gt;
+&lt;p&gt;Momenta的战略是通过“数据驱动的飞轮”以及“两条腿”打造自动驾驶的大脑，实现数据闭环的算法迭代。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;image.png&#34; loading=&#34;lazy&#34; src=&#34;21281fa9-3cb6-462e-ad8c-83d80ccfc280.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;数据飞轮指的是海量数据形成驱动，随着量产数据、数据驱动的算法以及两者闭环自动化的不断积累和迭代，&lt;em&gt;飞轮&lt;/em&gt;将越转越快，终成厚积薄发之势，带来产品和商业的爆发增长，最终实现无人&lt;em&gt;驾驶&lt;/em&gt;规模化落地&lt;/p&gt;
+&lt;p&gt;一条腿是Mpilot量产自动驾驶方案，另外一条腿是MSD——完全无人的驾驶方案，整个算法是按照MSD的标准和要求设计的，之后再应用于量产&lt;/p&gt;
+&lt;p&gt;第三个点是通过端到端大模型完成海量数据的低成本训练。&lt;/p&gt;
+&lt;p&gt;一般基于高精地图的智能驾驶方案，车辆行驶主要是依赖高精地图给的精度为±20厘米的车道参考线行驶，但没有无图方案下，就需要车辆自己能够确保在车道内行驶，所以需要车辆本身能够识别车道以及行驶的约束。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;感知模块：BEV+Transformer算法构架，辅以DDLD车道线识别算法。主要依赖其DDLD-Data Driven Landmark Detection 车道线识别算法来感知运动的边界。通过识别车道线以及道路标识构建车辆实时行驶地图，来告诉车辆行驶约束，但车辆是运动的，车辆的实时运动需要与实时行驶地图匹配和定位。Momenta通过采集车辆运动执行器以及姿态的传感器轮速传感器，转向角，IMU，电机转速等信息融合算法来实现车辆在实时地图中定位。&lt;/li&gt;
+&lt;li&gt;定位模块：采用&lt;a href=&#34;https://zhida.zhihu.com/search?content_id=240143038&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=DDPF&amp;amp;zhida_source=entity&#34;&gt;DDPF&lt;/a&gt; 算法&lt;/li&gt;
+&lt;li&gt;规划算法：引入DLP 算法。Momenta 的规划算法核心逻辑经历了从Rule-based/Optimization-based的方法到深度学习驱动的规划（Deep Learning-based Planning）的演进。在&lt;strong&gt;2020&lt;/strong&gt;年已经开始探索将&lt;strong&gt;深度学习方法引入规划模块&lt;/strong&gt;，到2023年上半年实现量产上车，时间点上比特斯拉用深度学习驱动planning甚至更早一点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在planning的部分，逐渐用深度学习去替代传统的基于规则的、基于优化的planning已经形成趋势&lt;/p&gt;
+&lt;p&gt;端到端大模型&lt;/p&gt;
+&lt;p&gt;在最新 的&lt;strong&gt;Momenta 智驾大模型 - AD 算法 5.0&lt;/strong&gt;中**，&lt;strong&gt;已经将&lt;/strong&gt;感知和规划**整合进一个大模型中，模仿人类的长期记忆。同时保留DLP模型，类似短期记忆，能快速学习。以此保证高质量的大模型训练数据+低成本的训练方法。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;image.png&#34; loading=&#34;lazy&#34; src=&#34;image%201.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;和特斯拉类似但是有不同之处的地方是：momenta的端到端分了两个支路。一个支路是端到端的大模型，类比于人类的长期记忆。另外一个支路类似于“短期记忆”，“短期记忆”由感知（DDLD）和规划（DDOD），以及记忆与深度学习的规划（DLP）构成，通过这样的方式，可以先进行快速训练，验证用于训练的数据是否正确，以及训练使用的算法是否有效。&lt;strong&gt;最终，被“短期记忆”验证过的好的算法和数据会在一段时间的积累后应用在“长期记忆”，即最终的端到端大模型上，这样可以保证一次就能把大模型训练好。其通过使用“长期记忆”和“短期记忆”配合的方式，能够让智驾大模型的训练成本缩小10到100倍。&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;MSD（Momenta Self-Driving）架构&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;BEV+Transformer&lt;/strong&gt;：通过视觉BEVFormer生成鸟瞰图特征&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时序融合&lt;/strong&gt;：利用3D Memory Bank存储历史帧信息&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多任务学习&lt;/strong&gt;：联合优化检测、分割、预测任务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Mpilot：侧重于量产自动驾驶技术的快速推广&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据闭环的意义：&lt;/p&gt;
+&lt;h3 id=&#34;11-搜集-corner-case-的数据&#34;&gt;&lt;strong&gt;1.1 搜集 corner case 的数据&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;只要是 L2 及 L2 以上的产品，都需要具备持续进化的能力。要让自动驾驶系统持续地进化，就需要不断获得 corner case 的数据。而随着越来越多的 corner case 从 「未知」 转换成 「已知」，通过数量有限、形式路线也有限的测试车辆挖掘出新的 corner case 的难度越来越大。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</guid>
+      <description>&lt;h1 id=&#34;waymo&#34;&gt;Waymo&lt;/h1&gt;
+&lt;p&gt;优势: 高精地图和多冗余传感器，有地图的城市地区表现稳健
+定位方向: L4，多传感器+激光雷达
+感知方案: 多摄像头、雷达+激光雷达
+技术路线 / 模型结构: 重传感器+高精地图；
+多目标跟踪+意图预测；
+模块化分层决策
+潜在短板/难点: 过于依赖高精地图导致泛化能力受限；
+Waymo的传感器和计算成本高昂&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</guid>
+      <description>&lt;h1 id=&#34;主线科技&#34;&gt;主线科技&lt;/h1&gt;
+&lt;p&gt;定位方向: 封闭园区
+商用车/卡车&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</guid>
+      <description>&lt;h1 id=&#34;图森未来&#34;&gt;图森未来&lt;/h1&gt;
+&lt;p&gt;定位方向: 封闭园区
+商用车/卡车&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</guid>
+      <description>&lt;h1 id=&#34;地平线&#34;&gt;地平线&lt;/h1&gt;
+&lt;p&gt;优势: 性价比高、低功耗、交付灵活
+典型客户: 理想、广汽、奇瑞
+定位方向: 芯片+算法一体平台/BPU架构
+感知方案: 视觉优先+低成本雷达
+成本区间: ¥0.8-1.2万
+技术路线 / 模型结构: 高效卷积网络 + 轻量BEV
+L2+量产
+潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术方案&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;传感器配置&lt;/strong&gt;：8MP摄像头×5 + 3R（4D成像雷达）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心算法&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;BPU® Nash架构优化&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;量化感知训练&lt;/strong&gt;：INT8精度下检测精度损失＜1%&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异构计算&lt;/strong&gt;：任务级分配到BPU/CPU（时延降低30%）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;感知模型&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Proprietary CNN&lt;/strong&gt;：针对征程5芯片优化的轻量网络&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多任务头设计&lt;/strong&gt;：检测、车道线、可行驶区域联合输出&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</guid>
+      <description>&lt;h1 id=&#34;毫末智行&#34;&gt;毫末智行&lt;/h1&gt;
+&lt;p&gt;优势: 数据驱动+闭环，大模型
+典型客户: 魏牌、沙龙等
+定位方向: 注重量产和成本控制、自建数据闭环
+感知方案: 视觉和毫米波雷达融合，适合L2+/L3级应用
+技术路线 / 模型结构: MANA大模型 + OccGrid + BEV
+潜在短板/难点: 商业拓展范围局限在长城生态；
+NOA落地慢于华为小鹏&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术方案&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;量产导向&lt;/strong&gt;：支持L2+级辅助驾驶&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;传感器配置&lt;/strong&gt;：1MP摄像头×3 + 5R（传统毫米波）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心算法&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;MANA雪湖数据体系&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;低成本数据引擎（千元级车端计算单元）&lt;/li&gt;
+&lt;li&gt;自动触发机制：仅上传0.01%关键场景数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;轻量化模型&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MobileNetV3+BiFPN&lt;/strong&gt;：模型大小＜8MB&lt;/li&gt;
+&lt;li&gt;知识蒸馏：从大模型迁移至车端小模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</guid>
+      <description>&lt;h1 id=&#34;海鸥科技&#34;&gt;海鸥科技&lt;/h1&gt;
+&lt;p&gt;优势: 快速部署、适配多车型
+典型客户: 合众、广汽等
+定位方向: BEV跟进快；
+轻量型NOA解决方案提供商/专注特定场景
+感知方案: 摄像头 + 雷达
+技术路线 / 模型结构: BEV + Transformer
+潜在短板/难点: 自研时间较短，长尾能力待验证&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术方案&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;专注场景&lt;/strong&gt;：港口/矿区低速封闭场景&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;传感器配置&lt;/strong&gt;：2MP广角摄像头×4 + 低成本LiDAR×2（16线）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心算法&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;动态背景建模&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;针对固定场景的移动目标检测（如AGV、集装箱）&lt;/li&gt;
+&lt;li&gt;背景差分法+光流法融合，误检率＜0.1次/小时&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抗粉尘干扰&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;毫米波雷达点云密度补偿算法&lt;/li&gt;
+&lt;li&gt;视觉去雾模型（AOD-Net）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</guid>
+      <description>&lt;h1 id=&#34;深圳元戎启行&#34;&gt;深圳元戎启行&lt;/h1&gt;
+&lt;p&gt;优势: 在城市复杂场景中表现出色，技术路线适应性强
+典型客户: 与多家车企合作，如长城汽车等
+定位方向: 高阶智驾，无图NOA
+感知方案: 多传感器融合，侧重于实时感知与决策
+成本区间: 中等，面向多种车型
+技术路线 / 模型结构: 基于“无图”端到端模型，强调在无高精地图的情况下实现自动驾驶
+潜在短板/难点: 无高精地图方案在某些场景下可能面临挑战，需要大量数据和训练以确保可靠性&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</guid>
+      <description>&lt;h1 id=&#34;纵目科技&#34;&gt;纵目科技&lt;/h1&gt;
+&lt;p&gt;优势: 成本控制好、量产交付经验丰富
+典型客户: 日产、本田（合资系）
+定位方向: 专注于自动泊车/传统ADAS / Tier1替代者
+感知方案: 多摄像头 + 通用雷达
+成本区间: ¥0.3-0.5万
+技术路线 / 模型结构: 摄像头视觉模型 + 规则融合
+潜在短板/难点: 算法深度/大模型研发相对滞后&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术方案&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;专注领域&lt;/strong&gt;：自动泊车（APA/AVP）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;传感器配置&lt;/strong&gt;：环视摄像头×4 + 超声波雷达×12&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心算法&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;车位识别&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;视觉几何约束检测（车位线夹角/长度分析）&lt;/li&gt;
+&lt;li&gt;超声波点聚类（DBSCAN算法优化版）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SLAM定位&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;视觉里程计+V-SLAM，定位误差＜5cm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抗干扰策略&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;雨水反光抑制（偏振滤光+图像修复）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</guid>
+      <description>&lt;h1 id=&#34;轻舟智航&#34;&gt;轻舟智航&lt;/h1&gt;
+&lt;p&gt;优势: 城市复杂工况经验丰富
+典型客户: 城市级Robotaxi项目
+定位方向: L4城市道路自动驾驶 / Robotaxi
+感知方案: 激光+视觉强融合
+成本区间: ¥8-12万
+技术路线 / 模型结构: 预测+规划+激光雷达BEV模型
+潜在短板/难点: 量产模型落地路径还不清晰&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术方案&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;城市道路聚焦&lt;/strong&gt;：支持复杂城区场景&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;传感器配置&lt;/strong&gt;：128线LiDAR×2 + 8MP摄像头×6 + 4D雷达×3&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心算法&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;OmniNet全场景感知&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;多模态BEV特征融合（LiDAR点云+视觉+雷达）&lt;/li&gt;
+&lt;li&gt;动态目标4D属性预测（位置+速度+加速度+意图）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;仿真增强&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;数字孪生引擎生成百万级corner case&lt;/li&gt;
+&lt;li&gt;对抗训练提升模型鲁棒性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     <item>
       <title></title>

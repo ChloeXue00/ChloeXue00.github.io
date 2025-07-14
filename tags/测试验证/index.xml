@@ -6,15 +6,8 @@
     <description>Recent content in 测试验证 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 29 May 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Apr 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>LKA（车道保持辅助）策略设计与问题集</title>
-      <link>/posts/lka_strategy/</link>
-      <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/lka_strategy/</guid>
-      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
-    </item>
     <item>
       <title>ACC（自适应巡航控制）策略设计与问题集</title>
       <link>/posts/acc-strategy/</link>

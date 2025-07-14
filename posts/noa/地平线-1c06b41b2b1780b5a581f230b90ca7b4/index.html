@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="地平线
+优势: 性价比高、低功耗、交付灵活
+典型客户: 理想、广汽、奇瑞
+定位方向: 芯片&#43;算法一体平台/BPU架构
+感知方案: 视觉优先&#43;低成本雷达
+成本区间: ¥0.8-1.2万
+技术路线 / 模型结构: 高效卷积网络 &#43; 轻量BEV
+L2&#43;量产
+潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion
+技术方案：
+
+传感器配置：8MP摄像头×5 &#43; 3R（4D成像雷达）
+核心算法：
+
+BPU® Nash架构优化：
+
+量化感知训练：INT8精度下检测精度损失＜1%
+异构计算：任务级分配到BPU/CPU（时延降低30%）
+
+
+感知模型：
+
+Proprietary CNN：针对征程5芯片优化的轻量网络
+多任务头设计：检测、车道线、可行驶区域联合输出
+
+
+
+
+">
+<meta name="author" content="">
+<link rel="canonical" href="/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/">
+  <meta property="og:description" content="地平线 优势: 性价比高、低功耗、交付灵活 典型客户: 理想、广汽、奇瑞 定位方向: 芯片&#43;算法一体平台/BPU架构 感知方案: 视觉优先&#43;低成本雷达 成本区间: ¥0.8-1.2万 技术路线 / 模型结构: 高效卷积网络 &#43; 轻量BEV L2&#43;量产 潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion
+技术方案：
+传感器配置：8MP摄像头×5 &#43; 3R（4D成像雷达） 核心算法： BPU® Nash架构优化： 量化感知训练：INT8精度下检测精度损失＜1% 异构计算：任务级分配到BPU/CPU（时延降低30%） 感知模型： Proprietary CNN：针对征程5芯片优化的轻量网络 多任务头设计：检测、车道线、可行驶区域联合输出 ">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="地平线
+优势: 性价比高、低功耗、交付灵活
+典型客户: 理想、广汽、奇瑞
+定位方向: 芯片&#43;算法一体平台/BPU架构
+感知方案: 视觉优先&#43;低成本雷达
+成本区间: ¥0.8-1.2万
+技术路线 / 模型结构: 高效卷积网络 &#43; 轻量BEV
+L2&#43;量产
+潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion
+技术方案：
+
+传感器配置：8MP摄像头×5 &#43; 3R（4D成像雷达）
+核心算法：
+
+BPU® Nash架构优化：
+
+量化感知训练：INT8精度下检测精度损失＜1%
+异构计算：任务级分配到BPU/CPU（时延降低30%）
+
+
+感知模型：
+
+Proprietary CNN：针对征程5芯片优化的轻量网络
+多任务头设计：检测、车道线、可行驶区域联合输出
+
+
+
+
+">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "",
+      "item": "/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "name": "",
+  "description": "地平线 优势: 性价比高、低功耗、交付灵活 典型客户: 理想、广汽、奇瑞 定位方向: 芯片+算法一体平台/BPU架构 感知方案: 视觉优先+低成本雷达 成本区间: ¥0.8-1.2万 技术路线 / 模型结构: 高效卷积网络 + 轻量BEV L2+量产 潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion\n技术方案：\n传感器配置：8MP摄像头×5 + 3R（4D成像雷达） 核心算法： BPU® Nash架构优化： 量化感知训练：INT8精度下检测精度损失＜1% 异构计算：任务级分配到BPU/CPU（时延降低30%） 感知模型： Proprietary CNN：针对征程5芯片优化的轻量网络 多任务头设计：检测、车道线、可行驶区域联合输出 ",
+  "keywords": [
+    
+  ],
+  "articleBody": "地平线 优势: 性价比高、低功耗、交付灵活 典型客户: 理想、广汽、奇瑞 定位方向: 芯片+算法一体平台/BPU架构 感知方案: 视觉优先+低成本雷达 成本区间: ¥0.8-1.2万 技术路线 / 模型结构: 高效卷积网络 + 轻量BEV L2+量产 潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion\n技术方案：\n传感器配置：8MP摄像头×5 + 3R（4D成像雷达） 核心算法： BPU® Nash架构优化： 量化感知训练：INT8精度下检测精度损失＜1% 异构计算：任务级分配到BPU/CPU（时延降低30%） 感知模型： Proprietary CNN：针对征程5芯片优化的轻量网络 多任务头设计：检测、车道线、可行驶区域联合输出 ",
+  "wordCount" : "33",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="地平线">地平线<a hidden class="anchor" aria-hidden="true" href="#地平线">#</a></h1>
+<p>优势: 性价比高、低功耗、交付灵活
+典型客户: 理想、广汽、奇瑞
+定位方向: 芯片+算法一体平台/BPU架构
+感知方案: 视觉优先+低成本雷达
+成本区间: ¥0.8-1.2万
+技术路线 / 模型结构: 高效卷积网络 + 轻量BEV
+L2+量产
+潜在短板/难点: 算法通用性不如Momenta；芯片性能不及Orion</p>
+<p><strong>技术方案</strong>：</p>
+<ul>
+<li><strong>传感器配置</strong>：8MP摄像头×5 + 3R（4D成像雷达）</li>
+<li><strong>核心算法</strong>：
+<ol>
+<li><strong>BPU® Nash架构优化</strong>：
+<ul>
+<li><strong>量化感知训练</strong>：INT8精度下检测精度损失＜1%</li>
+<li><strong>异构计算</strong>：任务级分配到BPU/CPU（时延降低30%）</li>
+</ul>
+</li>
+<li><strong>感知模型</strong>：
+<ul>
+<li><strong>Proprietary CNN</strong>：针对征程5芯片优化的轻量网络</li>
+<li><strong>多任务头设计</strong>：检测、车道线、可行驶区域联合输出</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

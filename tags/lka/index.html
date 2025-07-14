@@ -627,166 +627,139 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
-      <a href="/posts/lka_strategy/">LKA（车道保持辅助）策略设计与问题集</a>
+      <a href="/posts/lka_strategy/">LKA（车道保持辅助）策略设计</a>
     </h2>
   </header>
   <section class="entry-content">
-    <p><h1 id="lka车道保持辅助策略设计与问题集">LKA（车道保持辅助）策略设计与问题集</h1>
-<h2 id="一功能简介">一、功能简介</h2>
-<p>LKA（Lane Keeping Assist，车道保持辅助）是一种横向控制功能，在自车偏离车道中心趋势时，辅助驾驶员对方向盘进行微调，维持车辆在当前车道内行驶，提升安全性与驾驶舒适度。</p>
-<p>适用于高速公路、城市快速路等结构化道路场景，LKA 需与 LDW（车道偏离预警）、LCC（车道居中控制）等模块协同工作。</p>
-<h2 id="二功能层级">二、功能层级</h2>
+    <p><h1 id="lka车道保持辅助功能设计">LKA（车道保持辅助）功能设计</h1>
+<h1 id="1-功能概述function-overview">1. 功能概述（Function Overview）</h1>
+<p>LKA（Lane Keeping Assist，车道保持辅助系统）是一项基于车道线识别与方向盘控制的主动安全技术，属于车辆横向控制功能的一部分。系统通过摄像头等感知设备识别车道线，并结合车辆当前的横向位置和偏移趋势，判断是否存在偏离风险。一旦检测到车辆即将偏离车道且驾驶员未主动干预，LKA系统将自动输出轻微的方向盘转角，辅助驾驶员将车辆引导回车道中央区域，从而提升行车安全性与稳定性。</p>
+<h2 id="11-设计背景">1.1 设计背景</h2>
+<p>随着高级驾驶辅助系统（ADAS）功能不断普及，驾驶安全性和驾驶员负荷降低已成为新一代乘用车系统设计的核心关注点。研究表明，车道偏离是高速和城市快速路行车事故的主要诱因之一，特别是在驾驶员注意力不集中、疲劳驾驶或短暂分心的情况下。LKA系统可作为传统LDW（车道偏离预警）的主动升级方案，在预警基础上提供方向干预控制，是实现L2级自动驾驶的重要组成模块。</p>
+<h2 id="12-功能定位与边界">1.2 功能定位与边界</h2>
+<p>LKA系统主要定位于 <strong>车道内的横向稳定辅助控制</strong>，其功能边界如下：</p>
 <ul>
-<li><strong>LDW（车道偏离预警）</strong>：仅预警，无控制</li>
-<li><strong>LKA-A（车道保持辅助）</strong>：轻微转向修正</li>
-<li><strong>LCC（Lane Centering Control）</strong>：主动控制车辆保持车道中心</li>
+<li><strong>目标工况</strong>：高速公路、城市快速路等具有明确车道线标识的路段；</li>
+<li><strong>速度范围</strong>：通常适用于 20–70 km/h 区间；</li>
+<li><strong>工作条件</strong>：光照充足、车道线清晰、无打转向灯或刹车干预；</li>
+<li><strong>系统行为</strong>：在满足启用条件时自动激活；驾驶员主动控制方向时自动退出；</li>
+<li><strong>与LDW关系</strong>：LKA为主动控制系统，需与LDW系统共享感知信息并进行协同工作。</li>
 </ul>
-<h2 id="三核心输入信号">三、核心输入信号</h2>
+<h2 id="13-功能组成概览">1.3 功能组成概览</h2>
+<p>LKA系统主要包括以下核心模块：</p>
+<ul>
+<li><strong>感知输入模块</strong>：负责车道线识别、车辆偏离量计算；</li>
+<li><strong>横向偏离速度模块</strong>：计算车辆在车道内的横向偏移趋势；</li>
+<li><strong>偏离预警逻辑模块</strong>：判断车辆是否即将偏离车道；</li>
+<li><strong>期望转角计算模块</strong>：基于Ackermann模型计算方向盘目标转角；</li>
+<li><strong>使能控制模块</strong>：判断LKA是否满足启用/退出条件；</li>
+<li><strong>状态管理与接口模块</strong>：负责功能状态发布、HMI交互和转向控制信号输出。</li>
+</ul>
+<p>系统设计需保证干预柔和、控制精准，并支持驾驶员优先权逻辑，避免产生突兀控制或误触发行为。</p>
+<hr>
+<h1 id="2-功能目标functional-goals">2. 功能目标（Functional Goals）</h1>
+<p>LKA（Lane Keeping Assist，车道保持辅助系统）旨在在驾驶员未主动控制方向的情况下，协助车辆维持在当前车道内安全行驶，降低因注意力分散、疲劳驾驶或视线偏移而导致的车道偏离风险。LKA系统通过感知前方车道线、估算车辆偏离趋势，并适时输出方向盘转角指令，引导车辆回到车道中心。</p>
+<h2 id="21-总体目标">2.1 总体目标</h2>
 <table>
   <thead>
       <tr>
-          <th>信号名</th>
-          <th>说明</th>
+          <th>目标编号</th>
+          <th>功能目标描述</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td>V_ego</td>
-          <td>自车速度</td>
+          <td>FG-1</td>
+          <td>实现对车道线的实时感知与偏离趋势预测</td>
       </tr>
       <tr>
-          <td>Lane_Left/Right_Type</td>
-          <td>车道线类型</td>
+          <td>FG-2</td>
+          <td>提供平稳、及时的方向盘转角控制，保持车辆居中行驶</td>
       </tr>
       <tr>
-          <td>Lane_Center_Offset</td>
-          <td>自车相对于车道中心的横向偏移量</td>
+          <td>FG-3</td>
+          <td>避免在不合适场景（如打转向灯、车速过低）下误触发</td>
       </tr>
       <tr>
-          <td>Yaw_Angle</td>
-          <td>航向角</td>
+          <td>FG-4</td>
+          <td>支持驾驶员主动退出（踩刹车/打灯）与自动恢复机制</td>
       </tr>
       <tr>
-          <td>Steering_Torque_Driver</td>
-          <td>驾驶员方向盘力矩</td>
+          <td>FG-5</td>
+          <td>与LDW（车道偏离预警）协同工作，提升整体车道安全策略</td>
       </tr>
       <tr>
-          <td>Indicator_Status</td>
-          <td>转向灯状态</td>
+          <td>FG-6</td>
+          <td>满足系统可用性与鲁棒性设计，支持信号丢失、暂时遮挡等容错情况</td>
       </tr>
   </tbody>
 </table>
-<h2 id="四传感器要求">四、传感器要求</h2>
+<h2 id="22-用户视角目标">2.2 用户视角目标</h2>
 <table>
   <thead>
       <tr>
-          <th>传感器</th>
-          <th>用途</th>
+          <th>用户需求编号</th>
+          <th>用户体验目标</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td>前视摄像头</td>
-          <td>车道线识别</td>
+          <td>UFG-1</td>
+          <td>驾驶过程中能感知LKA介入但不引起突兀干预</td>
       </tr>
       <tr>
-          <td>EPS</td>
-          <td>执行横向控制</td>
+          <td>UFG-2</td>
+          <td>在符合条件下，系统可自动维持车辆不偏离车道</td>
       </tr>
       <tr>
-          <td>IMU</td>
-          <td>姿态估计</td>
+          <td>UFG-3</td>
+          <td>用户可在App或HMI中自由启停LKA功能</td>
       </tr>
       <tr>
-          <td>车速传感器</td>
-          <td>控制激活判断依据</td>
+          <td>UFG-4</td>
+          <td>系统退出后可自动恢复，不影响正常驾驶控制权</td>
+      </tr>
+      <tr>
+          <td>UFG-5</td>
+          <td>车道线丢失/恶劣天气等情况下不会误输出干预动作</td>
       </tr>
   </tbody>
 </table>
-<h2 id="五核心输出信号">五、核心输出信号</h2>
+<h2 id="23-性能目标可量化">2.3 性能目标（可量化）</h2>
 <table>
   <thead>
       <tr>
-          <th>信号</th>
-          <th>描述</th>
+          <th>性能目标编号</th>
+          <th>目标指标</th>
+          <th>备注</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td>LKA_Torque_Cmd</td>
-          <td>横向控制力矩输出</td>
+          <td>PG-1</td>
+          <td>LKA最大延迟时间 ≤ 100ms</td>
+          <td>感知 → 控制输出闭环延迟</td>
       </tr>
       <tr>
-          <td>LKA_Status</td>
-          <td>当前状态</td>
+          <td>PG-2</td>
+          <td>控制横向误差 ≤ ±0.25m</td>
+          <td>保持在车道中心附近运行</td>
       </tr>
       <tr>
-          <td>DriverDisplay_LKA</td>
-          <td>显示系统状态</td>
+          <td>PG-3</td>
+          <td>系统触发响应率 ≥ 95%</td>
+          <td>在满足ODD场景下的正常激活成功率</td>
+      </tr>
+      <tr>
+          <td>PG-4</td>
+          <td>误触发率 ≤ 1%</td>
+          <td>不应在无偏离趋势时误介入</td>
       </tr>
   </tbody>
 </table>
-<h2 id="六核心控制逻辑">六、核心控制逻辑</h2>
-<ol>
-<li>激活条件判断</li>
-<li>状态机切换</li>
-<li>控制器逻辑：</li>
-</ol>
-<p>$$
-T_{cmd} = K_p \cdot y_{off} + K_d \cdot \dot{y}_{off}
-$$</p>
-<h2 id="七关键控制参数">七、关键控制参数</h2>
-<table>
-  <thead>
-      <tr>
-          <th>参数</th>
-          <th>描述</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>K_p</td>
-          <td>比例增益</td>
-      </tr>
-      <tr>
-          <td>K_d</td>
-          <td>微分增益</td>
-      </tr>
-      <tr>
-          <td>T_max</td>
-          <td>最大输出力矩</td>
-      </tr>
-      <tr>
-          <td>Jerk_limit</td>
-          <td>横向加加速度限制</td>
-      </tr>
-      <tr>
-          <td>Cutout_Condition</td>
-          <td>退出条件</td>
-      </tr>
-  </tbody>
-</table>
-<h2 id="八典型问题与对策">八、典型问题与对策</h2>
-<h3 id="-q1lka-与驾驶员方向打架">✅ Q1：LKA 与驾驶员方向“打架”</h3>
-<ul>
-<li>原因：输出力矩过大</li>
-<li>对策：驾驶员优先 + 限制输出力矩</li>
-</ul>
-<h3 id="-q2弯道控制失败">✅ Q2：弯道控制失败</h3>
-<ul>
-<li>原因：曲率大或车道线缺失</li>
-<li>对策：失效保护 + 曲率自适应控制</li>
-</ul>
-<h3 id="-q3过度微调导致车体晃动">✅ Q3：过度微调导致车体晃动</h3>
-<ul>
-<li>原因：控制器参数设置不当</li>
-<li>对策：加入死区控制和滤波</li>
-</ul>
-<h3 id="-q4变道误触发-lka">✅ Q4：变道误触发 LKA</h3>
-<ul>
-<li>原因：未识别转向灯或延迟</li>
-<li>对策：识别转向意图 + 添加缓释机制</li>
-</ul></p>
+<hr>
+<h1 id="3-odd运行设计场景operational-design-domain">3. ODD运行设计场景（Operational Design Domain）</h1>
+<p>LKA系统的功能有效性依赖于其所运行的场景边界条件。ODD（Operational Design Domain）定义了LKA系统允许执行的<em>物理环境</em>、<em>动态状态</em>和<em>感知能力约束</em>。系统<em>仅在满足ODD条件的场景下才允许激活和发挥作用</em>，超出ODD范围将<em>自动退出LKA功能</em>或<em>切换至LDW模式</em>。</p></p>
   </section>
   <footer class="entry-footer">
     <span class="entry-date">May 29, 2024</span>
@@ -1640,6 +1613,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
   </header>
   <section class="entry-content">
     <p><h2 id="nopnavigate-on-pilot主要功能设计逻辑概览">NOP（Navigate on Pilot）主要功能设计逻辑概览</h2>
+<p>NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,</p>
 <p>NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。</p>
 <hr>
 <h2 id="一设计目标">一、设计目标</h2>
@@ -1707,7 +1681,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>启动 → 是否满足最低NOP开启条件？
 </span></span><span style="display:flex;"><span>     → 是 → 判断导航是否同步？
 </span></span><span style="display:flex;"><span>         → 是 → 进入巡航状态（车道保持 + 跟车）
-</span></span><span style="display:flex;"><span>             → 前车慢？侧后空？→ 变道触发
+</span></span><span style="display:flex;"><span>             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
 </span></span><span style="display:flex;"><span>             → 导航出口匹配？提前变道？→ 出口准备
 </span></span><span style="display:flex;"><span>         → 否 → 保持手动驾驶或提示同步失败
 </span></span><span style="display:flex;"><span>     → 否 → 禁用NOP，提示“条件不满足”
@@ -1803,6 +1777,57 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
   </section>
   <footer class="entry-footer">
     <span class="entry-date">May 20, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/">自动驾驶行业技术分析</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="1研究目的">1.研究目的</h1>
+<p>本篇报告主要围绕这几个问题展开:</p>
+<ol start="0">
+<li><a href="#1%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA">背景与研究动机</a></li>
+<li><a href="#2%E8%87%AA%E9%A9%BE%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%E4%B8%BB%E6%94%BB%E7%9B%AE%E6%A0%87">自驾技术发展方向/主攻目标</a></li>
+<li><a href="#3%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94">自动驾驶方案提供商的技术方案对比</a></li>
+<li><a href="#4%E5%B8%82%E5%9C%BA%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%BD%9C%E5%9C%A8%E7%9A%84%E5%B8%82%E5%9C%BA">市场大小和未被开发的市场</a></li>
+<li><a href="#5%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98%E5%92%8C%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF">技术趋势和突破点</a></li>
+</ol>
+<p>（部分信息可能覆盖不全，主要在于部分公司信息不够公开，需要进一步调研或者查看行业报告或第三方分析）</p>
+<h1 id="1-背景与研究动机">1. 背景与研究动机</h1>
+<p>行业趋势:
+地图: 对于高精度地图的鲜度依赖过高,导致城市路段的辅助驾驶进度难以继续,出于安全冗余的考虑，目前业内更认可的作法是“重感知、轻地图”的路线。
+小鹏汽车和智己汽车（合作方为Momenta），目前都已经从研发端切换到“重感知”的路线上，并且试图摆脱对高精地图的依赖。
+但如果没有高精地图，车辆行驶到路口时，系统需要依靠感知和计算作出正确判断。目前，毫末是通过迁移学习领域中的混合迁移训练方法，将仿真数据和真实数据进行混合训练，从而提高红绿灯识别度。此外，还通过用Transformer做时间和空间上的前融合方式，解决“空间感知碎片化”和“时间感知不连续”的问题，有效识别城市道路车道线。</p>
+<h1 id="2自驾技术发展方向主攻目标">2.自驾技术发展方向、主攻目标</h1>
+<h2 id="21城市无图noa导航辅助驾驶">2.1城市无图NOA（导航辅助驾驶）</h2>
+<p>随着智能驾驶技术的不断突破和消费者需求的日益升级，从L2等级到更高级的L2++自动驾驶辅助系统正逐步扩展至各类车型。</p>
+<p>无图NOA 是“感知驱动的决策规划系统”，感知是输入，决策规划是核心，本质是完整的智能驾驶决策架构，它的核心目标是：<strong>在没有高精地图的情况下，仅凭车辆自身感知，实时理解环境并做出安全、合理的驾驶决策。</strong></p>
+<p>高速和城市NOA（导航辅助驾驶），以及APA（自动泊车）等功能的渗透率不断提升,城市NOA已成为高阶智能驾驶技术的重要发展方向，而第三方智驾供应商在其中扮演着至关重要的角色。</p>
+<p>Momenta、HUAWEIinside（华为Hi模式）、Bosch+WeRide（博世+文远知行）、Apollo（百度自动驾驶平台）和深圳元戎启行科技有限公司这五家供应商是无图NOA方案战场中的主要玩家。</p>
+<h3 id="22无图化noa实现方式">2.2无图化NOA实现方式</h3>
+<p>无图方案不是完全摒弃高精地图，下游轨迹预测/规控仍然依赖<strong>高精地图</strong>的输入。『无图』实际指的是不再依赖厂商提供的高精地图，转而使用车载算法实时感知的『局部在线高精地图』。</p>
+<p>因此无图方案的核心在于<strong>实时在线地图</strong>构建的准确性，从技术层面来讲，正常情况下无图的上限就是有图；而在传统高精地图更新不及时的区域（比如施工路段、道路重构路段等），无图方案是更有优势的。在线高精地图的发展也有两年多了，无图一直致力于从『能用』走向『好用』。</p>
+<p>底图绘制设备：包含摄像头、高精度GPS、高精度IMU，及用于深度学习和SLAM的计算芯片，并对搭载的传感器设置高精度的时间同步，整套设备价格在1000美金左右。Momenta不会对产品进行单独的售卖，而选择和主机厂、出租车队、物流车队等合作，或将传感器设备搭载在自有测试车队上完成底图绘制；</p>
+<p>地图更新设备：地图更新设备的成本相较底图绘制设备，要低很多。Momenta将更新设备分为后装和前装两种方式进行部署。后装方式，即将众包更新方案搭载在Momenta后装产品设备“途铃”，完成地图更新。前装方式是Momenta将通过与主机厂合作共同研发“定位盒子”，并搭载Momenta地图更新方案。</p>
+<p>相关工作
+Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Mapping</p>
+<p>论文链接：https://arxiv.org/abs/2409.05352v1</p>
+<p>阿里巴巴和西交团队的工作：高精地图（HD地图）对于自动驾驶汽车的精确导航和决策至关重要，但其创建和维护带来了巨大的成本和及时性挑战。使用车载传感器在线构建高精地图已成为一种有前景的解决方案；然而，由于遮挡和恶劣天气，这些方法可能会受到不完整数据的阻碍。本文提出了PriorDrive框架，通过利用先验地图的力量来解决这些局限性，显著提高了在线高精地图构建的鲁棒性和准确性。我们的方法整合了各种先前的地图，如OpenStreetMap的标准定义地图（SD地图）、供应商过时的高精地图以及来自历史车辆数据的本地构建地图。为了将这些先验信息有效地编码到在线见图模型中，PriorDrive提出了一种混合先验表示（HPQuery），该表示对不同地图元素的表示进行了标准化。PriorDrive的核心是统一矢量编码器（UVE），它采用双编码机制来处理矢量数据。矢量内编码器捕获细粒度的局部特征，而矢量间编码器集成全局上下文。此外提出了一种segment-level和point-level的预训练策略，使UVE能够学习矢量数据的先验分布，从而提高编码器的泛化能力和性能。通过对nuScenes数据集的广泛测试，PriorDrive与各种在线地图模型高度兼容，并大大提高了地图预测能力。通过PriorDrive框架整合先前的地图，为单一感知数据的挑战提供了一个强大的解决方案，为更可靠的自动驾驶汽车导航铺平了道路。</p>
+<p>Neural HD Map Generation from Multiple Vectorized Tiles Locally Produced by Autonomous Vehicles</p>
+<p>论文链接：https://arxiv.org/abs/2409.03445v1</p>
+<p>高精地图厂商四维图新的工作：高精地图是自动驾驶系统的基本组成部分，因为它可以提供有关驾驶场景的精确环境信息。最近关于矢量化地图生成的工作，车辆运行一次只能在自车周围生成65%的局部地图元素，这就留下了一个难题，即如何在高质量标准下构建投影在世界坐标系中的全局高精地图。为了解决这个问题，我们将GNMap作为一个端到端的生成神经网络来自动构建具有多个矢量化图块的高精地图，这些图块是由自动驾驶汽车通过多次旅行在本地生成的。它利用多层和基于注意力的自动编码器作为共享网络，其中的参数是从两个不同的任务（即分别进行预训练和微调）中学习的，以确保生成的映射的完整性和元素类别的正确性。对真实世界的数据集进行了大量的定性评估，实验结果表明，GNMap可以超过SOTA方法5%以上的F1分数，只需少量手动修改即可达到工业使用水平。我们已经在有限公司Navinfo公司部署了它，作为自动构建自动驾驶系统高精地图的不可或缺的软件。</p>
+<p>Enhancing Vectorized Map Perception with Historical Rasterized Maps（ECCV2024）</p>
+<p>论文链接：https://arxiv.org/abs/2409.00620v1</p>
+<p>开源链接：https://github.com/HXMap/HRMapNet</p>
+<p>无图NOA以来，研究人员focus在端到端的在线矢量地图构建上，该技术在鸟瞰图（BEV）空间中实现，希望能够替代传统成本较高的离线高精（HD）地图。但是当前方法在恶劣环境下的准确性和鲁棒性很容易受限。为此本文提出了HRMapNet，其利用低成本的历史光栅化地图来增强在线矢量化地图的感知能力。历史光栅化地图来源于先前预测的结果，因此可以提供当前帧一定的先验信息。为了充分利用历史地图，作者设计了两个模块来增强BEV特征和地图元素的查询。对于BEV特征，本文设计了特征聚合模块，以编码图像和历史地图的特征。对于地图元素的查询，则设计了一个查询初始化模块，以赋予查询从历史地图中得到的先验信息。这两个模块对于在在线感知中利用地图信息至关重要。HRMapNet能够与大多数现有的在线矢量化地图感知方法集成。问鼎nuScenes和Argoverse 2 SOTA。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Feb 20, 2025</span>
   </footer>
 </article>
 

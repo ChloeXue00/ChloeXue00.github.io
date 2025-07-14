@@ -14,6 +14,7 @@
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
       <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
+&lt;p&gt;NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,&lt;/p&gt;
 &lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一设计目标&#34;&gt;一、设计目标&lt;/h2&gt;
@@ -81,7 +82,7 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;启动 → 是否满足最低NOP开启条件？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 是 → 判断导航是否同步？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 是 → 进入巡航状态（车道保持 + 跟车）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车慢？侧后空？→ 变道触发
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 导航出口匹配？提前变道？→ 出口准备
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 否 → 保持手动驾驶或提示同步失败
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 否 → 禁用NOP，提示“条件不满足”
@@ -166,6 +167,49 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;</description>
+    </item>
+    <item>
+      <title>自动驾驶行业技术分析</title>
+      <link>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</link>
+      <pubDate>Thu, 20 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</guid>
+      <description>&lt;h1 id=&#34;1研究目的&#34;&gt;1.研究目的&lt;/h1&gt;
+&lt;p&gt;本篇报告主要围绕这几个问题展开:&lt;/p&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;#1%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA&#34;&gt;背景与研究动机&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2%E8%87%AA%E9%A9%BE%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%E4%B8%BB%E6%94%BB%E7%9B%AE%E6%A0%87&#34;&gt;自驾技术发展方向/主攻目标&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94&#34;&gt;自动驾驶方案提供商的技术方案对比&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4%E5%B8%82%E5%9C%BA%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%BD%9C%E5%9C%A8%E7%9A%84%E5%B8%82%E5%9C%BA&#34;&gt;市场大小和未被开发的市场&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98%E5%92%8C%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF&#34;&gt;技术趋势和突破点&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;（部分信息可能覆盖不全，主要在于部分公司信息不够公开，需要进一步调研或者查看行业报告或第三方分析）&lt;/p&gt;
+&lt;h1 id=&#34;1-背景与研究动机&#34;&gt;1. 背景与研究动机&lt;/h1&gt;
+&lt;p&gt;行业趋势:
+地图: 对于高精度地图的鲜度依赖过高,导致城市路段的辅助驾驶进度难以继续,出于安全冗余的考虑，目前业内更认可的作法是“重感知、轻地图”的路线。
+小鹏汽车和智己汽车（合作方为Momenta），目前都已经从研发端切换到“重感知”的路线上，并且试图摆脱对高精地图的依赖。
+但如果没有高精地图，车辆行驶到路口时，系统需要依靠感知和计算作出正确判断。目前，毫末是通过迁移学习领域中的混合迁移训练方法，将仿真数据和真实数据进行混合训练，从而提高红绿灯识别度。此外，还通过用Transformer做时间和空间上的前融合方式，解决“空间感知碎片化”和“时间感知不连续”的问题，有效识别城市道路车道线。&lt;/p&gt;
+&lt;h1 id=&#34;2自驾技术发展方向主攻目标&#34;&gt;2.自驾技术发展方向、主攻目标&lt;/h1&gt;
+&lt;h2 id=&#34;21城市无图noa导航辅助驾驶&#34;&gt;2.1城市无图NOA（导航辅助驾驶）&lt;/h2&gt;
+&lt;p&gt;随着智能驾驶技术的不断突破和消费者需求的日益升级，从L2等级到更高级的L2++自动驾驶辅助系统正逐步扩展至各类车型。&lt;/p&gt;
+&lt;p&gt;无图NOA 是“感知驱动的决策规划系统”，感知是输入，决策规划是核心，本质是完整的智能驾驶决策架构，它的核心目标是：&lt;strong&gt;在没有高精地图的情况下，仅凭车辆自身感知，实时理解环境并做出安全、合理的驾驶决策。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高速和城市NOA（导航辅助驾驶），以及APA（自动泊车）等功能的渗透率不断提升,城市NOA已成为高阶智能驾驶技术的重要发展方向，而第三方智驾供应商在其中扮演着至关重要的角色。&lt;/p&gt;
+&lt;p&gt;Momenta、HUAWEIinside（华为Hi模式）、Bosch+WeRide（博世+文远知行）、Apollo（百度自动驾驶平台）和深圳元戎启行科技有限公司这五家供应商是无图NOA方案战场中的主要玩家。&lt;/p&gt;
+&lt;h3 id=&#34;22无图化noa实现方式&#34;&gt;2.2无图化NOA实现方式&lt;/h3&gt;
+&lt;p&gt;无图方案不是完全摒弃高精地图，下游轨迹预测/规控仍然依赖&lt;strong&gt;高精地图&lt;/strong&gt;的输入。『无图』实际指的是不再依赖厂商提供的高精地图，转而使用车载算法实时感知的『局部在线高精地图』。&lt;/p&gt;
+&lt;p&gt;因此无图方案的核心在于&lt;strong&gt;实时在线地图&lt;/strong&gt;构建的准确性，从技术层面来讲，正常情况下无图的上限就是有图；而在传统高精地图更新不及时的区域（比如施工路段、道路重构路段等），无图方案是更有优势的。在线高精地图的发展也有两年多了，无图一直致力于从『能用』走向『好用』。&lt;/p&gt;
+&lt;p&gt;底图绘制设备：包含摄像头、高精度GPS、高精度IMU，及用于深度学习和SLAM的计算芯片，并对搭载的传感器设置高精度的时间同步，整套设备价格在1000美金左右。Momenta不会对产品进行单独的售卖，而选择和主机厂、出租车队、物流车队等合作，或将传感器设备搭载在自有测试车队上完成底图绘制；&lt;/p&gt;
+&lt;p&gt;地图更新设备：地图更新设备的成本相较底图绘制设备，要低很多。Momenta将更新设备分为后装和前装两种方式进行部署。后装方式，即将众包更新方案搭载在Momenta后装产品设备“途铃”，完成地图更新。前装方式是Momenta将通过与主机厂合作共同研发“定位盒子”，并搭载Momenta地图更新方案。&lt;/p&gt;
+&lt;p&gt;相关工作
+Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Mapping&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.05352v1&lt;/p&gt;
+&lt;p&gt;阿里巴巴和西交团队的工作：高精地图（HD地图）对于自动驾驶汽车的精确导航和决策至关重要，但其创建和维护带来了巨大的成本和及时性挑战。使用车载传感器在线构建高精地图已成为一种有前景的解决方案；然而，由于遮挡和恶劣天气，这些方法可能会受到不完整数据的阻碍。本文提出了PriorDrive框架，通过利用先验地图的力量来解决这些局限性，显著提高了在线高精地图构建的鲁棒性和准确性。我们的方法整合了各种先前的地图，如OpenStreetMap的标准定义地图（SD地图）、供应商过时的高精地图以及来自历史车辆数据的本地构建地图。为了将这些先验信息有效地编码到在线见图模型中，PriorDrive提出了一种混合先验表示（HPQuery），该表示对不同地图元素的表示进行了标准化。PriorDrive的核心是统一矢量编码器（UVE），它采用双编码机制来处理矢量数据。矢量内编码器捕获细粒度的局部特征，而矢量间编码器集成全局上下文。此外提出了一种segment-level和point-level的预训练策略，使UVE能够学习矢量数据的先验分布，从而提高编码器的泛化能力和性能。通过对nuScenes数据集的广泛测试，PriorDrive与各种在线地图模型高度兼容，并大大提高了地图预测能力。通过PriorDrive框架整合先前的地图，为单一感知数据的挑战提供了一个强大的解决方案，为更可靠的自动驾驶汽车导航铺平了道路。&lt;/p&gt;
+&lt;p&gt;Neural HD Map Generation from Multiple Vectorized Tiles Locally Produced by Autonomous Vehicles&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.03445v1&lt;/p&gt;
+&lt;p&gt;高精地图厂商四维图新的工作：高精地图是自动驾驶系统的基本组成部分，因为它可以提供有关驾驶场景的精确环境信息。最近关于矢量化地图生成的工作，车辆运行一次只能在自车周围生成65%的局部地图元素，这就留下了一个难题，即如何在高质量标准下构建投影在世界坐标系中的全局高精地图。为了解决这个问题，我们将GNMap作为一个端到端的生成神经网络来自动构建具有多个矢量化图块的高精地图，这些图块是由自动驾驶汽车通过多次旅行在本地生成的。它利用多层和基于注意力的自动编码器作为共享网络，其中的参数是从两个不同的任务（即分别进行预训练和微调）中学习的，以确保生成的映射的完整性和元素类别的正确性。对真实世界的数据集进行了大量的定性评估，实验结果表明，GNMap可以超过SOTA方法5%以上的F1分数，只需少量手动修改即可达到工业使用水平。我们已经在有限公司Navinfo公司部署了它，作为自动构建自动驾驶系统高精地图的不可或缺的软件。&lt;/p&gt;
+&lt;p&gt;Enhancing Vectorized Map Perception with Historical Rasterized Maps（ECCV2024）&lt;/p&gt;
+&lt;p&gt;论文链接：https://arxiv.org/abs/2409.00620v1&lt;/p&gt;
+&lt;p&gt;开源链接：https://github.com/HXMap/HRMapNet&lt;/p&gt;
+&lt;p&gt;无图NOA以来，研究人员focus在端到端的在线矢量地图构建上，该技术在鸟瞰图（BEV）空间中实现，希望能够替代传统成本较高的离线高精（HD）地图。但是当前方法在恶劣环境下的准确性和鲁棒性很容易受限。为此本文提出了HRMapNet，其利用低成本的历史光栅化地图来增强在线矢量化地图的感知能力。历史光栅化地图来源于先前预测的结果，因此可以提供当前帧一定的先验信息。为了充分利用历史地图，作者设计了两个模块来增强BEV特征和地图元素的查询。对于BEV特征，本文设计了特征聚合模块，以编码图像和历史地图的特征。对于地图元素的查询，则设计了一个查询初始化模块，以赋予查询从历史地图中得到的先验信息。这两个模块对于在在线感知中利用地图信息至关重要。HRMapNet能够与大多数现有的在线矢量化地图感知方法集成。问鼎nuScenes和Argoverse 2 SOTA。&lt;/p&gt;</description>
     </item>
     <item>
       <title>智能驾驶功能版本节奏管理经验总结</title>

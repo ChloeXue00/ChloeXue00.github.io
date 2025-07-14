@@ -14,6 +14,7 @@
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
       <guid>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
       <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
+&lt;p&gt;NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,&lt;/p&gt;
 &lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一设计目标&#34;&gt;一、设计目标&lt;/h2&gt;
@@ -81,7 +82,7 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;启动 → 是否满足最低NOP开启条件？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 是 → 判断导航是否同步？
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 是 → 进入巡航状态（车道保持 + 跟车）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车慢？侧后空？→ 变道触发
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 导航出口匹配？提前变道？→ 出口准备
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 否 → 保持手动驾驶或提示同步失败
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 否 → 禁用NOP，提示“条件不满足”

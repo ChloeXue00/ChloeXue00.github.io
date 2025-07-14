@@ -112,11 +112,11 @@
 &lt;p&gt;src/imu_driver_node.cpp&lt;/p&gt;</description>
     </item>
     <item>
-      <title>LKA（车道保持辅助）策略设计与问题集</title>
+      <title>LKA（车道保持辅助）策略设计</title>
       <link>/posts/lka_strategy/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
       <guid>/posts/lka_strategy/</guid>
-      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号要求及典型问题</description>
+      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号等内容</description>
     </item>
     <item>
       <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
