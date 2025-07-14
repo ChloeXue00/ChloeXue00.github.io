@@ -627,12 +627,11 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
           <article class="post-entry">
   <header class="entry-header">
     <h2 class="entry-title">
-      <a href="/posts/lka_strategy/">LKA（车道保持辅助）策略设计</a>
+      <a href="/posts/lka_strategy/">LKA（车道保持辅助）功能设计</a>
     </h2>
   </header>
   <section class="entry-content">
-    <p><h1 id="lka车道保持辅助功能设计">LKA（车道保持辅助）功能设计</h1>
-<h1 id="1-功能概述function-overview">1. 功能概述（Function Overview）</h1>
+    <p><h1 id="1-功能概述function-overview">1. 功能概述（Function Overview）</h1>
 <p>LKA（Lane Keeping Assist，车道保持辅助系统）是一项基于车道线识别与方向盘控制的主动安全技术，属于车辆横向控制功能的一部分。系统通过摄像头等感知设备识别车道线，并结合车辆当前的横向位置和偏移趋势，判断是否存在偏离风险。一旦检测到车辆即将偏离车道且驾驶员未主动干预，LKA系统将自动输出轻微的方向盘转角，辅助驾驶员将车辆引导回车道中央区域，从而提升行车安全性与稳定性。</p>
 <h2 id="11-设计背景">1.1 设计背景</h2>
 <p>随着高级驾驶辅助系统（ADAS）功能不断普及，驾驶安全性和驾驶员负荷降低已成为新一代乘用车系统设计的核心关注点。研究表明，车道偏离是高速和城市快速路行车事故的主要诱因之一，特别是在驾驶员注意力不集中、疲劳驾驶或短暂分心的情况下。LKA系统可作为传统LDW（车道偏离预警）的主动升级方案，在预警基础上提供方向干预控制，是实现L2级自动驾驶的重要组成模块。</p>

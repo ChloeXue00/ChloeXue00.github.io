@@ -55,7 +55,21 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/acc-strategy/">
+</noscript><script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:url" content="/posts/acc-strategy/">
   <meta property="og:title" content="ACC（自适应巡航控制）策略设计与问题集">
   <meta property="og:description" content="解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点">
   <meta property="og:locale" content="en">

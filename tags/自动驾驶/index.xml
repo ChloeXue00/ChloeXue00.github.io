@@ -112,7 +112,7 @@
 &lt;p&gt;src/imu_driver_node.cpp&lt;/p&gt;</description>
     </item>
     <item>
-      <title>LKA（车道保持辅助）策略设计</title>
+      <title>LKA（车道保持辅助）功能设计</title>
       <link>/posts/lka_strategy/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
       <guid>/posts/lka_strategy/</guid>
