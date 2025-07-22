@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>LKA（车道保持辅助）功能设计 | </title>
 <meta name="keywords" content="L2, LKA, 自动驾驶, 控制策略">
 <meta name="description" content="解析L2系统中LKA功能的子模块结构、控制策略、信号等内容">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/lka_strategy/">
+<link rel="canonical" href="//localhost:1313/posts/lka_strategy/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/lka_strategy/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/lka_strategy/">
 <noscript>
     <style>
         #theme-toggle,
@@ -55,72 +55,7 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/lka_strategy/">
-  <meta property="og:title" content="LKA（车道保持辅助）功能设计">
-  <meta property="og:description" content="解析L2系统中LKA功能的子模块结构、控制策略、信号等内容">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-05-29T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-05-29T00:00:00+00:00">
-    <meta property="article:tag" content="L2">
-    <meta property="article:tag" content="LKA">
-    <meta property="article:tag" content="自动驾驶">
-    <meta property="article:tag" content="控制策略">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LKA（车道保持辅助）功能设计">
-<meta name="twitter:description" content="解析L2系统中LKA功能的子模块结构、控制策略、信号等内容">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "LKA（车道保持辅助）功能设计",
-      "item": "/posts/lka_strategy/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "LKA（车道保持辅助）功能设计",
-  "name": "LKA（车道保持辅助）功能设计",
-  "description": "解析L2系统中LKA功能的子模块结构、控制策略、信号等内容",
-  "keywords": [
-    "L2", "LKA", "自动驾驶", "控制策略"
-  ],
-  "articleBody": "1. 功能概述（Function Overview） LKA（Lane Keeping Assist，车道保持辅助系统）是一项基于车道线识别与方向盘控制的主动安全技术，属于车辆横向控制功能的一部分。系统通过摄像头等感知设备识别车道线，并结合车辆当前的横向位置和偏移趋势，判断是否存在偏离风险。一旦检测到车辆即将偏离车道且驾驶员未主动干预，LKA系统将自动输出轻微的方向盘转角，辅助驾驶员将车辆引导回车道中央区域，从而提升行车安全性与稳定性。\n1.1 设计背景 随着高级驾驶辅助系统（ADAS）功能不断普及，驾驶安全性和驾驶员负荷降低已成为新一代乘用车系统设计的核心关注点。研究表明，车道偏离是高速和城市快速路行车事故的主要诱因之一，特别是在驾驶员注意力不集中、疲劳驾驶或短暂分心的情况下。LKA系统可作为传统LDW（车道偏离预警）的主动升级方案，在预警基础上提供方向干预控制，是实现L2级自动驾驶的重要组成模块。\n1.2 功能定位与边界 LKA系统主要定位于 车道内的横向稳定辅助控制，其功能边界如下：\n目标工况：高速公路、城市快速路等具有明确车道线标识的路段； 速度范围：通常适用于 20–70 km/h 区间； 工作条件：光照充足、车道线清晰、无打转向灯或刹车干预； 系统行为：在满足启用条件时自动激活；驾驶员主动控制方向时自动退出； 与LDW关系：LKA为主动控制系统，需与LDW系统共享感知信息并进行协同工作。 1.3 功能组成概览 LKA系统主要包括以下核心模块：\n感知输入模块：负责车道线识别、车辆偏离量计算； 横向偏离速度模块：计算车辆在车道内的横向偏移趋势； 偏离预警逻辑模块：判断车辆是否即将偏离车道； 期望转角计算模块：基于Ackermann模型计算方向盘目标转角； 使能控制模块：判断LKA是否满足启用/退出条件； 状态管理与接口模块：负责功能状态发布、HMI交互和转向控制信号输出。 系统设计需保证干预柔和、控制精准，并支持驾驶员优先权逻辑，避免产生突兀控制或误触发行为。\n2. 功能目标（Functional Goals） LKA（Lane Keeping Assist，车道保持辅助系统）旨在在驾驶员未主动控制方向的情况下，协助车辆维持在当前车道内安全行驶，降低因注意力分散、疲劳驾驶或视线偏移而导致的车道偏离风险。LKA系统通过感知前方车道线、估算车辆偏离趋势，并适时输出方向盘转角指令，引导车辆回到车道中心。\n2.1 总体目标 目标编号 功能目标描述 FG-1 实现对车道线的实时感知与偏离趋势预测 FG-2 提供平稳、及时的方向盘转角控制，保持车辆居中行驶 FG-3 避免在不合适场景（如打转向灯、车速过低）下误触发 FG-4 支持驾驶员主动退出（踩刹车/打灯）与自动恢复机制 FG-5 与LDW（车道偏离预警）协同工作，提升整体车道安全策略 FG-6 满足系统可用性与鲁棒性设计，支持信号丢失、暂时遮挡等容错情况 2.2 用户视角目标 用户需求编号 用户体验目标 UFG-1 驾驶过程中能感知LKA介入但不引起突兀干预 UFG-2 在符合条件下，系统可自动维持车辆不偏离车道 UFG-3 用户可在App或HMI中自由启停LKA功能 UFG-4 系统退出后可自动恢复，不影响正常驾驶控制权 UFG-5 车道线丢失/恶劣天气等情况下不会误输出干预动作 2.3 性能目标（可量化） 性能目标编号 目标指标 备注 PG-1 LKA最大延迟时间 ≤ 100ms 感知 → 控制输出闭环延迟 PG-2 控制横向误差 ≤ ±0.25m 保持在车道中心附近运行 PG-3 系统触发响应率 ≥ 95% 在满足ODD场景下的正常激活成功率 PG-4 误触发率 ≤ 1% 不应在无偏离趋势时误介入 3. ODD运行设计场景（Operational Design Domain） LKA系统的功能有效性依赖于其所运行的场景边界条件。ODD（Operational Design Domain）定义了LKA系统允许执行的物理环境、动态状态和感知能力约束。系统仅在满足ODD条件的场景下才允许激活和发挥作用，超出ODD范围将自动退出LKA功能或切换至LDW模式。\n3.1 场景边界定义 类别 条件范围 说明 道路类型 城市快速路、高速公路、封闭场地 要求有明确可识别的车道线 车道线状态 清晰、连续的白色或黄色实线/虚线 不支持无车道线或严重遮挡情形 曲率半径 \u003e 200m 不适用于急弯或匝道出入口段 车速范围 20–70 km/h 高于20 km/h才能启用，70 km/h以上建议交由ACC+LKA协同模块控制 环境光照 光线良好，白天或隧道内照明充足 雨雾雪、逆光、夜间等条件下效果受限 天气条件 晴天、少云、无雨雪 不支持雨天、水雾、积雪覆盖车道线等场景 道路附加物 道路无施工锥桶、无跨车道遮挡物 存在遮挡或反光干扰时功能暂停 驾驶员行为 未打转向灯、未踩刹车、双手握方向盘 打灯、换道、人工强控方向盘时自动退出 传感器状态 前视摄像头正常、图像清晰、感知模型正常工作 摄像头故障或图像失真时立即退出 3.2 场景示例（满足ODD） 高速直线路段，白天光照良好，车道线连续，系统可稳定介入控制； 城市快速路缓弯段，无其他遮挡物，车道宽度充足，系统保持车辆居中； 封闭测试场景，模拟车道线清晰铺设，适合算法迭代验证和仿真评估。 3.3 场景示例（超出ODD） 夜间光照不足或雨天视线模糊时，LKA将退出，仅保留LDW功能； 车道线被遮挡、施工区变化频繁，系统无法识别车道边界时退出； 车辆驶入无车道线的路肩或变窄区域，不满足激活条件； 驾驶员踩刹车或打转向灯主动变道，LKA立即退出并交还控制权。 3.4 ODD扩展方向（未来版本支持） 扩展方向 说明 夜间/弱光感知增强 利用红外补光或低照度图像增强模型 弯道补偿算法 基于BEV感知融合与预瞄控制模型优化小曲率能力 与导航/高精地图联动 使用高精地图信息提前获知车道结构 雨雪场景鲁棒性 引入多传感器融合（摄像头+毫米波+激光）提升边界识别准确率 4. ODC系统运行限制条件（Operational Design Constraints） ODC（Operational Design Constraints）用于定义LKA系统在运行过程中必须遵守的边界条件与限制规则。即使系统所处环境满足ODD定义，但若当前状态违反任一ODC约束条件，LKA也将禁止激活或主动退出运行，以确保系统安全性、稳定性和驾驶员优先控制权。\n4.1 运行约束条件定义 编号 约束项 说明 ODC-1 转向灯信号开启 当左/右转向灯打开时，系统认为驾驶员意图变道，应立即退出LKA ODC-2 双闪灯激活 处于紧急状态或临时停靠状态，系统应不干预 ODC-3 驾驶员主动转动方向盘 检测到方向盘角度变化速率超过阈值，系统认为驾驶员主动控制方向，应立即退出 ODC-4 踩下制动踏板 驾驶员主动制动，系统退出LKA，交还横向控制权 ODC-5 当前车速 \u003c 最低激活阈值 若车辆行驶速度低于设定下限（如20km/h），系统禁止进入LKA状态 ODC-6 档位不为前进档 档位处于倒挡或空挡时，不满足激活条件 ODC-7 App未授权开启LKA 用户侧未开启LKA功能开关，系统禁止启用 ODC-8 摄像头识别车道线失败 感知失败，系统无法进行车道居中控制，需退出LKA ODC-9 系统内检测故障或通信异常 控制器或转向系统等通信异常，应立刻退出LKA功能 4.2 ODC触发后的系统行为 场景 LKA行为 检测到任一ODC约束违反 立即中止控制输出，退出LKA功能 控制退出后满足条件恢复 系统可自动重新激活（如未打灯、车速恢复） 持续ODC违规状态 系统维持LKA退出状态，仅保留LDW提示 控制退出后驾驶员未接管 可协同AEB/LDW提示，确保安全 4.3 与驾驶员控制权交互策略 LKA系统始终保持驾驶员优先权原则：\n若驾驶员主动控制方向（打灯/转动方向盘），系统应无条件退出； 驾驶员干预结束后，若其他条件满足，可自动恢复LKA控制； 系统退出时需通过HMI或提示音明确通知驾驶员当前控制状态。 4.4 异常状态处理建议 异常类别 建议策略 感知失效（如车道线消失） 输出“LKA退出”状态信号，HMI同步提示 传感器漂移或数据跳变 启动状态滤波、限制控制更新频率，必要时退出 通信断链或控制器超时 启动系统故障标志，立即断开控制输出 5. 系统接口定义（System Interface Definition） 本章定义LKA系统与外部模块之间的输入输出信号接口，包括信号名称、数据类型、单位和使用说明。这些接口信号涵盖感知输入、控制输出、系统状态反馈等内容，确保系统功能在各子模块间高效协同运行。\n5.1 输入信号列表 编号 信号名称 描述 单位/格式 1 leftoffset 距离左车道线的横向距离 m 2 rightoffset 距离右车道线的横向距离 m 3 vehiclehalfwidth 车身宽度的一半 m 4 appldkenable App端开启LKA使能信号 Bool（0/1） 5 vehiclespeed 本车当前速度 km/h 6 gear 当前档位信息 枚举（P/R/N/D） 7 minspeed LKA允许的最低激活车速 km/h 8 turnleft 左转向灯状态 Bool（0/1） 9 turnright 右转向灯状态 Bool（0/1） 10 brakestatus 踩下刹车状态 Bool（0/1） 11 xpreviewnear1/2 左右近预瞄点 X 坐标 m 12 ypreviewnear1/2 左右近预瞄点 Y 坐标 m 13 roadpointheading1/2 左右近预瞄点航向角 deg 14 xpreview 远预瞄点 X 坐标 m 15 ypreview 远预瞄点 Y 坐标 m 16 roadpointheading 远预瞄点航向角 deg 17 disfrontrear 前后轴间距 m 18 disleftright 后轴轮距 m 5.2 输出信号列表 编号 信号名称 描述 单位/格式 1 lkawarning LKA使能状态（是否正在控制） Bool 2 lkawarningleftright 左右车道线偏离预警标志 枚举或Bool 3 lkastate 当前LKA状态（关闭/待激活/激活） 枚举 4 lkalaneinfo 当前识别到的左右车道线有效性信息 数组/结构体 5 targetangle 当前方向盘期望输出角度 deg 5.3 接口说明与同步约定 所有输入信号以周期性采样方式读取，建议频率为 30Hz； 输出信号应具备时间戳标记，供上位机与HMI同步刷新； 所有角度类信号使用统一方向定义（左正右负或右正左负）； 所有状态类信号应支持异常状态标志（如信号丢失、故障标志）； 接口间数据同步需对接感知模块、转向控制器、HMI显示子系统。 5.4 系统接口拓扑示意（示意） +------------------------+ | 感知系统（Camera） | +------------------------+ ↓ left/right offset ↓ lane heading +------------------------+ | LKA控制模块（本系统） | +------------------------+ ↓ ↑ targetangle appldkenable / brake / gear ↓ ↑ +------------------------+ | EPS转向执行器模块 | +------------------------+ +------------------------+ | HMI界面 | +------------------------+ ↑ lkawarning / state 6. 横向偏离速度模块（Lateral Deviation Velocity Module） 6.1 模块功能概述 横向偏离速度模块是LKA系统中偏离趋势检测的基础功能模块之一，主要用于估算车辆在车道内的横向偏离速度，为偏离预警逻辑和LKA控制判断提供输入依据。该模块通过比较左右车道线偏移量在连续帧之间的变化趋势，提取车辆横向漂移的动态特征。\n6.2 输入信号 信号名 含义 单位 leftoffset 距离左车道线的横向偏移量 m rightoffset 距离右车道线的横向偏移量 m 这些信号由上游感知系统（摄像头识别+车体坐标变换）提供，表示当前车辆中心与左右车道线的实时偏距。\n6.3 输出信号 信号名 含义 单位 lateral_speed 横向偏移速度估计值 m/s 该信号用于后续偏离预警判断逻辑模块中进行是否“即将压线”的预测判断。\n6.4 算法设计逻辑 6.4.1 差分法计算横向速度 模块采用帧间差分算法估算左右偏移量的变化趋势：\n$$ v_{\\text{lateral}} = \\frac{\\Delta \\text{leftoffset} + \\Delta \\text{rightoffset}}{\\Delta t} $$\n其中：\n$\\Delta \\text{leftoffset} = \\text{leftoffset}t - \\text{leftoffset}{t-1}$ $\\Delta \\text{rightoffset} = \\text{rightoffset}t - \\text{rightoffset}{t-1}$ $\\Delta t$：图像帧周期，默认约为 $1/30,\\text{s}$ 为避免误差干扰，系统引入阈值滤波：\n当偏移量变化绝对值小于阈值（如 0.05m）时，认为为噪声，不更新； 仅当偏移量突变超过阈值时，更新当前帧值。 6.4.2 模块结构图（逻辑示意） leftoffset ─┬─\u003e[Abs]─\u003e[阈值判断]─┬─\u003e[差分计算] │ │ └────\u003e[Unit Delay]──┘ rightoffset ─┬─\u003e[Abs]─\u003e[阈值判断]─┬─\u003e[差分计算] │ │ └────\u003e[Unit Delay]──┘ ↓ ──────────\u003e[合成 lateral_speed]──────────\u003e 6.4.3 伪代码简化逻辑 if abs(leftoffset - prev_leftoffset) \u003e threshold: d_left = leftoffset - prev_leftoffset else: d_left = 0 if abs(rightoffset - prev_rightoffset) \u003e threshold: d_right = rightoffset - prev_rightoffset else: d_right = 0 lateral_speed = (d_left + d_right) / delta_t 6.5 模块特性与注意事项 抗噪设计：通过设置动态偏移阈值避免小幅抖动触发速度波动； 适配场景：车道线清晰、图像帧率稳定时效果最佳； 与预警模块耦合紧密：该模块为偏离预警的先决条件之一； 计算频率建议：与图像感知帧率一致（≥30Hz）； 异常情况处理：当车道线识别失败或偏移值无效时，冻结 lateral_speed 为 0。 7. 偏离预警逻辑模块（Lane Departure Warning Logic Module） 7.1 功能说明 偏离预警逻辑模块用于判断当前车辆是否存在车道偏离趋势，并在满足多个触发条件的情况下，激活预警或联动LKA控制逻辑。本模块基于车辆横向速度、车道线位置关系以及其他状态参数，采用时间预测模型提前判断车辆是否即将压线，从而实现主动干预或告警。\n7.2 输入/输出信号定义（接口列表） 输入变量 编号 信号名称 描述 备注 1 leftoffset 距离左车道线的偏距 m 2 rightoffset 距离右车道线的偏距 m 3 vehiclehalfwidth 车身宽度的一半 m 4 appldwenable App 开启功能信号 0/1 5 vehiclespeed 本车车速 km/h 6 gear 档位信号 — 7 minspeed 最小使能车速 km/h 8 turnleft 左转向灯信号 — 9 turnright 右转向灯信号 — 输出变量 编号 信号名称 描述 备注 1 ldwwarning LDW 预警信号 — 2 ldwstate LDW 状态信号 — 3 ldwlaneinfo 左右车道线信号 — 7.3 触发逻辑结构 7.3.1 压线预测公式 模块基于以下判断条件，预测车辆在未来 $T_{\\text{set}}$ 秒内是否会越过车道线边缘：\n$$ T_{\\text{set}} \\cdot v_{\\text{lateral}} \u003e d_{\\text{offset}} - d_{\\text{halfwidth}} $$\n其中：\n$T_{\\text{set}}$：预设判断时间窗口（默认3秒）； $v_{\\text{lateral}}$：横向偏移速度； $d_{\\text{offset}}$：当前偏移值（如rightoffset）； $d_{\\text{halfwidth}}$：车身宽度的一半。 当上述不等式成立时，表明车辆在 $T_{\\text{set}}$ 秒内将压线，进入预警判断链路。\n7.3.2 条件触发判断 除预测偏离外，系统需同时满足以下使能条件：\n当前档位为“前进档”（gear ∈ D档）； 当前车速 ≥ minspeed（例如20 km/h）； App中LKA功能已启用； 当前车道线偏移数据有效（左右距离大于最小可信阈值）； 横向偏移速度 $|v_{\\text{lateral}}|$ 在设定范围内（如 0.5 ~ 1.3 m/s）； 7.3.3 组合判定 所有条件通过布尔逻辑 AND 联合判断，仅在全部条件成立时，输出偏离预警信号（ldwwarning = True），否则为 False。\n7.4 输出信号 信号名 含义 ldwwarning 偏离预警激活标志（True/False） 该信号可联动仪表显示、HMI语音提示或传递至LKA控制模块启动方向干预。\n7.5 模块备注 若当前左右车道线信息缺失，则禁止偏离逻辑触发； 若横向速度过低，认为偏移趋势不显著，不触发预警； 模块响应周期与图像帧率同步，建议为30Hz或更高； 本模块共享与 LDW/LKA 两套系统，可单独启用。 \"\"\" ",
-  "wordCount" : "665",
-  "inLanguage": "en",
-  "datePublished": "2024-05-29T00:00:00Z",
-  "dateModified": "2024-05-29T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/lka_strategy/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -765,16 +700,8 @@
 <p>该信号用于后续偏离预警判断逻辑模块中进行是否“即将压线”的预测判断。</p>
 <h2 id="64-算法设计逻辑">6.4 算法设计逻辑<a hidden class="anchor" aria-hidden="true" href="#64-算法设计逻辑">#</a></h2>
 <h3 id="641-差分法计算横向速度">6.4.1 差分法计算横向速度<a hidden class="anchor" aria-hidden="true" href="#641-差分法计算横向速度">#</a></h3>
-<p>模块采用帧间差分算法估算左右偏移量的变化趋势：</p>
-<p>$$
-v_{\text{lateral}} = \frac{\Delta \text{leftoffset} + \Delta \text{rightoffset}}{\Delta t}
-$$</p>
-<p>其中：</p>
-<ul>
-<li>$\Delta \text{leftoffset} = \text{leftoffset}<em>t - \text{leftoffset}</em>{t-1}$</li>
-<li>$\Delta \text{rightoffset} = \text{rightoffset}<em>t - \text{rightoffset}</em>{t-1}$</li>
-<li>$\Delta t$：图像帧周期，默认约为 $1/30,\text{s}$</li>
-</ul>
+<p>模块采用帧间差分算法估算左右偏移量的变化趋势：
+<img alt="横向偏移速度计算公式" loading="lazy" src="/images/%E6%A8%AA%E5%90%91%E5%81%8F%E7%A7%BB%E9%80%9F%E5%BA%A6%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F.png"></p>
 <p>为避免误差干扰，系统引入阈值滤波：</p>
 <ul>
 <li>当偏移量变化绝对值小于阈值（如 0.05m）时，认为为噪声，不更新；</li>
@@ -917,10 +844,8 @@ $$</p>
 </table>
 <h2 id="73-触发逻辑结构">7.3 触发逻辑结构<a hidden class="anchor" aria-hidden="true" href="#73-触发逻辑结构">#</a></h2>
 <h3 id="731-压线预测公式">7.3.1 压线预测公式<a hidden class="anchor" aria-hidden="true" href="#731-压线预测公式">#</a></h3>
-<p>模块基于以下判断条件，预测车辆在未来 $T_{\text{set}}$ 秒内是否会越过车道线边缘：</p>
-<p>$$
-T_{\text{set}} \cdot v_{\text{lateral}} &gt; d_{\text{offset}} - d_{\text{halfwidth}}
-$$</p>
+<p>模块基于以下判断条件，预测车辆在未来 $T_{\text{set}}$ 秒内是否会越过车道线边缘：
+<img alt="偏离预测判断公式" loading="lazy" src="/images/%E5%81%8F%E7%A6%BB%E9%A2%84%E6%B5%8B%E5%88%A4%E6%96%AD%E5%85%AC%E5%BC%8F.png"></p>
 <p>其中：</p>
 <ul>
 <li>$T_{\text{set}}$：预设判断时间窗口（默认3秒）；</li>
@@ -964,16 +889,99 @@ $$</p>
 <li>本模块共享与 LDW/LKA 两套系统，可单独启用。
 &quot;&quot;&quot;</li>
 </ul>
+<h1 id="8-期望转角计算模块target-steering-angle-calculation-module">8. 期望转角计算模块（Target Steering Angle Calculation Module）<a hidden class="anchor" aria-hidden="true" href="#8-期望转角计算模块target-steering-angle-calculation-module">#</a></h1>
+<h2 id="81-模块功能说明">8.1 模块功能说明<a hidden class="anchor" aria-hidden="true" href="#81-模块功能说明">#</a></h2>
+<p>期望转角计算模块是LKA系统的核心控制模块之一。其作用是根据车辆当前位置与预瞄路径的空间几何关系，计算车辆在保持车道中心所需的前轮转角，并通过转向传动比转换为方向盘角度输出。该模块采用Ackermann运动模型实现路径跟踪精度和转角物理合理性的统一，确保控制行为稳定、可控、无突变。</p>
+<h2 id="82-输入信号">8.2 输入信号<a hidden class="anchor" aria-hidden="true" href="#82-输入信号">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>信号名</th>
+          <th>描述</th>
+          <th>单位</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>xpreview</code>, <code>ypreview</code></td>
+          <td>远预瞄点坐标</td>
+          <td>m</td>
+      </tr>
+      <tr>
+          <td><code>xpreviewnear1/2</code>, <code>ypreviewnear1/2</code></td>
+          <td>左右近预瞄点坐标</td>
+          <td>m</td>
+      </tr>
+      <tr>
+          <td><code>roadpointheading</code>, <code>roadpointheading1/2</code></td>
+          <td>路径朝向角（航向角）</td>
+          <td>deg</td>
+      </tr>
+      <tr>
+          <td><code>disfrontrear</code></td>
+          <td>车辆前后轴间距（轴距）</td>
+          <td>m</td>
+      </tr>
+      <tr>
+          <td><code>disleftright</code></td>
+          <td>后轴轮距</td>
+          <td>m</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="83-输出信号">8.3 输出信号<a hidden class="anchor" aria-hidden="true" href="#83-输出信号">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>信号名</th>
+          <th>描述</th>
+          <th>单位</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>targetangle</code></td>
+          <td>方向盘期望转角</td>
+          <td>deg</td>
+      </tr>
+  </tbody>
+</table>
+<p>该输出将传递至EPS控制器，用于实现实际的方向控制。</p>
+<h2 id="84-控制模型与计算方法">8.4 控制模型与计算方法<a hidden class="anchor" aria-hidden="true" href="#84-控制模型与计算方法">#</a></h2>
+<h3 id="841-ackermann圆弧模型">8.4.1 Ackermann圆弧模型<a hidden class="anchor" aria-hidden="true" href="#841-ackermann圆弧模型">#</a></h3>
+<p>LKA系统假设车辆以圆弧路径行驶，当前时刻的控制目标是将车辆驶向预设的预瞄点 \((x_t, y_t)\)。若车辆后轴中点坐标为 \((x_0, y_0)\)，则可通过圆弧几何关系求解控制所需的圆心和半径 \(R\)。</p>
+<p>若车辆与目标点的连线正交，则认为转向角为0，车辆无需修正；否则，基于如下公式计算期望前轮转角：</p>
+<p><img alt="期望转角" loading="lazy" src="/images/%E6%9C%9F%E6%9C%9B%E8%BD%AC%E8%A7%92.png"></p>
+<p>其中 \( L \) 为轴距，\( R \) 为车辆到圆心的半径。</p>
+<h3 id="842-圆心解算逻辑">8.4.2 圆心解算逻辑<a hidden class="anchor" aria-hidden="true" href="#842-圆心解算逻辑">#</a></h3>
+<p>给定目标点和车辆当前位置，圆心 \((x_c, y_c)\) 落在车辆后轴延长线上，满足：</p>
+<p><img alt="圆心等距" loading="lazy" src="/images/%E5%9C%86%E5%BF%83%E7%AD%89%E8%B7%9D%E6%9D%A1%E4%BB%B6.png"></p>
+<p><img alt="车道线_圆心_约束条件" loading="lazy" src="/images/%E8%BD%A6%E9%81%93%E7%BA%BF_%E5%9C%86%E5%BF%83_%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6.png">
+联立上述方程组即可解得 \(x_c, y_c\)，再计算半径 \(R\) 并推导出转角 \(\theta_t\)。</p>
+<h3 id="843-转向传动比映射">8.4.3 转向传动比映射<a hidden class="anchor" aria-hidden="true" href="#843-转向传动比映射">#</a></h3>
+<p>计算得到的前轮角 \(\theta_t\) 再乘以转向传动比 \(r_s\)，得到方向盘角度输出：</p>
+<p><img alt="转向传动比" loading="lazy" src="/images/%E8%BD%AC%E5%90%91%E4%BC%A0%E5%8A%A8%E6%AF%94.png"></p>
+<p>其中 \(r_s\) 依据车型配置（一般为12:1 ~ 20:1）设定。</p>
+<h2 id="85-控制逻辑说明与优化点">8.5 控制逻辑说明与优化点<a hidden class="anchor" aria-hidden="true" href="#85-控制逻辑说明与优化点">#</a></h2>
+<ul>
+<li><strong>平滑更新</strong>：每帧更新期望角，避免转角突变，建议加入角速度限制（rate limiting）；</li>
+<li><strong>冗余判断</strong>：当车道线不可用、预瞄点丢失时，自动保持当前方向或退出控制；</li>
+<li><strong>适配不同车型</strong>：Ackermann模型通用性强，适配不同轴距与传动比配置；</li>
+<li><strong>容错设计</strong>：当多条路径同时有效（左右识别均正常），可加权融合预瞄点；</li>
+<li><strong>预瞄距离动态调整</strong>：根据车速动态选择预瞄点远近，以提升控制响应。</li>
+</ul>
+<hr>
+<p>&quot;&quot;&quot;</p>
 
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="/tags/l2/">L2</a></li>
-      <li><a href="/tags/lka/">LKA</a></li>
-      <li><a href="/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
-      <li><a href="/tags/%E6%8E%A7%E5%88%B6%E7%AD%96%E7%95%A5/">控制策略</a></li>
+      <li><a href="//localhost:1313/tags/l2/">L2</a></li>
+      <li><a href="//localhost:1313/tags/lka/">LKA</a></li>
+      <li><a href="//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
+      <li><a href="//localhost:1313/tags/%E6%8E%A7%E5%88%B6%E7%AD%96%E7%95%A5/">控制策略</a></li>
     </ul>
   </footer>
 </article>

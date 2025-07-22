@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>LSTM on </title>
-    <link>/tags/lstm/</link>
+    <link>//localhost:1313/tags/lstm/</link>
     <description>Recent content in LSTM on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Thu, 10 Apr 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/lstm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/lstm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
-      <link>/posts/e2e-driving-resnet-lstm/</link>
+      <link>//localhost:1313/posts/e2e-driving-resnet-lstm/</link>
       <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/e2e-driving-resnet-lstm/</guid>
+      <guid>//localhost:1313/posts/e2e-driving-resnet-lstm/</guid>
       <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
 &lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
@@ -23,7 +23,7 @@
 &lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
-&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
 &lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
 &lt;ul&gt;
@@ -38,7 +38,7 @@
 &lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
 &lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
 模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;/images/loss_curve.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/loss_curve.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):

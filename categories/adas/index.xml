@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>ADAS on </title>
-    <link>/categories/adas/</link>
+    <link>//localhost:1313/categories/adas/</link>
     <description>Recent content in ADAS on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Wed, 29 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/categories/adas/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/categories/adas/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LKA（车道保持辅助）功能设计</title>
-      <link>/posts/lka_strategy/</link>
+      <link>//localhost:1313/posts/lka_strategy/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/lka_strategy/</guid>
+      <guid>//localhost:1313/posts/lka_strategy/</guid>
       <description>解析L2系统中LKA功能的子模块结构、控制策略、信号等内容</description>
     </item>
     <item>
       <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
-      <link>/posts/nop_strategy/</link>
+      <link>//localhost:1313/posts/nop_strategy/</link>
       <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/nop_strategy/</guid>
+      <guid>//localhost:1313/posts/nop_strategy/</guid>
       <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
     </item>
     <item>
       <title>ACC（自适应巡航控制）策略设计与问题集</title>
-      <link>/posts/acc-strategy/</link>
+      <link>//localhost:1313/posts/acc-strategy/</link>
       <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/acc-strategy/</guid>
+      <guid>//localhost:1313/posts/acc-strategy/</guid>
       <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
     <item>
       <title>LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</title>
-      <link>/posts/lcc_alc_strategy/</link>
+      <link>//localhost:1313/posts/lcc_alc_strategy/</link>
       <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/lcc_alc_strategy/</guid>
+      <guid>//localhost:1313/posts/lcc_alc_strategy/</guid>
       <description>剖析L2&#43;系统中的核心横向控制模块——LCC与ALC的功能结构、感知依赖与策略逻辑</description>
     </item>
   </channel>

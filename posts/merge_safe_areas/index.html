@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>如何合并多个 Safe Area 以简化规划图结构？ | </title>
 <meta name="keywords" content="QuadTree, Convex Hull, Safe Area, 路径图简化">
 <meta name="description" content="
@@ -56,16 +56,16 @@ def merge_safe_areas(self, distance_threshold=2.0):
     self.convex_hulls = {f&#34;merged_{i}&#34;: hull for i, hull in enumerate(merged)}
 其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/merge_safe_areas/">
+<link rel="canonical" href="//localhost:1313/posts/merge_safe_areas/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/merge_safe_areas/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/merge_safe_areas/">
 <noscript>
     <style>
         #theme-toggle,
@@ -102,124 +102,7 @@ def merge_safe_areas(self, distance_threshold=2.0):
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/merge_safe_areas/">
-  <meta property="og:title" content="如何合并多个 Safe Area 以简化规划图结构？">
-  <meta property="og:description" content=" 背景：为什么要合并 Safe Area？ 在使用 QuadTree 构建环境分区时，每一个 FREE 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：
-路径图节点数量过多，导致 A* 搜索复杂度提升 MPC 控制器的参考轨迹中断多，规划不平滑 可视化和维护困难 因此，将临近的 Safe Area 合并为更大的安全区域 是简化规划图结构、提高控制性能的重要手段。
-合并判据设计 在 connective_quadtree.py 和 utils_geo.py 中，我们可以基于以下原则实现 Safe Area 合并：
-邻接性：两个凸包边界是否接近或重合 几何相容性：合并后的点集是否仍然可以构成一个有效凸包 面积提升评估：合并后凸包面积未显著膨胀，避免引入死角区域 利用 shapely 和 scipy.spatial.ConvexHull，可以进行合并模拟与几何判断。
-合并过程实现思路 合并逻辑可以封装为 merge_safe_areas() 函数，并添加到 QuadTree 类中：
-def merge_safe_areas(self, distance_threshold=2.0): merged = [] used = set() keys = list(self.convex_hulls.keys()) for i in range(len(keys)): id1 = keys[i] if id1 in used: continue hull1 = self.convex_hulls[id1] points1 = hull1.points[hull1.vertices] for j in range(i&#43;1, len(keys)): id2 = keys[j] if id2 in used: continue hull2 = self.convex_hulls[id2] points2 = hull2.points[hull2.vertices] # 判断是否可合并（如边界相近、联合后仍凸） if can_merge(points1, points2, distance_threshold): combined = np.vstack((points1, points2)) new_hull = ConvexHull(combined) merged.append(new_hull) used.update([id1, id2]) break self.convex_hulls = {f&#34;merged_{i}&#34;: hull for i, hull in enumerate(merged)} 其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-04-17T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-04-17T00:00:00+00:00">
-    <meta property="article:tag" content="QuadTree">
-    <meta property="article:tag" content="Convex Hull">
-    <meta property="article:tag" content="Safe Area">
-    <meta property="article:tag" content="路径图简化">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何合并多个 Safe Area 以简化规划图结构？">
-<meta name="twitter:description" content="
-背景：为什么要合并 Safe Area？
-在使用 QuadTree 构建环境分区时，每一个 FREE 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：
-
-路径图节点数量过多，导致 A* 搜索复杂度提升
-MPC 控制器的参考轨迹中断多，规划不平滑
-可视化和维护困难
-
-因此，将临近的 Safe Area 合并为更大的安全区域 是简化规划图结构、提高控制性能的重要手段。
-
-合并判据设计
-在 connective_quadtree.py 和 utils_geo.py 中，我们可以基于以下原则实现 Safe Area 合并：
-
-邻接性：两个凸包边界是否接近或重合
-几何相容性：合并后的点集是否仍然可以构成一个有效凸包
-面积提升评估：合并后凸包面积未显著膨胀，避免引入死角区域
-
-利用 shapely 和 scipy.spatial.ConvexHull，可以进行合并模拟与几何判断。
-
-合并过程实现思路
-合并逻辑可以封装为 merge_safe_areas() 函数，并添加到 QuadTree 类中：
-def merge_safe_areas(self, distance_threshold=2.0):
-    merged = []
-    used = set()
-    keys = list(self.convex_hulls.keys())
-
-    for i in range(len(keys)):
-        id1 = keys[i]
-        if id1 in used: continue
-        hull1 = self.convex_hulls[id1]
-        points1 = hull1.points[hull1.vertices]
-
-        for j in range(i&#43;1, len(keys)):
-            id2 = keys[j]
-            if id2 in used: continue
-            hull2 = self.convex_hulls[id2]
-            points2 = hull2.points[hull2.vertices]
-
-            # 判断是否可合并（如边界相近、联合后仍凸）
-            if can_merge(points1, points2, distance_threshold):
-                combined = np.vstack((points1, points2))
-                new_hull = ConvexHull(combined)
-                merged.append(new_hull)
-                used.update([id1, id2])
-                break
-
-    self.convex_hulls = {f&#34;merged_{i}&#34;: hull for i, hull in enumerate(merged)}
-其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "如何合并多个 Safe Area 以简化规划图结构？",
-      "item": "/posts/merge_safe_areas/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "如何合并多个 Safe Area 以简化规划图结构？",
-  "name": "如何合并多个 Safe Area 以简化规划图结构？",
-  "description": " 背景：为什么要合并 Safe Area？ 在使用 QuadTree 构建环境分区时，每一个 FREE 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：\n路径图节点数量过多，导致 A* 搜索复杂度提升 MPC 控制器的参考轨迹中断多，规划不平滑 可视化和维护困难 因此，将临近的 Safe Area 合并为更大的安全区域 是简化规划图结构、提高控制性能的重要手段。\n合并判据设计 在 connective_quadtree.py 和 utils_geo.py 中，我们可以基于以下原则实现 Safe Area 合并：\n邻接性：两个凸包边界是否接近或重合 几何相容性：合并后的点集是否仍然可以构成一个有效凸包 面积提升评估：合并后凸包面积未显著膨胀，避免引入死角区域 利用 shapely 和 scipy.spatial.ConvexHull，可以进行合并模拟与几何判断。\n合并过程实现思路 合并逻辑可以封装为 merge_safe_areas() 函数，并添加到 QuadTree 类中：\ndef merge_safe_areas(self, distance_threshold=2.0): merged = [] used = set() keys = list(self.convex_hulls.keys()) for i in range(len(keys)): id1 = keys[i] if id1 in used: continue hull1 = self.convex_hulls[id1] points1 = hull1.points[hull1.vertices] for j in range(i+1, len(keys)): id2 = keys[j] if id2 in used: continue hull2 = self.convex_hulls[id2] points2 = hull2.points[hull2.vertices] # 判断是否可合并（如边界相近、联合后仍凸） if can_merge(points1, points2, distance_threshold): combined = np.vstack((points1, points2)) new_hull = ConvexHull(combined) merged.append(new_hull) used.update([id1, id2]) break self.convex_hulls = {f\u0026#34;merged_{i}\u0026#34;: hull for i, hull in enumerate(merged)} 其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。\n",
-  "keywords": [
-    "QuadTree", "Convex Hull", "Safe Area", "路径图简化"
-  ],
-  "articleBody": " 背景：为什么要合并 Safe Area？ 在使用 QuadTree 构建环境分区时，每一个 FREE 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：\n路径图节点数量过多，导致 A* 搜索复杂度提升 MPC 控制器的参考轨迹中断多，规划不平滑 可视化和维护困难 因此，将临近的 Safe Area 合并为更大的安全区域 是简化规划图结构、提高控制性能的重要手段。\n合并判据设计 在 connective_quadtree.py 和 utils_geo.py 中，我们可以基于以下原则实现 Safe Area 合并：\n邻接性：两个凸包边界是否接近或重合 几何相容性：合并后的点集是否仍然可以构成一个有效凸包 面积提升评估：合并后凸包面积未显著膨胀，避免引入死角区域 利用 shapely 和 scipy.spatial.ConvexHull，可以进行合并模拟与几何判断。\n合并过程实现思路 合并逻辑可以封装为 merge_safe_areas() 函数，并添加到 QuadTree 类中：\ndef merge_safe_areas(self, distance_threshold=2.0): merged = [] used = set() keys = list(self.convex_hulls.keys()) for i in range(len(keys)): id1 = keys[i] if id1 in used: continue hull1 = self.convex_hulls[id1] points1 = hull1.points[hull1.vertices] for j in range(i+1, len(keys)): id2 = keys[j] if id2 in used: continue hull2 = self.convex_hulls[id2] points2 = hull2.points[hull2.vertices] # 判断是否可合并（如边界相近、联合后仍凸） if can_merge(points1, points2, distance_threshold): combined = np.vstack((points1, points2)) new_hull = ConvexHull(combined) merged.append(new_hull) used.update([id1, id2]) break self.convex_hulls = {f\"merged_{i}\": hull for i, hull in enumerate(merged)} 其中 can_merge() 可以使用 shapely.Polygon 判断是否相交或几何接近。\n合并后需要更新的结构 为了保证合并后的区域能继续用于路径规划和轨迹控制，我们需要更新：\nself.convex_hulls：替换为合并后的 hulls self.leaf_nodes：如果需要，也可以合并为虚拟节点 self.connectivity_graph：调用 update_connectivity_after_change() 重建连接图 效果对比 以实验数据为例，合并前后 Safe Area 数量变化如下：\n状态 Safe Areas 数量 平均面积 控制器规划时间 合并前 62 1.2㎡ 38ms 合并后 18 3.8㎡ 23ms 合并显著减少了冗余节点，提高了路径简洁度和控制效率。\n总结 通过对 QuadTree 生成的多个 Safe Area 进行基于邻接性和凸性判断的合并，我们可以极大简化路径图结构，提高后续路径搜索和 MPC 控制器的执行效率。\n关键模块涉及：\nconnective_quadtree.py：ConvexHull 构建与管理 utils_geo.py：多边形几何工具函数 visualize_quadtree_process.py：合并前后对比可视化 下一篇将介绍：如何构建连通性图并叠加动态障碍物生成避障路径规划图结构。\n项目仓库链接 GitHub: safe_area_navigation_for_robots\n",
-  "wordCount" : "172",
-  "inLanguage": "en",
-  "datePublished": "2025-04-17T00:00:00Z",
-  "dateModified": "2025-04-17T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/merge_safe_areas/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -378,10 +261,10 @@ def merge_safe_areas(self, distance_threshold=2.0):
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="/tags/quadtree/">QuadTree</a></li>
-      <li><a href="/tags/convex-hull/">Convex Hull</a></li>
-      <li><a href="/tags/safe-area/">Safe Area</a></li>
-      <li><a href="/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/">路径图简化</a></li>
+      <li><a href="//localhost:1313/tags/quadtree/">QuadTree</a></li>
+      <li><a href="//localhost:1313/tags/convex-hull/">Convex Hull</a></li>
+      <li><a href="//localhost:1313/tags/safe-area/">Safe Area</a></li>
+      <li><a href="//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/">路径图简化</a></li>
     </ul>
   </footer>
 </article>

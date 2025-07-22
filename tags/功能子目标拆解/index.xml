@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>功能子目标拆解 on </title>
-    <link>/tags/%E5%8A%9F%E8%83%BD%E5%AD%90%E7%9B%AE%E6%A0%87%E6%8B%86%E8%A7%A3/</link>
+    <link>//localhost:1313/tags/%E5%8A%9F%E8%83%BD%E5%AD%90%E7%9B%AE%E6%A0%87%E6%8B%86%E8%A7%A3/</link>
     <description>Recent content in 功能子目标拆解 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Fri, 20 Dec 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/%E5%8A%9F%E8%83%BD%E5%AD%90%E7%9B%AE%E6%A0%87%E6%8B%86%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/%E5%8A%9F%E8%83%BD%E5%AD%90%E7%9B%AE%E6%A0%87%E6%8B%86%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>智能驾驶功能版本节奏管理经验总结</title>
-      <link>/posts/adas-feature-roadmap/</link>
+      <link>//localhost:1313/posts/adas-feature-roadmap/</link>
       <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/adas-feature-roadmap/</guid>
+      <guid>//localhost:1313/posts/adas-feature-roadmap/</guid>
       <description>&lt;h2 id=&#34;一版本节奏管理的目的与核心价值&#34;&gt;一、版本节奏管理的目的与核心价值&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;目标&lt;/strong&gt;：确保在 SOP（量产节点）/OTS（测试节点）前，核心功能稳定上线、策略迭代有序、用户体验持续提升；&lt;/li&gt;
@@ -66,7 +66,7 @@
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;/images/output.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/output.png&#34;&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;示例图形： NOP版本迭代节奏图，描述每一版本功能合入&lt;br&gt;
 横坐标代表迭代版本（Alpha → Final），纵坐标代表功能子目标，颜色代表完成状态或优先级（灰色：未开始，橙色：已规划，金色：开发中，绿色：已完成）。&lt;/p&gt;&lt;/blockquote&gt;
@@ -206,9 +206,9 @@
     </item>
     <item>
       <title>智能驾驶功能开发中的典型问题汇总</title>
-      <link>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
+      <link>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
       <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
+      <guid>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一变道类问题nop--noa&#34;&gt;一、变道类问题（NOP / NOA）&lt;/h2&gt;
@@ -275,9 +275,9 @@
     </item>
     <item>
       <title>需求分析与功能设计</title>
-      <link>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
+      <link>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
       <description>&lt;p&gt;基于用户体验目标与典型使用场景，对需求进行逐步细化，最终转化为可实现的功能设计。&lt;/p&gt;
 &lt;h3 id=&#34;以nop和apa为例&#34;&gt;以NOP和APA为例&lt;/h3&gt;
 &lt;ul&gt;

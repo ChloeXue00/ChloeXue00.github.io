@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>DRL 常见算法对比 | </title>
 <meta name="keywords" content="算法对比, 强化学习, DQN, PPO, Actor-Critic">
 <meta name="description" content="
@@ -59,16 +59,16 @@ L(θ) = 𝔼ₜ [(rₜ &#43; γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(s�
 
 优化器：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/drl-algorithm-comparison/">
+<link rel="canonical" href="//localhost:1313/posts/drl-algorithm-comparison/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/drl-algorithm-comparison/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/drl-algorithm-comparison/">
 <noscript>
     <style>
         #theme-toggle,
@@ -105,128 +105,7 @@ L(θ) = 𝔼ₜ [(rₜ &#43; γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(s�
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/drl-algorithm-comparison/">
-  <meta property="og:title" content="DRL 常见算法对比">
-  <meta property="og:description" content=" 深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。
-三大算法流派对比 算法类型 特点 优点 局限 Value-based 学习 Q(s, a) 并通过贪婪策略选动作 样本利用率高，适合离散动作空间 不适用于连续/高维动作 Policy-based 直接建模并优化策略 π(a s) 适合连续动作，训练稳定 样本效率低，梯度方差大 Actor-Critic 同时训练策略和价值函数 综合两者优势，适用于复杂控制问题 架构复杂，对超参数敏感 一、DQN（Deep Q-Network） 类型：Value-based
-损失函数（均方 TD 误差）：
-L(θ) = 𝔼ₜ [(rₜ &#43; γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]
-其中：
-θ 是 Q 网络参数 θ⁻ 是目标网络参数（定期同步） 使用贪婪策略选择 a′ = argmax Q(s′, a′) 优化器：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-05-17T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-05-17T00:00:00+00:00">
-    <meta property="article:tag" content="算法对比">
-    <meta property="article:tag" content="强化学习">
-    <meta property="article:tag" content="DQN">
-    <meta property="article:tag" content="PPO">
-    <meta property="article:tag" content="Actor-Critic">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DRL 常见算法对比">
-<meta name="twitter:description" content="
-深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。
-
-三大算法流派对比
-
-  
-      
-          算法类型
-          特点
-          优点
-          局限
-          
-      
-  
-  
-      
-          Value-based
-          学习 Q(s, a) 并通过贪婪策略选动作
-          样本利用率高，适合离散动作空间
-          不适用于连续/高维动作
-          
-      
-      
-          Policy-based
-          直接建模并优化策略 π(a
-          s)
-          适合连续动作，训练稳定
-          样本效率低，梯度方差大
-      
-      
-          Actor-Critic
-          同时训练策略和价值函数
-          综合两者优势，适用于复杂控制问题
-          架构复杂，对超参数敏感
-          
-      
-  
-
-
-一、DQN（Deep Q-Network）
-类型：Value-based
-损失函数（均方 TD 误差）：
-
-L(θ) = 𝔼ₜ [(rₜ &#43; γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]
-其中：
-
-θ 是 Q 网络参数
-θ⁻ 是目标网络参数（定期同步）
-使用贪婪策略选择 a′ = argmax Q(s′, a′)
-
-优化器：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "DRL 常见算法对比",
-      "item": "/posts/drl-algorithm-comparison/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "DRL 常见算法对比",
-  "name": "DRL 常见算法对比",
-  "description": " 深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。\n三大算法流派对比 算法类型 特点 优点 局限 Value-based 学习 Q(s, a) 并通过贪婪策略选动作 样本利用率高，适合离散动作空间 不适用于连续/高维动作 Policy-based 直接建模并优化策略 π(a s) 适合连续动作，训练稳定 样本效率低，梯度方差大 Actor-Critic 同时训练策略和价值函数 综合两者优势，适用于复杂控制问题 架构复杂，对超参数敏感 一、DQN（Deep Q-Network） 类型：Value-based\n损失函数（均方 TD 误差）：\nL(θ) = 𝔼ₜ [(rₜ + γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]\n其中：\nθ 是 Q 网络参数 θ⁻ 是目标网络参数（定期同步） 使用贪婪策略选择 a′ = argmax Q(s′, a′) 优化器：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。\n",
-  "keywords": [
-    "算法对比", "强化学习", "DQN", "PPO", "Actor-Critic"
-  ],
-  "articleBody": " 深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。\n三大算法流派对比 算法类型 特点 优点 局限 Value-based 学习 Q(s, a) 并通过贪婪策略选动作 样本利用率高，适合离散动作空间 不适用于连续/高维动作 Policy-based 直接建模并优化策略 π(a s) 适合连续动作，训练稳定 样本效率低，梯度方差大 Actor-Critic 同时训练策略和价值函数 综合两者优势，适用于复杂控制问题 架构复杂，对超参数敏感 一、DQN（Deep Q-Network） 类型：Value-based\n损失函数（均方 TD 误差）：\nL(θ) = 𝔼ₜ [(rₜ + γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]\n其中：\nθ 是 Q 网络参数 θ⁻ 是目标网络参数（定期同步） 使用贪婪策略选择 a′ = argmax Q(s′, a′) 优化器：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。\n二、REINFORCE（Monte Carlo Policy Gradient） 类型：Policy-based\n策略目标函数：\nJ(θ) = 𝔼ₜ [log πθ(aₜ|sₜ) · Rₜ]\n梯度公式（无偏估计）：\n∇θ J(θ) = 𝔼ₜ [∇θ log πθ(aₜ|sₜ) · Rₜ]\n其中 Rₜ 是从当前时间步开始的累计回报。\n训练策略：\n对每个 episode 完成后，回顾整段轨迹，计算每个状态动作对的梯度贡献。 对所有样本梯度求平均，得到期望梯度估计。 使用优化器（如 Adam）进行如下更新： θ ← θ + α ∇θ J(θ)\n其中 α 是学习率。\n方差控制：常引入 baseline（如 V(sₜ)）改写为：\n∇θ J(θ) = 𝔼ₜ [∇θ log πθ(aₜ|sₜ) · (Rₜ − b(sₜ))]\n这样做可以减小梯度估计的方差，提高训练稳定性。\n三、PPO（Proximal Policy Optimization） 类型：Actor-Critic\n策略目标函数（Clipped Surrogate Objective）：\nL(θ) = 𝔼ₜ [min(rₜ(θ) Âₜ, clip(rₜ(θ), 1−ε, 1+ε) Âₜ)]\n其中：\nrₜ(θ) = πθ(aₜ|sₜ) / πθ_old(aₜ|sₜ) Âₜ 是优势函数，通常估计为 GAE（广义优势估计）或 TD 误差形式 Critic 损失：\nLᵥ = 𝔼ₜ [(V(sₜ) − Rₜ)²]\n总损失函数：\nL_total = −L(θ) + c₁ · Lᵥ − c₂ · Entropy[πθ]\n训练目标是最大化策略目标，最小化值函数误差，同时维持策略分布的多样性（熵奖励）。\n优化器：Adam\n四、DDPG / TD3（Deterministic Policy Gradient） 类型：Actor-Critic（off-policy）\nCritic 损失函数（TD 误差）：\nL = 𝔼ₜ [(rₜ + γQθ⁻(sₜ₊₁, μθ⁻(sₜ₊₁)) − Qθ(sₜ, aₜ))²]\nActor 策略梯度：\n∇θ J = 𝔼ₜ [∇ₐ Qθ(s, a) |ₐ=μθ(s) ∇θ μθ(s)]\nDDPG 是一种处理连续动作空间的强化学习算法，结合了 Actor-Critic 架构、确定性策略、经验回放和目标网络。 适用于动作是实数的环境.\nDDPG = 深度 Actor-Critic + 连续动作 + Replay Buffer + 目标网络\n训练流程\n环境 → s_t ↓ Actor(s_t) → a_t ↓ 执行 a_t → 得到 r_t, s_{t+1} ↓ 存入 Replay Buffer 每 N 步： 从 buffer 采样： → 用目标 Actor π' 生成 a' → 用目标 Critic Q' 计算目标 y → 更新 Critic（最小 MSE） → 更新 Actor（最大 Q） → 软更新 π', Q' 初始化网络 Actor 网络： π(s;θ^π)\nCritic 网络： Q(s,a;θ^Q)\n同时复制两个目标网络：𝜋′ 、Q ′\n与环境交互 确定当前状态s_t, Actor 输出动作a_t = π(s_t) + N_t (加噪声探索) 与环境执行动作， 得到r_t, s_(t+1) 存入replay buffer:(s_t, a_t, r_t, s_(t+1)) 从buffer随机采样一个batch\n更新Critic网络\n目标值 y 损失函数MSE 反向传播优化Critic参数theta^Q 更新Actor网络（策略梯度） 最大化期望Q值 实际现实中通常写作L_actor = -1/N [sumQ(s_i, pi(s_i))] 最小化负Q值，更新Actor参数 6.软更新目标网络（Polyak） θ^Q ←τθ^Q +(1−τ)θ^Q′ θ^π′ ←τθ^π +(1−τ)θ^π′\n一般 τ=0.005\nTD3 改进点：\n使用双 Critic 网络 Q₁、Q₂，目标为 min(Q₁, Q₂) Target Policy 加噪声，增强鲁棒性 延迟 Actor 更新，先更新 Critic 多次 优化器：Adam，分别用于 Actor 和 Critic 网络\n五、SAC（Soft Actor-Critic） 类型：Actor-Critic（off-policy）\n策略目标函数（最大熵）：\nJ(π) = 𝔼ₜ [Q(sₜ, aₜ) − α log π(aₜ|sₜ)]\nCritic 损失函数：\nL = 𝔼ₜ [(rₜ + γ𝔼ₐ′[Q⁻(sₜ₊₁, a′) − α log π(a′|sₜ₊₁)] − Q(sₜ, aₜ))²]\n训练策略：\n策略网络输出动作分布（如高斯），通过 reparameterization trick（如 a = μ + σ · ξ）实现可导性 自动调整温度系数 α 平衡探索与利用（鼓励高熵策略） 优化器：Adam，独立更新策略网络与两个 Critic 网络\n总结：算法选择建议 任务场景 推荐算法 离散动作、规则清晰 DQN, Double DQN 连续动作、精细控制 DDPG, TD3, SAC 高稳定性、对泛化要求高 PPO, A2C 高维控制 + 探索重要性高 SAC 最后的建议 新手推荐：从 PPO 开始，接口清晰、训练稳定 高维连续控制：尝试 TD3 或 SAC，性能优于 DDPG 低资源或验证思路：先跑通 DQN / REINFORCE，再考虑复杂结构 下一篇将介绍：\n“如何保存训练好的模型？如何在真实环境中使用？”\n上一篇：怎么训练一个 DRL 模型？需要准备哪些模块？\n",
-  "wordCount" : "423",
-  "inLanguage": "en",
-  "datePublished": "2025-05-17T00:00:00Z",
-  "dateModified": "2025-05-17T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/drl-algorithm-comparison/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -519,11 +398,11 @@ Actor(s_t) → a_t
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94/">算法对比</a></li>
-      <li><a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">强化学习</a></li>
-      <li><a href="/tags/dqn/">DQN</a></li>
-      <li><a href="/tags/ppo/">PPO</a></li>
-      <li><a href="/tags/actor-critic/">Actor-Critic</a></li>
+      <li><a href="//localhost:1313/tags/%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94/">算法对比</a></li>
+      <li><a href="//localhost:1313/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">强化学习</a></li>
+      <li><a href="//localhost:1313/tags/dqn/">DQN</a></li>
+      <li><a href="//localhost:1313/tags/ppo/">PPO</a></li>
+      <li><a href="//localhost:1313/tags/actor-critic/">Actor-Critic</a></li>
     </ul>
   </footer>
 </article>

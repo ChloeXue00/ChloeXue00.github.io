@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title></title>
-    <link>/categories/</link>
+    <link>//localhost:1313/categories/</link>
     <description>Recent content on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Tue, 20 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Product &amp; Project Management</title>
-      <link>/categories/product--project-management/</link>
+      <link>//localhost:1313/categories/product--project-management/</link>
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/product--project-management/</guid>
+      <guid>//localhost:1313/categories/product--project-management/</guid>
       <description></description>
     </item>
     <item>
       <title>DRL</title>
-      <link>/categories/drl/</link>
+      <link>//localhost:1313/categories/drl/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/drl/</guid>
+      <guid>//localhost:1313/categories/drl/</guid>
       <description></description>
     </item>
     <item>
       <title>Projects</title>
-      <link>/categories/projects/</link>
+      <link>//localhost:1313/categories/projects/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/projects/</guid>
+      <guid>//localhost:1313/categories/projects/</guid>
       <description></description>
     </item>
     <item>
       <title>自动驾驶感知模块</title>
-      <link>/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/</link>
+      <link>//localhost:1313/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/</guid>
+      <guid>//localhost:1313/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9D%97/</guid>
       <description></description>
     </item>
     <item>
       <title>ADAS</title>
-      <link>/categories/adas/</link>
+      <link>//localhost:1313/categories/adas/</link>
       <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
-      <guid>/categories/adas/</guid>
+      <guid>//localhost:1313/categories/adas/</guid>
       <description></description>
     </item>
     <item>
       <title>Function Strategy &amp; UX Optimization</title>
-      <link>/categories/function-strategy--ux-optimization/</link>
+      <link>//localhost:1313/categories/function-strategy--ux-optimization/</link>
       <pubDate>Thu, 15 Feb 2024 00:00:00 +0000</pubDate>
-      <guid>/categories/function-strategy--ux-optimization/</guid>
+      <guid>//localhost:1313/categories/function-strategy--ux-optimization/</guid>
       <description></description>
     </item>
   </channel>

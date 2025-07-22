@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>路径图简化 on </title>
-    <link>/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/</link>
+    <link>//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/</link>
     <description>Recent content in 路径图简化 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Thu, 17 Apr 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E5%9B%BE%E7%AE%80%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何合并多个 Safe Area 以简化规划图结构？</title>
-      <link>/posts/merge_safe_areas/</link>
+      <link>//localhost:1313/posts/merge_safe_areas/</link>
       <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/merge_safe_areas/</guid>
+      <guid>//localhost:1313/posts/merge_safe_areas/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;背景为什么要合并-safe-area&#34;&gt;背景：为什么要合并 Safe Area？&lt;/h2&gt;
 &lt;p&gt;在使用 QuadTree 构建环境分区时，每一个 &lt;code&gt;FREE&lt;/code&gt; 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：&lt;/p&gt;

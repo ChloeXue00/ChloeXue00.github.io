@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Actor-Critic on </title>
-    <link>/tags/actor-critic/</link>
+    <link>//localhost:1313/tags/actor-critic/</link>
     <description>Recent content in Actor-Critic on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/actor-critic/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/actor-critic/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DRL 常见算法对比</title>
-      <link>/posts/drl-algorithm-comparison/</link>
+      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/drl-algorithm-comparison/</guid>
+      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
       <description>&lt;hr&gt;
 &lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
 &lt;hr&gt;
@@ -67,9 +67,9 @@
     </item>
     <item>
       <title>DRL训练</title>
-      <link>/posts/how-to-train-drl-model/</link>
+      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
       <pubDate>Fri, 02 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/how-to-train-drl-model/</guid>
+      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
       <description>&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
 &lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
 &lt;hr&gt;

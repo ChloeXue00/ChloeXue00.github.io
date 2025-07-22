@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title></title>
 <meta name="keywords" content="">
 <meta name="description" content="从 0 搭建一个 LLM 全流程
@@ -112,16 +112,16 @@ GPT-NeoX / GPT-J
 
 如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/build_llm_from_scratch/">
+<link rel="canonical" href="//localhost:1313/posts/build_llm_from_scratch/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/build_llm_from_scratch/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/build_llm_from_scratch/">
 <noscript>
     <style>
         #theme-toggle,
@@ -158,170 +158,7 @@ GPT-NeoX / GPT-J
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/build_llm_from_scratch/">
-  <meta property="og:description" content="从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。
-2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）
-推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="">
-<meta name="twitter:description" content="从 0 搭建一个 LLM 全流程
-阶段划分
-
-  
-      
-          阶段
-          目标
-          产出物
-      
-  
-  
-      
-          1 数据准备
-          语料收集/清洗
-          预训练数据集
-      
-      
-          2 模型架构设计
-          Transformer模型构建
-          初始模型结构
-      
-      
-          3 预训练（PTM）
-          学会语言知识
-          基础大模型
-      
-      
-          4 SFT（指令微调）
-          学会理解和执行指令
-          SFT后模型
-      
-      
-          5 DPO / RLHF
-          优化为人喜欢的风格
-          对齐后的模型
-      
-      
-          6 部署优化
-          推理优化、上线
-          可用API/产品
-      
-  
-
-1 数据准备
-语料收集
-
-Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等）
-开源数据集（The Pile, C4, OSCAR, OpenWebText 等）
-自建爬虫抓取数据
-
-清洗与处理
-
-去噪（去广告、去低质量段落）
-去重（SHA去重）
-分词（如 sentencepiece, BPE）
-数据格式转换（jsonl, tsv）
-长度过滤（过短/过长段落丢弃）
-
-产出物：Tokenized corpus，准备供模型训练。
-2 模型架构设计
-核心：Transformer 解码器架构（GPT类模型）
-推荐开源实现
-
-Huggingface Transformers
-nanoGPT
-Megatron-LM
-GPT-NeoX / GPT-J
-
-模型设计参数
-
-  
-      
-          参数
-          典型值（GPT-3 类模型）
-      
-  
-  
-      
-          hidden_dim
-          12288
-      
-      
-          n_layers
-          96
-      
-      
-          n_heads
-          96
-      
-      
-          vocab_size
-          50k
-      
-      
-          max_position_embeddings
-          2048
-      
-      
-          activation
-          GELU
-      
-  
-
-如果从小模型做起，1亿～3亿参数是初学者可训练范围。">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "",
-      "item": "/posts/build_llm_from_scratch/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "",
-  "name": "",
-  "description": "从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。\n2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）\n推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。\n",
-  "keywords": [
-    
-  ],
-  "articleBody": "从 0 搭建一个 LLM 全流程 阶段划分 阶段 目标 产出物 1 数据准备 语料收集/清洗 预训练数据集 2 模型架构设计 Transformer模型构建 初始模型结构 3 预训练（PTM） 学会语言知识 基础大模型 4 SFT（指令微调） 学会理解和执行指令 SFT后模型 5 DPO / RLHF 优化为人喜欢的风格 对齐后的模型 6 部署优化 推理优化、上线 可用API/产品 1 数据准备 语料收集 Web data（CommonCrawl、Wikipedia、Books、Reddit、Arxiv、Github code 等） 开源数据集（The Pile, C4, OSCAR, OpenWebText 等） 自建爬虫抓取数据 清洗与处理 去噪（去广告、去低质量段落） 去重（SHA去重） 分词（如 sentencepiece, BPE） 数据格式转换（jsonl, tsv） 长度过滤（过短/过长段落丢弃） 产出物：Tokenized corpus，准备供模型训练。\n2 模型架构设计 核心：Transformer 解码器架构（GPT类模型）\n推荐开源实现 Huggingface Transformers nanoGPT Megatron-LM GPT-NeoX / GPT-J 模型设计参数 参数 典型值（GPT-3 类模型） hidden_dim 12288 n_layers 96 n_heads 96 vocab_size 50k max_position_embeddings 2048 activation GELU 如果从小模型做起，1亿～3亿参数是初学者可训练范围。\n3 预训练（PTM阶段） 训练目标 Causal Language Modeling → 预测下一个token\nInput: \"The quick brown fox jumps over the lazy\" Target: \"dog\" 工具栈推荐 Trainer: Huggingface Trainer / DeepSpeed / Megatron-LM Trainer Optimizer: AdamW + CosineDecay LR Distributed: DeepSpeed ZeRO Stage 2 or Stage 3 Mixed Precision: FP16 or BF16 训练配置示例 batch_size: 1024 learning_rate: 1e-4 warmup_steps: 10000 total_steps: 500000 gradient_accumulation_steps: 8 fp16: true 注意：数据吞吐瓶颈是常见问题，DataLoader 优化很重要。\n产出物：初步学会语言的大模型 Checkpoint。\n4 SFT（指令微调） 数据集 FLAN / SuperNI\nOpenAssistant / Dolly / ShareGPT\n自行构造（指令 + 回答对）\n训练方式 监督学习：CrossEntropy loss\n普通 fine-tune 即可，不需要 RL\nPrompt设计 Instruction: Translate the following sentence into French. Input: “Good morning.” Response: “Bonjour.” 产出物：能理解指令的模型。 5 DPO / RLHF DPO 数据格式：prompt + positive_answer + negative_answer 优化 loss：DPO loss（对比学习 loss） RLHF 收集人类打分 → 训练 Reward Model\nPPO 训练 base model\n工具：TRL PPOTrainer / RLHF RLlib 产出物：对齐人偏好的模型，正式上线版本。\n6 部署优化 Quantization GPTQ / AWQ / LLM.int8 → 把模型压缩到 INT8 / INT4 推理\n开源工具：AutoGPTQ, llama.cpp, exllama\nServing vLLM（高性能批推理）\nTGI (Text Generation Inference, Huggingface)\nllama.cpp（轻量 CPU/GPU 本地推理）\n总结 Data Collection → Data Cleaning → Tokenization → PTM → SFT → DPO / RLHF → Deployment\n工程化开源项目\n项目名 特点 nanoGPT 极简 GPT 训练 GPT-NeoX 大规模 GPT 训练 Huggingface Transformers 最全生态 Huggingface TRL RLHF/DPO 支持 Megatron-LM 超大规模 GPT 支持 vLLM 高性能推理框架 llama.cpp 轻量 CPU/GPU 推理 Huggingface Transformers → 有大量预训练模型可以直接用\nGPT-NeoX → 社区有预训练模型可以直接用（HF Hub 上 GPT-NeoX 20B 等）\nMegatron-LM → 通常需要自己训练 or 企业内部使用，公开模型少\nllama.cpp → 本身不负责训练，负责部署，加载 LLaMA / Qwen / Mistral 等现有预训练模型\nnanoGPT → 教学用途，自己训练的小模型，一般不直接产品化用\nTRL → 用已有模型进行 DPO / RLHF 优化，不负责训练 base model\nvLLM → 用已有 Transformers 模型做高性能推理，不负责训练\n从0-1 搭建一个tiny大模型的问题：\ntokenizer 怎么设计\npretraining loss 怎么定义\noptimizer / lr scheduler 怎么调\n数据 pipeline 怎么做\nfp16 / bf16 mixed precision 怎么踩过坑\ncheckpoint 怎么存，推理 latency 怎么评估\ntiny model 的 scaling law 有啥观察\n过拟合现象怎么处理\ntraining curve\n参数配置\n参数 推荐值（示例） vocab_size 50k n_layers 6 - 12 n_heads 6 - 12 hidden_dim 512 - 1024 max_position_embeddings 512 - 1024 total_params 50M - 100M 训练工具链 nanoGPT or Huggingface Transformers + Trainer ",
-  "wordCount" : "399",
-  "inLanguage": "en",
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/build_llm_from_scratch/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">

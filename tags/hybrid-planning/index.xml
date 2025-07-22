@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Hybrid Planning on </title>
-    <link>/tags/hybrid-planning/</link>
+    <link>//localhost:1313/tags/hybrid-planning/</link>
     <description>Recent content in Hybrid Planning on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Wed, 07 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/hybrid-planning/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/hybrid-planning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
-      <link>/posts/hybrid-planner-integration/</link>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
       <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/hybrid-planner-integration/</guid>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
       <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
-&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
 &lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
 &lt;ul&gt;

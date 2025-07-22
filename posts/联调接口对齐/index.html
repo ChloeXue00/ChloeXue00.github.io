@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>模块分工与接口定义表 | </title>
 <meta name="keywords" content="">
 <meta name="description" content="模块通信接口定义文档（感知 / 规划 / 控制）
@@ -226,16 +226,16 @@ float64 yaw
 
 本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。">
 <meta name="author" content="">
-<link rel="canonical" href="/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">
+<link rel="canonical" href="//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">
 <noscript>
     <style>
         #theme-toggle,
@@ -272,286 +272,7 @@ float64 yaw
         }
 
     </style>
-</noscript><meta property="og:url" content="/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">
-  <meta property="og:title" content="模块分工与接口定义表">
-  <meta property="og:description" content="模块通信接口定义文档（感知 / 规划 / 控制） 本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。
-模块分工与接口定义表（感知 / 规划 / 控制） 模块 主要职责 输入接口 输出接口 依赖参数 / 配置 典型异常情况 感知模块 提供环境建图、障碍物检测、车道线识别等基础信息 摄像头、雷达、超声波、IMU 原始数据 - 障碍物列表- 车道线模型- 可通行区域Mask- 动态物体预测轨迹 感知置信度阈值障碍物融合策略 静态物体误识别车道线断裂预测轨迹跳变 规划模块 基于感知结果和导航目标，生成轨迹并动态调整行为策略 - 当前车辆状态- 障碍物列表- 可通行区域- 全局路径 - 局部轨迹（轨迹点序列）- 行为决策（变道 / 跟车 / 停止） 最远预测距离轨迹重规划频率变道策略参数 轨迹折线过多变道触发不合理变道后不恢复原车道 控制模块 接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行 - 规划轨迹- 当前车速 / 横摆角- 控制目标点 - 方向盘角度- 加速度 / 油门开度- 制动指令 控制频率控制器类型（PID/MPC）跟踪误差阈值 指令跳变横向控制震荡刹车响应滞后 1. 模块功能分工 模块 主要职责 感知模块 环境建图、车道线识别、障碍物检测与跟踪 规划模块 行为决策（如变道、跟车）、轨迹生成 控制模块 控制命令输出（转向、加减速），完成车辆运动控制 2. 模块间通信接口定义 🔹 2.1 感知 → 规划 接口名称 数据类型 发布频率 数据字段示例 /perception/obstacles ObstacleArray 20 Hz id, position(x,y), velocity, type, confidence /perception/lane LaneModel 20 Hz lane_id, coeffs(a,b,c), confidence /perception/area DrivableArea 10 Hz polygon_mask, timestamp 🔹 2.2 规划 → 控制 接口名称 数据类型 发布频率 数据字段示例 /planning/trajectory Trajectory 50 Hz points[x,y,v,acc,yaw], timestamp /planning/behavior BehaviorState 10 Hz state_type (lane_following, lane_change, stop), duration 🔹 2.3 感知 → 控制（直接辅助控制冗余通道） 接口名称 数据类型 发布频率 说明 /perception/yaw_rate Float32 100 Hz 高频率反馈用于横向控制辅助 /imu/data IMUData 100 Hz 惯性导航传感器数据 3. 配置参数依赖项 模块 参数名称 描述 感知 lane_conf_threshold 车道线识别的最低置信度 规划 lane_change_timeout 变道超时时间设置 控制 lateral_ctrl_gain 横向 PID 控制器增益参数 4. 常见接口问题与调试建议 问题描述 可能原因 调试建议 轨迹点跳变 / 抖动 感知误差大，置信度低 检查感知数据时间同步与滤波器配置 控制器响应滞后 轨迹点更新频率低 提高轨迹发布频率，调整控制器采样率 行为状态误判（频繁进入lane_change） 规则配置阈值过低 / 误判插队 优化状态机转移条件，结合多维输入决策 5. 接口格式示例（ROS Message） # Trajectory.msg Header header TrajectoryPoint[] points # TrajectoryPoint.msg float64 x float64 y float64 v float64 acc float64 yaw 本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-01-21T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-01-21T00:00:00+00:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="模块分工与接口定义表">
-<meta name="twitter:description" content="模块通信接口定义文档（感知 / 规划 / 控制）
-本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。
-模块分工与接口定义表（感知 / 规划 / 控制）
-
-  
-      
-          模块
-          主要职责
-          输入接口
-          输出接口
-          依赖参数 / 配置
-          典型异常情况
-      
-  
-  
-      
-          感知模块
-          提供环境建图、障碍物检测、车道线识别等基础信息
-          摄像头、雷达、超声波、IMU 原始数据
-          - 障碍物列表- 车道线模型- 可通行区域Mask- 动态物体预测轨迹
-          感知置信度阈值障碍物融合策略
-          静态物体误识别车道线断裂预测轨迹跳变
-      
-      
-          规划模块
-          基于感知结果和导航目标，生成轨迹并动态调整行为策略
-          - 当前车辆状态- 障碍物列表- 可通行区域- 全局路径
-          - 局部轨迹（轨迹点序列）- 行为决策（变道 / 跟车 / 停止）
-          最远预测距离轨迹重规划频率变道策略参数
-          轨迹折线过多变道触发不合理变道后不恢复原车道
-      
-      
-          控制模块
-          接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行
-          - 规划轨迹- 当前车速 / 横摆角- 控制目标点
-          - 方向盘角度- 加速度 / 油门开度- 制动指令
-          控制频率控制器类型（PID/MPC）跟踪误差阈值
-          指令跳变横向控制震荡刹车响应滞后
-      
-  
-
-
-1. 模块功能分工
-
-  
-      
-          模块
-          主要职责
-      
-  
-  
-      
-          感知模块
-          环境建图、车道线识别、障碍物检测与跟踪
-      
-      
-          规划模块
-          行为决策（如变道、跟车）、轨迹生成
-      
-      
-          控制模块
-          控制命令输出（转向、加减速），完成车辆运动控制
-      
-  
-
-
-2. 模块间通信接口定义
-🔹 2.1 感知 → 规划
-
-  
-      
-          接口名称
-          数据类型
-          发布频率
-          数据字段示例
-      
-  
-  
-      
-          /perception/obstacles
-          ObstacleArray
-          20 Hz
-          id, position(x,y), velocity, type, confidence
-      
-      
-          /perception/lane
-          LaneModel
-          20 Hz
-          lane_id, coeffs(a,b,c), confidence
-      
-      
-          /perception/area
-          DrivableArea
-          10 Hz
-          polygon_mask, timestamp
-      
-  
-
-🔹 2.2 规划 → 控制
-
-  
-      
-          接口名称
-          数据类型
-          发布频率
-          数据字段示例
-      
-  
-  
-      
-          /planning/trajectory
-          Trajectory
-          50 Hz
-          points[x,y,v,acc,yaw], timestamp
-      
-      
-          /planning/behavior
-          BehaviorState
-          10 Hz
-          state_type (lane_following, lane_change, stop), duration
-      
-  
-
-🔹 2.3 感知 → 控制（直接辅助控制冗余通道）
-
-  
-      
-          接口名称
-          数据类型
-          发布频率
-          说明
-      
-  
-  
-      
-          /perception/yaw_rate
-          Float32
-          100 Hz
-          高频率反馈用于横向控制辅助
-      
-      
-          /imu/data
-          IMUData
-          100 Hz
-          惯性导航传感器数据
-      
-  
-
-
-3. 配置参数依赖项
-
-  
-      
-          模块
-          参数名称
-          描述
-      
-  
-  
-      
-          感知
-          lane_conf_threshold
-          车道线识别的最低置信度
-      
-      
-          规划
-          lane_change_timeout
-          变道超时时间设置
-      
-      
-          控制
-          lateral_ctrl_gain
-          横向 PID 控制器增益参数
-      
-  
-
-
-4. 常见接口问题与调试建议
-
-  
-      
-          问题描述
-          可能原因
-          调试建议
-      
-  
-  
-      
-          轨迹点跳变 / 抖动
-          感知误差大，置信度低
-          检查感知数据时间同步与滤波器配置
-      
-      
-          控制器响应滞后
-          轨迹点更新频率低
-          提高轨迹发布频率，调整控制器采样率
-      
-      
-          行为状态误判（频繁进入lane_change）
-          规则配置阈值过低 / 误判插队
-          优化状态机转移条件，结合多维输入决策
-      
-  
-
-
-5. 接口格式示例（ROS Message）
-# Trajectory.msg
-Header header
-TrajectoryPoint[] points
-
-# TrajectoryPoint.msg
-float64 x
-float64 y
-float64 v
-float64 acc
-float64 yaw
-
-本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "/posts/"
-    }
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "模块分工与接口定义表",
-      "item": "/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "模块分工与接口定义表",
-  "name": "模块分工与接口定义表",
-  "description": "模块通信接口定义文档（感知 / 规划 / 控制） 本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。\n模块分工与接口定义表（感知 / 规划 / 控制） 模块 主要职责 输入接口 输出接口 依赖参数 / 配置 典型异常情况 感知模块 提供环境建图、障碍物检测、车道线识别等基础信息 摄像头、雷达、超声波、IMU 原始数据 - 障碍物列表- 车道线模型- 可通行区域Mask- 动态物体预测轨迹 感知置信度阈值障碍物融合策略 静态物体误识别车道线断裂预测轨迹跳变 规划模块 基于感知结果和导航目标，生成轨迹并动态调整行为策略 - 当前车辆状态- 障碍物列表- 可通行区域- 全局路径 - 局部轨迹（轨迹点序列）- 行为决策（变道 / 跟车 / 停止） 最远预测距离轨迹重规划频率变道策略参数 轨迹折线过多变道触发不合理变道后不恢复原车道 控制模块 接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行 - 规划轨迹- 当前车速 / 横摆角- 控制目标点 - 方向盘角度- 加速度 / 油门开度- 制动指令 控制频率控制器类型（PID/MPC）跟踪误差阈值 指令跳变横向控制震荡刹车响应滞后 1. 模块功能分工 模块 主要职责 感知模块 环境建图、车道线识别、障碍物检测与跟踪 规划模块 行为决策（如变道、跟车）、轨迹生成 控制模块 控制命令输出（转向、加减速），完成车辆运动控制 2. 模块间通信接口定义 🔹 2.1 感知 → 规划 接口名称 数据类型 发布频率 数据字段示例 /perception/obstacles ObstacleArray 20 Hz id, position(x,y), velocity, type, confidence /perception/lane LaneModel 20 Hz lane_id, coeffs(a,b,c), confidence /perception/area DrivableArea 10 Hz polygon_mask, timestamp 🔹 2.2 规划 → 控制 接口名称 数据类型 发布频率 数据字段示例 /planning/trajectory Trajectory 50 Hz points[x,y,v,acc,yaw], timestamp /planning/behavior BehaviorState 10 Hz state_type (lane_following, lane_change, stop), duration 🔹 2.3 感知 → 控制（直接辅助控制冗余通道） 接口名称 数据类型 发布频率 说明 /perception/yaw_rate Float32 100 Hz 高频率反馈用于横向控制辅助 /imu/data IMUData 100 Hz 惯性导航传感器数据 3. 配置参数依赖项 模块 参数名称 描述 感知 lane_conf_threshold 车道线识别的最低置信度 规划 lane_change_timeout 变道超时时间设置 控制 lateral_ctrl_gain 横向 PID 控制器增益参数 4. 常见接口问题与调试建议 问题描述 可能原因 调试建议 轨迹点跳变 / 抖动 感知误差大，置信度低 检查感知数据时间同步与滤波器配置 控制器响应滞后 轨迹点更新频率低 提高轨迹发布频率，调整控制器采样率 行为状态误判（频繁进入lane_change） 规则配置阈值过低 / 误判插队 优化状态机转移条件，结合多维输入决策 5. 接口格式示例（ROS Message） # Trajectory.msg Header header TrajectoryPoint[] points # TrajectoryPoint.msg float64 x float64 y float64 v float64 acc float64 yaw 本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。\n",
-  "keywords": [
-    
-  ],
-  "articleBody": "模块通信接口定义文档（感知 / 规划 / 控制） 本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。\n模块分工与接口定义表（感知 / 规划 / 控制） 模块 主要职责 输入接口 输出接口 依赖参数 / 配置 典型异常情况 感知模块 提供环境建图、障碍物检测、车道线识别等基础信息 摄像头、雷达、超声波、IMU 原始数据 - 障碍物列表- 车道线模型- 可通行区域Mask- 动态物体预测轨迹 感知置信度阈值障碍物融合策略 静态物体误识别车道线断裂预测轨迹跳变 规划模块 基于感知结果和导航目标，生成轨迹并动态调整行为策略 - 当前车辆状态- 障碍物列表- 可通行区域- 全局路径 - 局部轨迹（轨迹点序列）- 行为决策（变道 / 跟车 / 停止） 最远预测距离轨迹重规划频率变道策略参数 轨迹折线过多变道触发不合理变道后不恢复原车道 控制模块 接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行 - 规划轨迹- 当前车速 / 横摆角- 控制目标点 - 方向盘角度- 加速度 / 油门开度- 制动指令 控制频率控制器类型（PID/MPC）跟踪误差阈值 指令跳变横向控制震荡刹车响应滞后 1. 模块功能分工 模块 主要职责 感知模块 环境建图、车道线识别、障碍物检测与跟踪 规划模块 行为决策（如变道、跟车）、轨迹生成 控制模块 控制命令输出（转向、加减速），完成车辆运动控制 2. 模块间通信接口定义 🔹 2.1 感知 → 规划 接口名称 数据类型 发布频率 数据字段示例 /perception/obstacles ObstacleArray 20 Hz id, position(x,y), velocity, type, confidence /perception/lane LaneModel 20 Hz lane_id, coeffs(a,b,c), confidence /perception/area DrivableArea 10 Hz polygon_mask, timestamp 🔹 2.2 规划 → 控制 接口名称 数据类型 发布频率 数据字段示例 /planning/trajectory Trajectory 50 Hz points[x,y,v,acc,yaw], timestamp /planning/behavior BehaviorState 10 Hz state_type (lane_following, lane_change, stop), duration 🔹 2.3 感知 → 控制（直接辅助控制冗余通道） 接口名称 数据类型 发布频率 说明 /perception/yaw_rate Float32 100 Hz 高频率反馈用于横向控制辅助 /imu/data IMUData 100 Hz 惯性导航传感器数据 3. 配置参数依赖项 模块 参数名称 描述 感知 lane_conf_threshold 车道线识别的最低置信度 规划 lane_change_timeout 变道超时时间设置 控制 lateral_ctrl_gain 横向 PID 控制器增益参数 4. 常见接口问题与调试建议 问题描述 可能原因 调试建议 轨迹点跳变 / 抖动 感知误差大，置信度低 检查感知数据时间同步与滤波器配置 控制器响应滞后 轨迹点更新频率低 提高轨迹发布频率，调整控制器采样率 行为状态误判（频繁进入lane_change） 规则配置阈值过低 / 误判插队 优化状态机转移条件，结合多维输入决策 5. 接口格式示例（ROS Message） # Trajectory.msg Header header TrajectoryPoint[] points # TrajectoryPoint.msg float64 x float64 y float64 v float64 acc float64 yaw 本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。\n",
-  "wordCount" : "206",
-  "inLanguage": "en",
-  "datePublished": "2024-01-21T00:00:00Z",
-  "dateModified": "2024-01-21T00:00:00Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">

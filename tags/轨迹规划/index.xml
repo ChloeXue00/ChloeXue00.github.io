@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>轨迹规划 on </title>
-    <link>/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/</link>
+    <link>//localhost:1313/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/</link>
     <description>Recent content in 轨迹规划 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>四叉树与 MPC 集成在机器人导航中的应用</title>
-      <link>/posts/quadtree_integrate_mpc/</link>
+      <link>//localhost:1313/posts/quadtree_integrate_mpc/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_integrate_mpc/</guid>
+      <guid>//localhost:1313/posts/quadtree_integrate_mpc/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;总览&#34;&gt;总览&lt;/h2&gt;
 &lt;p&gt;本篇文档介绍了如何将&lt;strong&gt;四叉树（QuadTree）空间表示法&lt;/strong&gt;与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。&lt;/p&gt;
@@ -53,7 +53,7 @@
 &lt;li&gt;为每个叶子节点生成一个凸包（Convex Hull）&lt;/li&gt;
 &lt;li&gt;这些凸包表示机器人可以安全通行的区域&lt;/li&gt;
 &lt;li&gt;邻接凸包间连接形成路径图
-&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
+&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;mpc-所需的约束生成方式&#34;&gt;MPC 所需的约束生成方式&lt;/h2&gt;
@@ -71,12 +71,12 @@
     </item>
     <item>
       <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
-      <link>/posts/narrow_exploration/</link>
+      <link>//localhost:1313/posts/narrow_exploration/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/narrow_exploration/</guid>
+      <guid>//localhost:1313/posts/narrow_exploration/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
-&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
 &lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
 &lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
 &lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
@@ -114,7 +114,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;
 &lt;p&gt;第一：目标策略平滑
 用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
-&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;/images/td3_target_action.png&#34;&gt;
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
 目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
 它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
 这种情况可以通过平滑类似动作的Q函数来避免，
@@ -122,11 +122,11 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
-      <link>/posts/hybrid-planner-integration/</link>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
       <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/hybrid-planner-integration/</guid>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
       <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
-&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
 &lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
 &lt;ul&gt;
