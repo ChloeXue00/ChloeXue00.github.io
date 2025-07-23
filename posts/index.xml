@@ -2,19 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on </title>
-    <link>/posts/</link>
+    <link>//localhost:1313/posts/</link>
     <description>Recent content in Posts on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Wed, 23 Jul 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>城市NOA功能竞品分析</title>
-      <link>/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</link>
+      <link>//localhost:1313/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</link>
       <pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</guid>
-      <description>&lt;p&gt;理想、小鹏、蔚来的&lt;/p&gt;
-&lt;h1 id=&#34;城市noa技术战局上从bev到vla拆解头部玩家技术路线&#34;&gt;城市NOA技术战局（上）：从BEV到VLA，拆解头部玩家技术路线&lt;/h1&gt;
+      <guid>//localhost:1313/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</guid>
+      <description>&lt;h1 id=&#34;城市noa技术战局上从bev到vla拆解头部玩家技术路线&#34;&gt;城市NOA技术战局（上）：从BEV到VLA，拆解头部玩家技术路线&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;主要结论：&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;继2023–2024年BEV+Transformer+Occupancy Network架构成为智能驾驶的感知主流后，2025年起，行业正加速向更高级的**VLM（Vision-Language Model）&lt;strong&gt;与&lt;/strong&gt;VLA（Vision-Language-Action）**模型演进。相较于传统BEV结构仅关注空间几何关系，VLM/VLA引入语言推理模块，可对标志、规则、指令进行语义理解，结合多模态输入（如摄像头图像、语音交互、交通文本信息），生成更泛化、更类人的行为决策。&lt;/p&gt;
 &lt;p&gt;芯片与算力能力成为支撑城市NOA架构升级的关键基础。2020年前后主流平台算力集中于144 TOPS，如今已普遍跃升至500 TOPS以上，高端平台如蔚来NX9031、理想Thor-U、小鹏图灵AI芯片等更达到千级算力，支撑端到端推理、大模型部署与多模态处理。自研芯片、自建智算中心、自主模型训练正成为具备战略自主能力车企的核心壁垒。&lt;/p&gt;
@@ -55,15 +54,15 @@
 &lt;p&gt;&lt;strong&gt;端到端 + 多模态语义推理架构（VLA）：&lt;/strong&gt; 引入视觉语言模型、扩散策略网络、博弈推理模块等，实现感知–理解–决策一体化。&lt;/p&gt;
 &lt;p&gt;“去高精地图化”已成为城市NOA发展的行业共识，各家方案通过Occupancy Network、弱地图辅助、分布式建图等方式逐步替代静态地图依赖，以提升系统泛化能力与落地效率。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;3.2.1 特斯拉技术演进：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;/images/NOA_image1.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/NOA_image1.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;自2014年发布AutoPilot 1.0以来，特斯拉持续引领辅助驾驶从规则驱动走向数据驱动、再走向端到端神经控制的范式演进。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;HW1.0 + Mobileye平台（2014–2016）：&lt;/strong&gt; 初代AutoPilot基于Mobileye方案，支持基本的巡航与车道保持功能，但受限于单摄像头配置与规则逻辑，系统泛化能力有限。&lt;/p&gt;</description>
     </item>
     <item>
       <title>AI汽车、自研底座与产品力跃迁</title>
-      <link>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</link>
+      <link>//localhost:1313/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</link>
       <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</guid>
+      <guid>//localhost:1313/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</guid>
       <description>&lt;p&gt;&lt;strong&gt;汽车行业智能化下半场：人工智能时代的自研趋势以及产品力跃迁&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;本报告基于对当前中国主流智能车企技术路径的梳理，重点聚焦AI时代自研趋势、技术栈重构与用户体验跃迁路径，提出自研芯片+操作系统在产品竞争力打造中的关键价值。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;一、引言：智能驾驶竞争进入“底层能力为王”阶段&lt;/strong&gt;&lt;/p&gt;
@@ -104,13 +103,13 @@
     </item>
     <item>
       <title>NOP主要功能设计逻辑图（状态机）</title>
-      <link>/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
+      <link>//localhost:1313/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>//localhost:1313/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
       <description>&lt;h1 id=&#34;全域领航辅助nop&#34;&gt;全域领航辅助NOP+&lt;/h1&gt;
 &lt;h2 id=&#34;1-产品概述&#34;&gt;1. 产品概述&lt;/h2&gt;
 &lt;p&gt;全域领航辅助NOP+是一种舒适性功能，它是能让车辆根据导航规划好的路线进行行驶的辅助驾驶功能，能够完成如&lt;strong&gt;路口通行&lt;/strong&gt;、导航变道、超车变道、绕向车辆等驾驶任务。在面对&lt;strong&gt;施工区域、通用障碍物等场景时，车辆具有&lt;/strong&gt;安全能力，能够提供联通地面道路与城市快速路、高速公路的辅助驾驶体验。&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;image.png&#34; loading=&#34;lazy&#34; src=&#34;/images/nop_image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;image.png&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/nop_image.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;2-车型配置&#34;&gt;2. 车型配置&lt;/h2&gt;
 &lt;p&gt;本文档中提出的 &lt;strong&gt;NOP+&lt;/strong&gt; 全域领航辅助功能，配置在 ES8车型上。&lt;/p&gt;
 &lt;h2 id=&#34;3-参考文档&#34;&gt;&lt;strong&gt;3. 参考文档&lt;/strong&gt;&lt;/h2&gt;
@@ -263,9 +262,9 @@
     </item>
     <item>
       <title>DRL 常见算法对比</title>
-      <link>/posts/drl-algorithm-comparison/</link>
+      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/drl-algorithm-comparison/</guid>
+      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
       <description>&lt;hr&gt;
 &lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
 &lt;hr&gt;
@@ -320,9 +319,9 @@
     </item>
     <item>
       <title>四叉树与 MPC 集成在机器人导航中的应用</title>
-      <link>/posts/quadtree_integrate_mpc/</link>
+      <link>//localhost:1313/posts/quadtree_integrate_mpc/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_integrate_mpc/</guid>
+      <guid>//localhost:1313/posts/quadtree_integrate_mpc/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;总览&#34;&gt;总览&lt;/h2&gt;
 &lt;p&gt;本篇文档介绍了如何将&lt;strong&gt;四叉树（QuadTree）空间表示法&lt;/strong&gt;与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。&lt;/p&gt;
@@ -363,7 +362,7 @@
 &lt;li&gt;为每个叶子节点生成一个凸包（Convex Hull）&lt;/li&gt;
 &lt;li&gt;这些凸包表示机器人可以安全通行的区域&lt;/li&gt;
 &lt;li&gt;邻接凸包间连接形成路径图
-&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
+&lt;img alt=&#34;四叉树分解链接凸包形成路径图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/quadtree_path_planning.png&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;mpc-所需的约束生成方式&#34;&gt;MPC 所需的约束生成方式&lt;/h2&gt;
@@ -381,12 +380,12 @@
     </item>
     <item>
       <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
-      <link>/posts/narrow_exploration/</link>
+      <link>//localhost:1313/posts/narrow_exploration/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/narrow_exploration/</guid>
+      <guid>//localhost:1313/posts/narrow_exploration/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
-&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
 &lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
 &lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
 &lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
@@ -424,7 +423,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;
 &lt;p&gt;第一：目标策略平滑
 用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
-&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;/images/td3_target_action.png&#34;&gt;
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
 目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
 它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
 这种情况可以通过平滑类似动作的Q函数来避免，
@@ -432,9 +431,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</title>
-      <link>/posts/quadtree_to_mpc/</link>
+      <link>//localhost:1313/posts/quadtree_to_mpc/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_to_mpc/</guid>
+      <guid>//localhost:1313/posts/quadtree_to_mpc/</guid>
       <description>&lt;h2 id=&#34;背景介绍路径规划--控制的解耦-vs-联合&#34;&gt;背景介绍：路径规划 + 控制的解耦 vs 联合&lt;/h2&gt;
 &lt;p&gt;在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：&lt;/p&gt;
 &lt;ul&gt;
@@ -470,18 +469,18 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</title>
-      <link>/posts/quadtree_safearea/</link>
+      <link>//localhost:1313/posts/quadtree_safearea/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/quadtree_safearea/</guid>
+      <guid>//localhost:1313/posts/quadtree_safearea/</guid>
       <description>详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。</description>
     </item>
     <item>
       <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</title>
-      <link>/posts/hybrid-planner-integration/</link>
+      <link>//localhost:1313/posts/hybrid-planner-integration/</link>
       <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/hybrid-planner-integration/</guid>
+      <guid>//localhost:1313/posts/hybrid-planner-integration/</guid>
       <description>&lt;p&gt;在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 &lt;strong&gt;四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）&lt;/strong&gt; 的混合轨迹规划框架，该方案的主模块集中在 &lt;code&gt;helper_main_continous.py&lt;/code&gt; 文件中，具备良好的模块化与通用性。
-&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
+&lt;img alt=&#34;机器人DRL轨迹图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_control_result.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;一模块概览&#34;&gt;一、模块概览&lt;/h2&gt;
 &lt;h3 id=&#34;1-地图生成与表示&#34;&gt;1. 地图生成与表示&lt;/h3&gt;
 &lt;ul&gt;
@@ -538,9 +537,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>DRL训练</title>
-      <link>/posts/how-to-train-drl-model/</link>
+      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
       <pubDate>Fri, 02 May 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/how-to-train-drl-model/</guid>
+      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
       <description>&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
 &lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
 &lt;hr&gt;
@@ -617,9 +616,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>如何合并多个 Safe Area 以简化规划图结构？</title>
-      <link>/posts/merge_safe_areas/</link>
+      <link>//localhost:1313/posts/merge_safe_areas/</link>
       <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/merge_safe_areas/</guid>
+      <guid>//localhost:1313/posts/merge_safe_areas/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;背景为什么要合并-safe-area&#34;&gt;背景：为什么要合并 Safe Area？&lt;/h2&gt;
 &lt;p&gt;在使用 QuadTree 构建环境分区时，每一个 &lt;code&gt;FREE&lt;/code&gt; 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：&lt;/p&gt;
@@ -671,9 +670,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
-      <link>/posts/e2e-driving-resnet-lstm/</link>
+      <link>//localhost:1313/posts/e2e-driving-resnet-lstm/</link>
       <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>/posts/e2e-driving-resnet-lstm/</guid>
+      <guid>//localhost:1313/posts/e2e-driving-resnet-lstm/</guid>
       <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
 &lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
@@ -684,7 +683,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
-&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
 &lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
 &lt;ul&gt;
@@ -699,7 +698,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
 &lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
 模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;/images/loss_curve.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/loss_curve.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
@@ -719,9 +718,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>强化学习环境之 Gymnasium</title>
-      <link>/posts/what-is-gymnasium/</link>
+      <link>//localhost:1313/posts/what-is-gymnasium/</link>
       <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/what-is-gymnasium/</guid>
+      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
       <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
@@ -756,16 +755,16 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>路径规划（一）几何地图与占用地图在路径规划中的应用</title>
-      <link>/posts/map-structure-explained/</link>
+      <link>//localhost:1313/posts/map-structure-explained/</link>
       <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/map-structure-explained/</guid>
+      <guid>//localhost:1313/posts/map-structure-explained/</guid>
       <description>解释 GeometricMap 与 OccupancyMap 的区别、各自作用及与 Quadtree 的衔接逻辑</description>
     </item>
     <item>
       <title>如何使用 C&#43;&#43; 编写一个 ROS 节点</title>
-      <link>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
+      <link>//localhost:1313/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
+      <guid>//localhost:1313/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
       <description>&lt;p&gt;通过本案例可以掌握：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如何使用 C++ 编写一个 ROS 设备驱动节点；&lt;/li&gt;
@@ -818,9 +817,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>强化学习的状态空间和动作空间是什么</title>
-      <link>/posts/state-action-space/</link>
+      <link>//localhost:1313/posts/state-action-space/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/state-action-space/</guid>
+      <guid>//localhost:1313/posts/state-action-space/</guid>
       <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
 &lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
 &lt;hr&gt;
@@ -902,9 +901,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>数据结构与算法(自动驾驶应用方向)</title>
-      <link>/posts/data_structure_and_algorithm/</link>
+      <link>//localhost:1313/posts/data_structure_and_algorithm/</link>
       <pubDate>Thu, 02 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/data_structure_and_algorithm/</guid>
+      <guid>//localhost:1313/posts/data_structure_and_algorithm/</guid>
       <description>&lt;h1 id=&#34;数据结构与算法自动驾驶应用方向&#34;&gt;数据结构与算法（自动驾驶应用方向）&lt;/h1&gt;
 &lt;p&gt;在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对&lt;strong&gt;数据的高效组织和计算方法的选择&lt;/strong&gt;。&lt;/p&gt;
 &lt;hr&gt;
@@ -1042,9 +1041,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title>激光点云处理（Lidar Point Cloud Processing）</title>
-      <link>/posts/lidar_point_cloud_processing/</link>
+      <link>//localhost:1313/posts/lidar_point_cloud_processing/</link>
       <pubDate>Thu, 02 May 2024 00:00:00 +0000</pubDate>
-      <guid>/posts/lidar_point_cloud_processing/</guid>
+      <guid>//localhost:1313/posts/lidar_point_cloud_processing/</guid>
       <description>&lt;p&gt;激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧&lt;strong&gt;点云数据（point cloud）&lt;/strong&gt;，表示空间中障碍物的位置和形状。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;1-什么是点云&#34;&gt;1. 什么是点云？&lt;/h2&gt;
@@ -1153,9 +1152,9 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
     </item>
     <item>
       <title></title>
-      <link>/posts/acc-strategy/</link>
+      <link>//localhost:1313/posts/acc-strategy/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/acc-strategy/</guid>
+      <guid>//localhost:1313/posts/acc-strategy/</guid>
       <description>&lt;h1 id=&#34;acc自适应巡航控制策略设计与问题集&#34;&gt;ACC（自适应巡航控制）策略设计与问题集&lt;/h1&gt;
 &lt;h2 id=&#34;一功能简介&#34;&gt;一、功能简介&lt;/h2&gt;
 &lt;p&gt;ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。&lt;/p&gt;
@@ -1202,9 +1201,9 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
     </item>
     <item>
       <title></title>
-      <link>/posts/adas-feature-roadmap/</link>
+      <link>//localhost:1313/posts/adas-feature-roadmap/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/adas-feature-roadmap/</guid>
+      <guid>//localhost:1313/posts/adas-feature-roadmap/</guid>
       <description>&lt;h2 id=&#34;一版本节奏管理的目的与核心价值&#34;&gt;一、版本节奏管理的目的与核心价值&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;目标&lt;/strong&gt;：确保在 SOP（量产节点）/OTS（测试节点）前，核心功能稳定上线、策略迭代有序、用户体验持续提升；&lt;/li&gt;
@@ -1258,7 +1257,7 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;/images/output.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/output.png&#34;&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;示例图形： NOP版本迭代节奏图，描述每一版本功能合入&lt;br&gt;
 横坐标代表迭代版本（Alpha → Final），纵坐标代表功能子目标，颜色代表完成状态或优先级（灰色：未开始，橙色：已规划，金色：开发中，绿色：已完成）。&lt;/p&gt;&lt;/blockquote&gt;
@@ -1398,9 +1397,9 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
     </item>
     <item>
       <title></title>
-      <link>/posts/build_llm_from_scratch/</link>
+      <link>//localhost:1313/posts/build_llm_from_scratch/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/build_llm_from_scratch/</guid>
+      <guid>//localhost:1313/posts/build_llm_from_scratch/</guid>
       <description>&lt;h1 id=&#34;从-0-搭建一个-llm-全流程&#34;&gt;从 0 搭建一个 LLM 全流程&lt;/h1&gt;
 &lt;h2 id=&#34;阶段划分&#34;&gt;阶段划分&lt;/h2&gt;
 &lt;table&gt;
@@ -1508,9 +1507,9 @@ DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，
     </item>
     <item>
       <title></title>
-      <link>/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</link>
+      <link>//localhost:1313/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</guid>
+      <guid>//localhost:1313/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/</guid>
       <description>&lt;p&gt;本篇文档主要分析落地场景和相应的技术路径&lt;/p&gt;
 &lt;h2 id=&#34;一l2典型落地场景总览&#34;&gt;一、L2++典型落地场景总览&lt;/h2&gt;
 &lt;table&gt;
@@ -1599,9 +1598,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/lcc_alc_strategy/</link>
+      <link>//localhost:1313/posts/lcc_alc_strategy/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/lcc_alc_strategy/</guid>
+      <guid>//localhost:1313/posts/lcc_alc_strategy/</guid>
       <description>&lt;h1 id=&#34;lcc车道居中控制与-alc自动变道策略解析&#34;&gt;LCC（车道居中控制）与 ALC（自动变道）策略解析&lt;/h1&gt;
 &lt;h2 id=&#34;一功能简介&#34;&gt;一、功能简介&lt;/h2&gt;
 &lt;p&gt;LCC（Lane Centering Control）车道居中控制是 L2 自动驾驶的基础模块，目标是在双车道线清晰可见的情况下，让车辆持续保持在当前车道中线附近行驶，提升驾驶舒适性与安全性。&lt;/p&gt;
@@ -1771,9 +1770,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/lka_strategy/</link>
+      <link>//localhost:1313/posts/lka_strategy/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/lka_strategy/</guid>
+      <guid>//localhost:1313/posts/lka_strategy/</guid>
       <description>&lt;h1 id=&#34;1-功能概述function-overview&#34;&gt;1. 功能概述（Function Overview）&lt;/h1&gt;
 &lt;p&gt;LKA（Lane Keeping Assist，车道保持辅助系统）是一项基于车道线识别与方向盘控制的主动安全技术，属于车辆横向控制功能的一部分。系统通过摄像头等感知设备识别车道线，并结合车辆当前的横向位置和偏移趋势，判断是否存在偏离风险。一旦检测到车辆即将偏离车道且驾驶员未主动干预，LKA系统将自动输出轻微的方向盘转角，辅助驾驶员将车辆引导回车道中央区域，从而提升行车安全性与稳定性。&lt;/p&gt;
 &lt;h2 id=&#34;11-设计背景&#34;&gt;1.1 设计背景&lt;/h2&gt;
@@ -1905,9 +1904,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</link>
+      <link>//localhost:1313/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</guid>
+      <guid>//localhost:1313/posts/noa/apollo%E7%99%BE%E5%BA%A6%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0-1c16b41b2b178049b2e8da438a96b359/</guid>
       <description>&lt;h1 id=&#34;apollo百度自动驾驶平台&#34;&gt;Apollo（百度自动驾驶平台）&lt;/h1&gt;
 &lt;p&gt;优势: 拥有庞大的数据积累和强大的AI能力，开放平台生态丰富
 典型客户: 与多家车企合作，如红旗、威马等
@@ -1919,9 +1918,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</link>
+      <link>//localhost:1313/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</guid>
+      <guid>//localhost:1313/posts/noa/bosch&#43;weride%E5%8D%9A%E4%B8%96&#43;%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C-1c16b41b2b17804e8438d2989a1de86e/</guid>
       <description>&lt;h1 id=&#34;boschweride博世文远知行&#34;&gt;Bosch+WeRide（博世+文远知行）&lt;/h1&gt;
 &lt;p&gt;优势: 博世在汽车零部件供应方面的优势与文远知行的自动驾驶技术相结合，具备量产能力和技术积累
 典型客户: 未公开
@@ -1933,9 +1932,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</link>
+      <link>//localhost:1313/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</guid>
+      <guid>//localhost:1313/posts/noa/cruise-1c06b41b2b1780e38aeae2339059447a/</guid>
       <description>&lt;h1 id=&#34;cruise&#34;&gt;Cruise&lt;/h1&gt;
 &lt;p&gt;优势: 背靠通用汽车，在车辆集成和量产部署上有优势
 典型客户: Robotaxi
@@ -1946,9 +1945,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</link>
+      <link>//localhost:1313/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</guid>
+      <guid>//localhost:1313/posts/noa/huaweiinside%E5%8D%8E%E4%B8%BAhi%E6%A8%A1%E5%BC%8F-1c16b41b2b178030b1baf8e98729ea9f/</guid>
       <description>&lt;h1 id=&#34;huaweiinside华为hi模式&#34;&gt;HUAWEIinside（华为Hi模式）&lt;/h1&gt;
 &lt;p&gt;优势: 强大的技术研发能力，深厚的ICT背景，提供全栈智能驾驶解决方案
 典型客户: 与多家车企合作，如北汽、长安、广汽等
@@ -1963,9 +1962,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</link>
+      <link>//localhost:1313/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</guid>
+      <guid>//localhost:1313/posts/noa/mobileye-1c06b41b2b178052ab04c501917f4153/</guid>
       <description>&lt;h1 id=&#34;mobileye&#34;&gt;mobileye&lt;/h1&gt;
 &lt;p&gt;优势: 在视觉感知特别是识别交通标志、车道线方面有深厚积累；
 定位方向: 芯片+算法一体化
@@ -1977,9 +1976,9 @@ Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</link>
+      <link>//localhost:1313/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</guid>
+      <guid>//localhost:1313/posts/noa/momenta-1c06b41b2b1780b7ba45c11193acd292/</guid>
       <description>&lt;h1 id=&#34;momenta&#34;&gt;Momenta&lt;/h1&gt;
 &lt;p&gt;优势: 海量数据，量产交付经验；
 算法领先、支持模块输出
@@ -2025,9 +2024,9 @@ Mpilot实现L2/L2+驾驶辅助功能
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</link>
+      <link>//localhost:1313/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</guid>
+      <guid>//localhost:1313/posts/noa/waymo-1c06b41b2b17800f94b0cbb3b50246fc/</guid>
       <description>&lt;h1 id=&#34;waymo&#34;&gt;Waymo&lt;/h1&gt;
 &lt;p&gt;优势: 高精地图和多冗余传感器，有地图的城市地区表现稳健
 定位方向: L4，多传感器+激光雷达
@@ -2040,27 +2039,27 @@ Waymo的传感器和计算成本高昂&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</link>
+      <link>//localhost:1313/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</guid>
+      <guid>//localhost:1313/posts/noa/%E4%B8%BB%E7%BA%BF%E7%A7%91%E6%8A%80-1c16b41b2b1780049f10fd2531f511a9/</guid>
       <description>&lt;h1 id=&#34;主线科技&#34;&gt;主线科技&lt;/h1&gt;
 &lt;p&gt;定位方向: 封闭园区
 商用车/卡车&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</link>
+      <link>//localhost:1313/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</guid>
+      <guid>//localhost:1313/posts/noa/%E5%9B%BE%E6%A3%AE%E6%9C%AA%E6%9D%A5-1c16b41b2b1780a3be7bc526b4328c7f/</guid>
       <description>&lt;h1 id=&#34;图森未来&#34;&gt;图森未来&lt;/h1&gt;
 &lt;p&gt;定位方向: 封闭园区
 商用车/卡车&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</link>
+      <link>//localhost:1313/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</guid>
+      <guid>//localhost:1313/posts/noa/%E5%9C%B0%E5%B9%B3%E7%BA%BF-1c06b41b2b1780b5a581f230b90ca7b4/</guid>
       <description>&lt;h1 id=&#34;地平线&#34;&gt;地平线&lt;/h1&gt;
 &lt;p&gt;优势: 性价比高、低功耗、交付灵活
 典型客户: 理想、广汽、奇瑞
@@ -2093,9 +2092,9 @@ L2+量产
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</link>
+      <link>//localhost:1313/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</guid>
+      <guid>//localhost:1313/posts/noa/%E6%AF%AB%E6%9C%AB%E6%99%BA%E8%A1%8C-1c06b41b2b17803bb483c438e3b43b4b/</guid>
       <description>&lt;h1 id=&#34;毫末智行&#34;&gt;毫末智行&lt;/h1&gt;
 &lt;p&gt;优势: 数据驱动+闭环，大模型
 典型客户: 魏牌、沙龙等
@@ -2128,9 +2127,9 @@ NOA落地慢于华为小鹏&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</link>
+      <link>//localhost:1313/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</guid>
+      <guid>//localhost:1313/posts/noa/%E6%B5%B7%E9%B8%A5%E7%A7%91%E6%8A%80-1c06b41b2b1780568e95c169f46edee7/</guid>
       <description>&lt;h1 id=&#34;海鸥科技&#34;&gt;海鸥科技&lt;/h1&gt;
 &lt;p&gt;优势: 快速部署、适配多车型
 典型客户: 合众、广汽等
@@ -2163,9 +2162,9 @@ NOA落地慢于华为小鹏&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</link>
+      <link>//localhost:1313/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</guid>
+      <guid>//localhost:1313/posts/noa/%E6%B7%B1%E5%9C%B3%E5%85%83%E6%88%8E%E5%90%AF%E8%A1%8C-1c16b41b2b1780079604c0e777965807/</guid>
       <description>&lt;h1 id=&#34;深圳元戎启行&#34;&gt;深圳元戎启行&lt;/h1&gt;
 &lt;p&gt;优势: 在城市复杂场景中表现出色，技术路线适应性强
 典型客户: 与多家车企合作，如长城汽车等
@@ -2177,9 +2176,9 @@ NOA落地慢于华为小鹏&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</link>
+      <link>//localhost:1313/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</guid>
+      <guid>//localhost:1313/posts/noa/%E7%BA%B5%E7%9B%AE%E7%A7%91%E6%8A%80-1c06b41b2b1780a9b340d68448d9f0f2/</guid>
       <description>&lt;h1 id=&#34;纵目科技&#34;&gt;纵目科技&lt;/h1&gt;
 &lt;p&gt;优势: 成本控制好、量产交付经验丰富
 典型客户: 日产、本田（合资系）
@@ -2216,9 +2215,9 @@ NOA落地慢于华为小鹏&lt;/p&gt;
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</link>
+      <link>//localhost:1313/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</guid>
+      <guid>//localhost:1313/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</guid>
       <description>&lt;h1 id=&#34;1研究目的&#34;&gt;1.研究目的&lt;/h1&gt;
 &lt;p&gt;本篇报告主要围绕这几个问题展开:&lt;/p&gt;
 &lt;ol start=&#34;0&#34;&gt;
@@ -2259,9 +2258,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</link>
+      <link>//localhost:1313/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</guid>
+      <guid>//localhost:1313/posts/noa/%E8%BD%BB%E8%88%9F%E6%99%BA%E8%88%AA-1c06b41b2b178013bc1ff8d04d7b368f/</guid>
       <description>&lt;h1 id=&#34;轻舟智航&#34;&gt;轻舟智航&lt;/h1&gt;
 &lt;p&gt;优势: 城市复杂工况经验丰富
 典型客户: 城市级Robotaxi项目
@@ -2294,9 +2293,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/nop_strategy/</link>
+      <link>//localhost:1313/posts/nop_strategy/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/nop_strategy/</guid>
+      <guid>//localhost:1313/posts/nop_strategy/</guid>
       <description>&lt;h1 id=&#34;nopnavigate-on-pilot功能逻辑与子功能模块解析&#34;&gt;NOP（Navigate on Pilot）功能逻辑与子功能模块解析&lt;/h1&gt;
 &lt;h2 id=&#34;一功能简介&#34;&gt;一、功能简介&lt;/h2&gt;
 &lt;p&gt;NOP（Navigate on Pilot，领航辅助驾驶）是典型的 L2+ 自动驾驶融合功能，依托导航系统、高精地图、感知系统与底层控制系统的深度集成，可在高精地图覆盖的高速及城市高架路段中，按导航路径执行一系列驾驶操作，包括：&lt;/p&gt;
@@ -2440,9 +2439,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</link>
+      <link>//localhost:1313/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
+      <guid>//localhost:1313/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
       <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
 &lt;p&gt;NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,&lt;/p&gt;
 &lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
@@ -2530,9 +2529,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</link>
+      <link>//localhost:1313/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</guid>
+      <guid>//localhost:1313/posts/%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E6%A2%B3%E7%90%86/</guid>
       <description>&lt;p&gt;用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；
 然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。&lt;/p&gt;
 &lt;p&gt;一、用户旅程地图是什么
@@ -2598,13 +2597,13 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;/static/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/static/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
+      <link>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
+      <guid>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一变道类问题nop--noa&#34;&gt;一、变道类问题（NOP / NOA）&lt;/h2&gt;
@@ -2671,17 +2670,17 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E8%BF%AD%E4%BB%A3/</link>
+      <link>//localhost:1313/posts/%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E8%BF%AD%E4%BB%A3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E8%BF%AD%E4%BB%A3/</guid>
+      <guid>//localhost:1313/posts/%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E8%BF%AD%E4%BB%A3/</guid>
       <description>&lt;p&gt;关键功能的设计逻辑图（状态机 + 决策路径）&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</link>
+      <link>//localhost:1313/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</guid>
-      <description>&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;
+      <guid>//localhost:1313/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</guid>
+      <description>&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;
 用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;一用户旅程地图是什么&#34;&gt;一、用户旅程地图是什么&lt;/h2&gt;
@@ -2748,9 +2747,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</link>
+      <link>//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</guid>
+      <guid>//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</guid>
       <description>&lt;h1 id=&#34;模块通信接口定义文档感知--规划--控制&#34;&gt;模块通信接口定义文档（感知 / 规划 / 控制）&lt;/h1&gt;
 &lt;p&gt;本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。&lt;/p&gt;
 &lt;h1 id=&#34;模块分工与接口定义表感知--规划--控制&#34;&gt;模块分工与接口定义表（感知 / 规划 / 控制）&lt;/h1&gt;
@@ -2972,9 +2971,9 @@ Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Ma
     </item>
     <item>
       <title></title>
-      <link>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
+      <link>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
       <description>&lt;p&gt;基于用户体验目标与典型使用场景，对需求进行逐步细化，最终转化为可实现的功能设计。&lt;/p&gt;
 &lt;h3 id=&#34;以nop和apa为例&#34;&gt;以NOP和APA为例&lt;/h3&gt;
 &lt;ul&gt;
