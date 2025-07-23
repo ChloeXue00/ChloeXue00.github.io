@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？ | </title>
 <meta name="keywords" content="Hybrid Planning, QuadTree, MPC, DRL, 轨迹规划">
 <meta name="description" content="在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）&#43; 模型预测控制（MPC）&#43; 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。
@@ -63,16 +63,16 @@ else:
 quadtree_to_mpc_constraints
 将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/posts/hybrid-planner-integration/">
+<link rel="canonical" href="/posts/hybrid-planner-integration/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/hybrid-planner-integration/">
+<link rel="alternate" hreflang="en" href="/posts/hybrid-planner-integration/">
 <noscript>
     <style>
         #theme-toggle,
@@ -109,7 +109,130 @@ quadtree_to_mpc_constraints
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/posts/hybrid-planner-integration/">
+  <meta property="og:title" content="为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？">
+  <meta property="og:description" content="在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）&#43; 模型预测控制（MPC）&#43; 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。 一、模块概览 1. 地图生成与表示 generate_map()：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。 get_geometric_map()：将地图对象转换为可用于膨胀和路径推理的几何结构。 Inflator 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。 2. 四叉树路径规划模块 由外部函数 create_quadtree_from_occupancy_map() 从栅格占用地图创建四叉树划分空间 quadtree_to_mpc_constraints()（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。 3. MPC 控制器接口 InterfaceMpc（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。 integrate_quadtree_with_mpc()：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。 4. DRL 策略控制 控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。 动作 smoothness 与可行性在 Metrics 中有单独评估指标。 5. 智能切换模块 HintSwitcher：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。 切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。 二、系统整体工作流程 以下代码片段概括了系统的主要运行步骤：
+# Step 1: 创建地图对象 map_data = generate_map() mpc_controller = InterfaceMpc(map_data) config = Configurator() # Step 2: 四叉树路径规划 quadtree = create_quadtree_from_occupancy_map(occupancy_map) constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state) # Step 3: MPC 轨迹生成 mpc_controller.update_static_constraints(constraints) trajectory = mpc_controller.generate_trajectory(current_state, goal_state) # Step 4: 智能控制切换（DRL or MPC） switcher = HintSwitcher(max_switch_distance=5.0, min_detach_distance=8.0) if switcher.switch(current_position, original_traj, new_traj, obstacle_list): action = drl_model.predict(observation) else: action = mpc_controller.get_control_action() 三、关键函数解读 quadtree_to_mpc_constraints 将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-07T00:00:00+00:00">
+    <meta property="article:tag" content="Hybrid Planning">
+    <meta property="article:tag" content="QuadTree">
+    <meta property="article:tag" content="MPC">
+    <meta property="article:tag" content="DRL">
+    <meta property="article:tag" content="轨迹规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？">
+<meta name="twitter:description" content="在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）&#43; 模型预测控制（MPC）&#43; 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。
+
+一、模块概览
+1. 地图生成与表示
+
+generate_map()：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。
+get_geometric_map()：将地图对象转换为可用于膨胀和路径推理的几何结构。
+Inflator 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。
+
+2. 四叉树路径规划模块
+
+由外部函数 create_quadtree_from_occupancy_map() 从栅格占用地图创建四叉树划分空间
+quadtree_to_mpc_constraints()（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。
+
+3. MPC 控制器接口
+
+InterfaceMpc（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。
+integrate_quadtree_with_mpc()：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。
+
+4. DRL 策略控制
+
+控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。
+动作 smoothness 与可行性在 Metrics 中有单独评估指标。
+
+5. 智能切换模块
+
+HintSwitcher：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。
+切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。
+
+
+二、系统整体工作流程
+以下代码片段概括了系统的主要运行步骤：
+# Step 1: 创建地图对象
+map_data = generate_map()
+mpc_controller = InterfaceMpc(map_data)
+config = Configurator()
+
+# Step 2: 四叉树路径规划
+quadtree = create_quadtree_from_occupancy_map(occupancy_map)
+constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+
+# Step 3: MPC 轨迹生成
+mpc_controller.update_static_constraints(constraints)
+trajectory = mpc_controller.generate_trajectory(current_state, goal_state)
+
+# Step 4: 智能控制切换（DRL or MPC）
+switcher = HintSwitcher(max_switch_distance=5.0, min_detach_distance=8.0)
+if switcher.switch(current_position, original_traj, new_traj, obstacle_list):
+    action = drl_model.predict(observation)
+else:
+    action = mpc_controller.get_control_action()
+
+三、关键函数解读
+quadtree_to_mpc_constraints
+将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "为什么以及如何集成四叉树 + MPC + DRL 进行机器人轨迹规划？",
+      "item": "/posts/hybrid-planner-integration/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "为什么以及如何集成四叉树 + MPC + DRL 进行机器人轨迹规划？",
+  "name": "为什么以及如何集成四叉树 \u002b MPC \u002b DRL 进行机器人轨迹规划？",
+  "description": "在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。 一、模块概览 1. 地图生成与表示 generate_map()：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。 get_geometric_map()：将地图对象转换为可用于膨胀和路径推理的几何结构。 Inflator 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。 2. 四叉树路径规划模块 由外部函数 create_quadtree_from_occupancy_map() 从栅格占用地图创建四叉树划分空间 quadtree_to_mpc_constraints()（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。 3. MPC 控制器接口 InterfaceMpc（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。 integrate_quadtree_with_mpc()：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。 4. DRL 策略控制 控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。 动作 smoothness 与可行性在 Metrics 中有单独评估指标。 5. 智能切换模块 HintSwitcher：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。 切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。 二、系统整体工作流程 以下代码片段概括了系统的主要运行步骤：\n# Step 1: 创建地图对象 map_data = generate_map() mpc_controller = InterfaceMpc(map_data) config = Configurator() # Step 2: 四叉树路径规划 quadtree = create_quadtree_from_occupancy_map(occupancy_map) constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state) # Step 3: MPC 轨迹生成 mpc_controller.update_static_constraints(constraints) trajectory = mpc_controller.generate_trajectory(current_state, goal_state) # Step 4: 智能控制切换（DRL or MPC） switcher = HintSwitcher(max_switch_distance=5.0, min_detach_distance=8.0) if switcher.switch(current_position, original_traj, new_traj, obstacle_list): action = drl_model.predict(observation) else: action = mpc_controller.get_control_action() 三、关键函数解读 quadtree_to_mpc_constraints 将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。\n",
+  "keywords": [
+    "Hybrid Planning", "QuadTree", "MPC", "DRL", "轨迹规划"
+  ],
+  "articleBody": "在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL） 的混合轨迹规划框架，该方案的主模块集中在 helper_main_continous.py 文件中，具备良好的模块化与通用性。 一、模块概览 1. 地图生成与表示 generate_map()：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。 get_geometric_map()：将地图对象转换为可用于膨胀和路径推理的几何结构。 Inflator 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。 2. 四叉树路径规划模块 由外部函数 create_quadtree_from_occupancy_map() 从栅格占用地图创建四叉树划分空间 quadtree_to_mpc_constraints()（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。 3. MPC 控制器接口 InterfaceMpc（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。 integrate_quadtree_with_mpc()：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。 4. DRL 策略控制 控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。 动作 smoothness 与可行性在 Metrics 中有单独评估指标。 5. 智能切换模块 HintSwitcher：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。 切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。 二、系统整体工作流程 以下代码片段概括了系统的主要运行步骤：\n# Step 1: 创建地图对象 map_data = generate_map() mpc_controller = InterfaceMpc(map_data) config = Configurator() # Step 2: 四叉树路径规划 quadtree = create_quadtree_from_occupancy_map(occupancy_map) constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state) # Step 3: MPC 轨迹生成 mpc_controller.update_static_constraints(constraints) trajectory = mpc_controller.generate_trajectory(current_state, goal_state) # Step 4: 智能控制切换（DRL or MPC） switcher = HintSwitcher(max_switch_distance=5.0, min_detach_distance=8.0) if switcher.switch(current_position, original_traj, new_traj, obstacle_list): action = drl_model.predict(observation) else: action = mpc_controller.get_control_action() 三、关键函数解读 quadtree_to_mpc_constraints 将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。\ndef quadtree_to_mpc_constraints(quadtree, state, goal): path_nodes = quadtree.find_path((state[0], state[1]), (goal[0], goal[1])) free_space_polygons = [] for node_id in path_nodes: if node_id in quadtree.convex_hulls: hull = quadtree.convex_hulls[node_id] vertices = hull.vertices.tolist() free_space_polygons.append(vertices) return free_space_polygons integrate_quadtree_with_mpc 动态将静态与预测动态障碍加入 MPC 控制器，生成最优控制轨迹：\ndef integrate_quadtree_with_mpc(map, mpc_controller, current_state, goal_state, dynamic_obstacles): static_constraints = quadtree_to_mpc_constraints(quadtree, current_state, goal_state) mpc_controller.update_static_constraints(static_constraints) # 转换动态障碍物为多边形约束 dyn_obstacles_for_mpc = [] for obs in dynamic_obstacles: polygon = [(x + radius * np.cos(a), y + radius * np.sin(a)) for a in np.linspace(0, 2*np.pi, 8)] dyn_obstacles_for_mpc.append(polygon) mpc_controller.update_dynamic_constraints(dyn_obstacles_for_mpc) HintSwitcher.switch() 使用 shapely 几何计算机器人与障碍物距离，当靠近障碍时切换到 DRL，远离时回归 MPC：\ndef switch(self, current_position, original_traj, new_traj, obstacle_list): for obstacle in obstacle_list: dist = Polygon(obstacle).distance(Point(current_position)) if dist \u003c self.switch_distance and not self.switch_on: self.switch_on = True return True elif dist \u003e self.detach_distance and self.switch_on: if self.detach_cnt \u003e self.detach_steps: self.switch_on = False else: self.detach_cnt += 1 return self.switch_on 四、性能评估模块 Metrics 提供多个维度的轨迹质量指标：\ncomputation_time：平均/最大/方差 deviation_distance：跟踪轨迹的平均/最大偏移 smoothness：控制输入的二阶导数平滑度 clearance：离最近障碍物的最小距离 success_rate：任务完成率 可输出为 LaTeX 表格格式。\n五、小结 这个系统通过模块化的方式将地图理解、自由空间分割（QuadTree）、优化控制（MPC）与策略控制（DRL）无缝整合在一起，在保持轨迹平滑和可控的前提下，具备应对复杂障碍结构与动态环境的能力。\n在实际部署中，可以根据任务复杂度、动态性与推理速度，灵活地配置切换阈值、优化步长与 DRL 策略细节。\n",
+  "wordCount" : "256",
+  "inLanguage": "en",
+  "datePublished": "2025-05-07T00:00:00Z",
+  "dateModified": "2025-05-07T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/hybrid-planner-integration/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+
+
 </head>
 
 <body class="" id="top">
@@ -278,11 +401,11 @@ quadtree_to_mpc_constraints
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="//localhost:1313/tags/hybrid-planning/">Hybrid Planning</a></li>
-      <li><a href="//localhost:1313/tags/quadtree/">QuadTree</a></li>
-      <li><a href="//localhost:1313/tags/mpc/">MPC</a></li>
-      <li><a href="//localhost:1313/tags/drl/">DRL</a></li>
-      <li><a href="//localhost:1313/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/">轨迹规划</a></li>
+      <li><a href="/tags/hybrid-planning/">Hybrid Planning</a></li>
+      <li><a href="/tags/quadtree/">QuadTree</a></li>
+      <li><a href="/tags/mpc/">MPC</a></li>
+      <li><a href="/tags/drl/">DRL</a></li>
+      <li><a href="/tags/%E8%BD%A8%E8%BF%B9%E8%A7%84%E5%88%92/">轨迹规划</a></li>
     </ul>
   </footer>
 </article>

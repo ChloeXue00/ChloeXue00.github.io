@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>理想 on </title>
+    <link>/tags/%E7%90%86%E6%83%B3/</link>
+    <description>Recent content in 理想 on </description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 22 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/%E7%90%86%E6%83%B3/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI汽车、自研底座与产品力跃迁</title>
+      <link>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</link>
+      <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;汽车行业智能化下半场：人工智能时代的自研趋势以及产品力跃迁&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;本报告基于对当前中国主流智能车企技术路径的梳理，重点聚焦AI时代自研趋势、技术栈重构与用户体验跃迁路径，提出自研芯片+操作系统在产品竞争力打造中的关键价值。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一、引言：智能驾驶竞争进入“底层能力为王”阶段&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;随着智能驾驶算法从传统的三段式架构逐步演化为统一大模型，底层算力的压力正在指数级上升。过去由规则驱动的架构，正逐步让位于数据驱动与模型推理为主导的新范式。小鹏、理想都曾表明目标是成为面向全球的AI汽车公司（&lt;a href=&#34;https://wallstreetcn.com/articles/3738111&#34;&gt;小鹏想成为面向全球的AI汽车公司&lt;/a&gt;，&lt;a href=&#34;https://stcn.com/article/detail/1468633.html&#34;&gt;李想“隐退”九个月后高调发声，要将理想汽车打造成AI公司&lt;/a&gt;）， 在这种趋势下，AI三要素中的&lt;strong&gt;数据和算力&lt;/strong&gt;，不再是支持角色，而正在成为影响智驾系统架构、决策能力和推理效率的“底层决定性资源”。&lt;/p&gt;
+&lt;p&gt;以智能驾驶主控芯片为例，从2019年Mobileye EyeQ4的24 TOPS算力，到2023年NVIDIA Orin-X单颗256 TOPS，算力提升10倍以上，芯片价格和适配难度也随之飙升。公开数据显示，Orin-X 零售单价接近 500 美元，在算法开发完成后仍需4~6个月进行底层适配与算子调优。芯片不再是“模块化采购”的一环，而是演化为算法性能释放的“主控变量”。&lt;/p&gt;
+&lt;p&gt;回顾历史，从智能手机厂商（如苹果、三星以及华为）到云厂商（如亚马逊、谷歌），都经历了&lt;strong&gt;通过自研芯片实现性能边界控制、系统主导权和成本结构优化，自研芯片已成为“技术驱动产品体验”的底层共识。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;面对这一演进趋势，蔚小理纷纷加速芯片自研布局，希望打通“自研算法+定制芯片”的协同链条。在这条路径上，在国内厂商中，华为无疑走在更前一步——其MDC系列芯片已在极狐、阿维塔等平台落地，与ADS系统形成“芯片即平台”的整合模式。&lt;/p&gt;
+&lt;p&gt;自研（智驾/座舱）芯片不仅提高了算力上限，降低了整车成本，同时让企业掌握底层算力与接口设计的主动权，从而决定了智驾域和座舱域&lt;strong&gt;从芯片架构、操作系统、通信协议到电子电器架构&lt;/strong&gt;等多个层级的自主可控程度。这些系统共同决定了智能驾驶系统的处理能力、响应速度、功能复用率和可持续升级能力。&lt;/p&gt;
+&lt;p&gt;这一趋势正是推动智驾系统从“功能运营型”向“技术驱动型”转变的关键分水岭——决定其是跟随迭代，还是主导演进。&lt;/p&gt;
+&lt;p&gt;但这场底层变革之战的真正价值，或许并不止于技术领先本身，而在于它能否带来一种“自我定义产品体验、构建自驱闭环”的能力边界重塑。&lt;strong&gt;自研芯片+自研架构+OS 作为企业软硬结合的锚点，其作用机制、投入路径与演进节奏，也因此成为观察智能车产业未来格局演化的关键切口&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;本文将聚焦华为与小鹏两家典型代表，从技术栈演化、系统能力建构、用户体验反馈、品牌市场影响等多个维度展开分析，尝试还原自研芯片与操作系统背后，技术战略与产品能力之间的真实因果链条。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;二、以华为为例，解读OS+MDC+集中式架构带来的体验跃迁&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;MDC计算平台作为算力支撑，鸿蒙OS构建生态加强交互体验，集中式架构降低系统时延提升智驾功能表现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.2 华为 MDC 智能驾驶计算平台—自2018年起持续演进&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;规划与产品矩阵完善（2018–2021）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;2018年3月，华为推出首款MDC智能驾驶计算平台，最初基于&lt;strong&gt;昇腾310芯片&lt;/strong&gt;，迄今已发展出包括&lt;strong&gt;MDC210、300F、610、810、Pro 610等&lt;/strong&gt;产品，覆盖从L2到L4的不同自动驾驶级别。2024年，搭载MDC610的车型可升级到ADS 3.0，为高阶城市NOA提供了算力基础。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;更高算力平台到位（2021–2023）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;随后推出的&lt;strong&gt;MDC810&lt;/strong&gt;以稠密算力峰值超400 TOPS，支持更复杂的多传感器融合与高精度感知，为L3前装落地铺设平台基础。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;最新演进方向：MDC Pro 610系列&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;截至2025年，华为MDC产品线已新增&lt;strong&gt;MDC Pro 610&lt;/strong&gt;等型号，搭载更高算力的昇腾610芯片，并采用12位LPDDR5+液冷散热方案，实现&lt;strong&gt;500–800+ TOPS算力&lt;/strong&gt;与更高能效密度。华为 MDC Pro 610 智能驾驶控制器主要用于执行融合、识别、分类任务，同时处理地图定位，以进行路径规划和驾驶决策，从而实现车辆的精确控制和自动驾驶。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.3 麒麟芯片追赶高通地位，搭配鸿蒙OS，提升智能座舱交互体验&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在智能汽车逐步迈入“全栈自研”的时代，操作系统作为底层能力承上启下，是实现&lt;strong&gt;软件解耦、整车协同和体验跃迁&lt;/strong&gt;的核心基座。华为率先部署三层操作系统体系——&lt;strong&gt;HarmonyOS OS（座舱）+ AOS（车控）+ VOS（智驾）&lt;/strong&gt;，不仅实现了智舱、智驾、车控的能力分离与协同调度，更通过操作系统的持续演进，显著提升整车的流畅性、智能性与安全性体验。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;HarmonyOS：从“操作系统”到“生态系统”，提升人车交互体验&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;作为车载鸿蒙的重要落地形态，HarmonyOS 不仅承担座舱控制任务，更整合手机、平板、手表、家居IoT等跨终端生态能力，打造“万物互联”的空间体验：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;分布式架构打造跨终端无缝协同体验，支持多设备间无缝流转（导航、通话、视频会议、音乐等）；&lt;/p&gt;
+&lt;p&gt;语音助手基于端云协同大模型能力升级（如方舟语音大模型），具备更高意图理解力和情境感知；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;界面响应与流畅性极大提升&lt;/strong&gt;：借助统一内核与多线程渲染机制，复杂场景下UI响应延迟降低40%、用户交互成功率提升25%以上。&lt;/p&gt;
+&lt;p&gt;如在问界M9、小鹏G6等车型上，鸿蒙座舱系统实现“智慧语音 + 视觉感知 + 空间音效 + 多设备协同”的沉浸式体验，显著领先传统车机。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;AOS：高实时性车控操作系统，提升系统响应稳定性&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;AOS是专为汽车底层控制场景设计的轻量级实时操作系统，以调度精度、冗余安全与定制能力为核心特性：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;精确控制如转向、电机、车身等关键子系统&lt;/p&gt;
+&lt;p&gt;对车规芯片如MCU/SoC适配性强，支持多线程任务管理与高优先级中断&lt;/p&gt;
+&lt;p&gt;与自研芯片联合优化，可实现端到端时延&amp;lt;10ms、异常恢复时间&amp;lt;100ms的性能表现&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

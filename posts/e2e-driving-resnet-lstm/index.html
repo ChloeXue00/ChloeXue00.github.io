@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测 | </title>
 <meta name="keywords" content="CNN, LSTM, 自动驾驶, 端到端学习">
 <meta name="description" content="项目背景
@@ -50,16 +50,16 @@ class ResNetLSTMModel(nn.Module):
 模型选择与对比分析
 为什么选择 ResNet 而不是简单 CNN：">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/posts/e2e-driving-resnet-lstm/">
+<link rel="canonical" href="/posts/e2e-driving-resnet-lstm/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/e2e-driving-resnet-lstm/">
+<link rel="alternate" hreflang="en" href="/posts/e2e-driving-resnet-lstm/">
 <noscript>
     <style>
         #theme-toggle,
@@ -96,7 +96,121 @@ class ResNetLSTMModel(nn.Module):
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/posts/e2e-driving-resnet-lstm/">
+  <meta property="og:title" content="基于ResNet&#43;LSTM的端到端自动驾驶转向预测">
+  <meta property="og:description" content="项目背景 本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。
+此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。
+模型结构概览 整体结构采用两阶段：
+ResNet 特征提取：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。 LSTM 序列建模：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度 模型结构图 数据与预处理 数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。
+输入帧尺寸统一为 224x224 标签为每帧角度（可选包含扭矩、车速） 图像预处理：resize → normalize → batch 标签标准化：使用均值/方差归一化角度值 损失函数：MSE 均方误差损失 优化器：Adam, 学习率 = 1e-4 序列长度：T = 5（即每个样本为连续5帧） 实验结果 在测试集上，MSE 误差为 0.06，对应角度误差约为 7°。
+模型在直线段表现稳定，在连续转弯段有一定预测延迟
+关键代码片段： class ResNetLSTMModel(nn.Module): def __init__(self): super().__init__() self.resnet = resnet18(pretrained=True) self.lstm = nn.LSTM(input_size=512, hidden_size=128, batch_first=True) self.fc = nn.Linear(128, 1) def forward(self, x_seq): batch, seq_len, C, H, W = x_seq.shape feats = [self.resnet(x_seq[:, i]) for i in range(seq_len)] feats = torch.stack(feats, dim=1) # [B, T, D] out, _ = self.lstm(feats) return self.fc(out[:, -1]) 模型选择与对比分析 为什么选择 ResNet 而不是简单 CNN：">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-10T00:00:00+00:00">
+    <meta property="article:tag" content="CNN">
+    <meta property="article:tag" content="LSTM">
+    <meta property="article:tag" content="自动驾驶">
+    <meta property="article:tag" content="端到端学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于ResNet&#43;LSTM的端到端自动驾驶转向预测">
+<meta name="twitter:description" content="项目背景
+本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。
+此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。
+模型结构概览
+整体结构采用两阶段：
+
+ResNet 特征提取：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。
+LSTM 序列建模：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度
+
+模型结构图
+
+数据与预处理
+数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。
+
+输入帧尺寸统一为 224x224
+标签为每帧角度（可选包含扭矩、车速）
+图像预处理：resize → normalize → batch
+标签标准化：使用均值/方差归一化角度值
+损失函数：MSE 均方误差损失
+优化器：Adam, 学习率 = 1e-4
+序列长度：T = 5（即每个样本为连续5帧）
+
+实验结果
+在测试集上，MSE 误差为 0.06，对应角度误差约为 7°。
+模型在直线段表现稳定，在连续转弯段有一定预测延迟
+
+关键代码片段：
+class ResNetLSTMModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.resnet = resnet18(pretrained=True)
+        self.lstm = nn.LSTM(input_size=512, hidden_size=128, batch_first=True)
+        self.fc = nn.Linear(128, 1)
+
+    def forward(self, x_seq):
+        batch, seq_len, C, H, W = x_seq.shape
+        feats = [self.resnet(x_seq[:, i]) for i in range(seq_len)]
+        feats = torch.stack(feats, dim=1)  # [B, T, D]
+        out, _ = self.lstm(feats)
+        return self.fc(out[:, -1])
+模型选择与对比分析
+为什么选择 ResNet 而不是简单 CNN：">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "基于ResNet+LSTM的端到端自动驾驶转向预测",
+      "item": "/posts/e2e-driving-resnet-lstm/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "基于ResNet+LSTM的端到端自动驾驶转向预测",
+  "name": "基于ResNet\u002bLSTM的端到端自动驾驶转向预测",
+  "description": "项目背景 本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。\n此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。\n模型结构概览 整体结构采用两阶段：\nResNet 特征提取：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。 LSTM 序列建模：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度 模型结构图 数据与预处理 数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。\n输入帧尺寸统一为 224x224 标签为每帧角度（可选包含扭矩、车速） 图像预处理：resize → normalize → batch 标签标准化：使用均值/方差归一化角度值 损失函数：MSE 均方误差损失 优化器：Adam, 学习率 = 1e-4 序列长度：T = 5（即每个样本为连续5帧） 实验结果 在测试集上，MSE 误差为 0.06，对应角度误差约为 7°。\n模型在直线段表现稳定，在连续转弯段有一定预测延迟\n关键代码片段： class ResNetLSTMModel(nn.Module): def __init__(self): super().__init__() self.resnet = resnet18(pretrained=True) self.lstm = nn.LSTM(input_size=512, hidden_size=128, batch_first=True) self.fc = nn.Linear(128, 1) def forward(self, x_seq): batch, seq_len, C, H, W = x_seq.shape feats = [self.resnet(x_seq[:, i]) for i in range(seq_len)] feats = torch.stack(feats, dim=1) # [B, T, D] out, _ = self.lstm(feats) return self.fc(out[:, -1]) 模型选择与对比分析 为什么选择 ResNet 而不是简单 CNN：\n",
+  "keywords": [
+    "CNN", "LSTM", "自动驾驶", "端到端学习"
+  ],
+  "articleBody": "项目背景 本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。\n此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。\n模型结构概览 整体结构采用两阶段：\nResNet 特征提取：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。 LSTM 序列建模：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度 模型结构图 数据与预处理 数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。\n输入帧尺寸统一为 224x224 标签为每帧角度（可选包含扭矩、车速） 图像预处理：resize → normalize → batch 标签标准化：使用均值/方差归一化角度值 损失函数：MSE 均方误差损失 优化器：Adam, 学习率 = 1e-4 序列长度：T = 5（即每个样本为连续5帧） 实验结果 在测试集上，MSE 误差为 0.06，对应角度误差约为 7°。\n模型在直线段表现稳定，在连续转弯段有一定预测延迟\n关键代码片段： class ResNetLSTMModel(nn.Module): def __init__(self): super().__init__() self.resnet = resnet18(pretrained=True) self.lstm = nn.LSTM(input_size=512, hidden_size=128, batch_first=True) self.fc = nn.Linear(128, 1) def forward(self, x_seq): batch, seq_len, C, H, W = x_seq.shape feats = [self.resnet(x_seq[:, i]) for i in range(seq_len)] feats = torch.stack(feats, dim=1) # [B, T, D] out, _ = self.lstm(feats) return self.fc(out[:, -1]) 模型选择与对比分析 为什么选择 ResNet 而不是简单 CNN：\n预训练权重可加快收敛\nResNet 的残差结构对特征提取更加稳健\n为什么用 LSTM 而不是 FC： 能捕捉时间上的上下文依赖\n适合处理图像序列任务（比 RNN 收敛更稳定）\n我的思考 ResNet 有效提取空间特征，但模型在连续转弯区域仍存在滞后。\n真正部署前还需加入控制平滑性约束、sensor fusion、时延补偿等；\n若加入车辆状态如速度、上帧角度，效果可能进一步优化。\n可扩展方向包括： 使用 Transformer 替代 LSTM\n引入 attention 模块\n增加辅助状态输入（车速、扭矩等）\n延伸阅读 NVIDIA PilotNet End-to-End Learning for Self-Driving Cars (2016) 下一篇预告：\nLSTM在连续控制任务中的优势，以及与Transformer的对比。\n",
+  "wordCount" : "129",
+  "inLanguage": "en",
+  "datePublished": "2025-04-10T00:00:00Z",
+  "dateModified": "2025-04-10T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/e2e-driving-resnet-lstm/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+
+
 </head>
 
 <body class="" id="top">
@@ -232,10 +346,10 @@ LSTM在连续控制任务中的优势，以及与Transformer的对比。</p>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="//localhost:1313/tags/cnn/">CNN</a></li>
-      <li><a href="//localhost:1313/tags/lstm/">LSTM</a></li>
-      <li><a href="//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
-      <li><a href="//localhost:1313/tags/%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%AD%A6%E4%B9%A0/">端到端学习</a></li>
+      <li><a href="/tags/cnn/">CNN</a></li>
+      <li><a href="/tags/lstm/">LSTM</a></li>
+      <li><a href="/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">自动驾驶</a></li>
+      <li><a href="/tags/%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%AD%A6%E4%B9%A0/">端到端学习</a></li>
     </ul>
   </footer>
 </article>

@@ -2,107 +2,68 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Product &amp; Project Management on </title>
-    <link>//localhost:1313/categories/product--project-management/</link>
+    <link>/categories/product--project-management/</link>
     <description>Recent content in Product &amp; Project Management on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 20 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/categories/product--project-management/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/categories/product--project-management/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>NOP主要功能设计逻辑图（状态机 &#43; 决策路径）</title>
-      <link>//localhost:1313/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</link>
-      <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/</guid>
-      <description>&lt;h2 id=&#34;nopnavigate-on-pilot主要功能设计逻辑概览&#34;&gt;NOP（Navigate on Pilot）主要功能设计逻辑概览&lt;/h2&gt;
-&lt;p&gt;NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,&lt;/p&gt;
-&lt;p&gt;NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;一设计目标&#34;&gt;一、设计目标&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验&lt;/li&gt;
-&lt;li&gt;支持用户切入、退出、过渡等操作&lt;/li&gt;
-&lt;li&gt;在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二核心状态机结构nop-functional-state-machine&#34;&gt;二、核心状态机结构（NOP Functional State Machine）&lt;/h2&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;stateDiagram-v2
-    [*] --&amp;gt; Idle
-    Idle --&amp;gt; Activated : 用户开启NOP
-    Activated --&amp;gt; Cruise : 成功识别车道 + 导航同步
-    Cruise --&amp;gt; LaneChange : 策略触发变道
-    LaneChange --&amp;gt; Cruise : 变道完成
-    Cruise --&amp;gt; ExitPreparation : 出口识别提前准备
-    ExitPreparation --&amp;gt; ExitExecution : 到达出口区
-    ExitExecution --&amp;gt; Idle : NOP退出或用户接管
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&#34;三状态说明&#34;&gt;三、状态说明&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;状态名&lt;/th&gt;
-          &lt;th&gt;含义说明&lt;/th&gt;
-          &lt;th&gt;触发条件&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Idle&lt;/td&gt;
-          &lt;td&gt;NOP未激活或退出状态&lt;/td&gt;
-          &lt;td&gt;用户未启用NOP / 驶出高速&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Activated&lt;/td&gt;
-          &lt;td&gt;系统初始化并准备启用巡航&lt;/td&gt;
-          &lt;td&gt;用户点击NOP按钮，车速/车道满足条件&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Cruise&lt;/td&gt;
-          &lt;td&gt;进入自动巡航，包括车道保持 + ACC跟车&lt;/td&gt;
-          &lt;td&gt;系统感知良好，导航同步，无异常事件&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;LaneChange&lt;/td&gt;
-          &lt;td&gt;触发主动变道（超车 / 路况避障）&lt;/td&gt;
-          &lt;td&gt;策略模块判断变道条件满足&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;ExitPreparation&lt;/td&gt;
-          &lt;td&gt;提前感知导航出口，准备变道至出口车道&lt;/td&gt;
-          &lt;td&gt;与导航路径匹配，出口识别提前量足够&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;ExitExecution&lt;/td&gt;
-          &lt;td&gt;实施出口变道与减速，并准备交接控制权&lt;/td&gt;
-          &lt;td&gt;距离出口不足100m，车道和速度就绪&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;四策略决策路径decision-logic-path&#34;&gt;四、策略决策路径（Decision Logic Path）&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;启动 → 是否满足最低NOP开启条件？
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 是 → 判断导航是否同步？
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 是 → 进入巡航状态（车道保持 + 跟车）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             → 导航出口匹配？提前变道？→ 出口准备
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;         → 否 → 保持手动驾驶或提示同步失败
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     → 否 → 禁用NOP，提示“条件不满足”
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id=&#34;五模块交互简图配合时序图使用&#34;&gt;五、模块交互简图（配合时序图使用）&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;用户交互（启动、退出、转向灯） ↔ NOP 控制状态机&lt;/li&gt;
-&lt;li&gt;感知输入（车道、车辆、障碍） → 策略模块（是否变道）&lt;/li&gt;
-&lt;li&gt;导航模块（出口路径） → 策略模块（是否切换车道）&lt;/li&gt;
-&lt;li&gt;控制模块 ← 状态机指令（加速、减速、横向控制）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;小结&#34;&gt;小结&lt;/h2&gt;
-&lt;p&gt;该状态机设计确保了：&lt;/p&gt;</description>
+      <title>城市NOA功能竞品分析</title>
+      <link>/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</link>
+      <pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/%E5%9F%8E%E5%B8%82noa%E7%AB%9E%E5%93%81%E6%8A%80%E6%9C%AF%E5%85%A8%E6%99%AF%E4%B8%8A%E4%BB%8Ebev%E5%88%B0vla%E6%8B%86%E8%A7%A3%E7%90%86%E6%83%B3%E5%B0%8F%E9%B9%8F%E8%94%9A%E6%9D%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E5%88%86%E6%B0%B4%E5%B2%AD/</guid>
+      <description>&lt;p&gt;理想、小鹏、蔚来的&lt;/p&gt;
+&lt;h1 id=&#34;城市noa技术战局上从bev到vla拆解头部玩家技术路线&#34;&gt;城市NOA技术战局（上）：从BEV到VLA，拆解头部玩家技术路线&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;主要结论：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;继2023–2024年BEV+Transformer+Occupancy Network架构成为智能驾驶的感知主流后，2025年起，行业正加速向更高级的**VLM（Vision-Language Model）&lt;strong&gt;与&lt;/strong&gt;VLA（Vision-Language-Action）**模型演进。相较于传统BEV结构仅关注空间几何关系，VLM/VLA引入语言推理模块，可对标志、规则、指令进行语义理解，结合多模态输入（如摄像头图像、语音交互、交通文本信息），生成更泛化、更类人的行为决策。&lt;/p&gt;
+&lt;p&gt;芯片与算力能力成为支撑城市NOA架构升级的关键基础。2020年前后主流平台算力集中于144 TOPS，如今已普遍跃升至500 TOPS以上，高端平台如蔚来NX9031、理想Thor-U、小鹏图灵AI芯片等更达到千级算力，支撑端到端推理、大模型部署与多模态处理。自研芯片、自建智算中心、自主模型训练正成为具备战略自主能力车企的核心壁垒。&lt;/p&gt;
+&lt;p&gt;在感知侧，“视觉为主+激光雷达补盲”已成为当前主流配置。视觉方案具备数据规模与算力适配优势，激光雷达则增强空间精度与安全冗余，尤其在无高精地图场景中具备更强稳定性。不同厂商依据策略选择单感知或多模态融合方案，构建安全容错体系。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;产品背景&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;近年来，随着特斯拉AutoPilot不断进阶至FSD，辅助驾驶已从L0级定速巡航，逐步拓展至高速NOA，再迈入城市NOA阶段，覆盖更复杂多变的交通环境。智能驾驶正在从“技术亮点”转向“核心卖点”，显著影响消费者购车决策。&lt;/p&gt;
+&lt;p&gt;以小鹏和问界为例：小鹏G6智驾版配置占比超过70%，问界新M7的大定用户中也有60%以上选择搭载高阶智能驾驶方案。这一趋势标志着，中国智能驾驶市场已全面进入L2+/NOA功能的规模化普及阶段。&lt;/p&gt;
+&lt;p&gt;L2+辅助驾驶能力包括自适应巡航（ACC）、车道居中控制（LCC）、自动变道（ALC）、高速NOA等，城市NOA则在此基础上，扩展至非结构化路况中的红绿灯通行、环岛绕行、路口博弈等复杂决策工况，对感知精度、决策智能与系统泛化能力提出更高要求。&lt;/p&gt;
+&lt;p&gt;在城市NOA推进过程中，&lt;strong&gt;高精地图鲜度不足、覆盖受限、成本高昂等问题，成为核心瓶颈&lt;/strong&gt;。为突破此限制，主流技术路线正在从依赖地图的规则驱动方案，全面转向&lt;strong&gt;端到端模型驱动 + 自主环境建图 + 多模态策略融合&lt;/strong&gt;的新范式。&lt;/p&gt;
+&lt;p&gt;技术架构上，感知模块经历了从前向2D视角 → BEV建图 → Occupancy Network建模的迭代，决策控制模块也正由传统rule-based状态机，向&lt;strong&gt;基于神经网络的端到端行为预测&lt;/strong&gt;发展。2025年起，VLM（视觉语言模型）和VLA（Vision-Language-Action）架构逐步上车，赋予系统语义理解与策略推理能力，成为当前算法演进的前沿方向。&lt;/p&gt;
+&lt;p&gt;本报告将围绕特斯拉、小鹏、理想、蔚来等具备自研能力的头部品牌，梳理其城市NOA技术路线演进路径，结合软硬件系统方案与市场落地节奏，探讨中国品牌如何在“从BEV到VLA”的产业跃迁中建立领先优势。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;&lt;strong&gt;目标用户与使用场景&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;L2/L2+辅助驾驶系统主要面向具备一定驾驶经验、希望在日常通勤或长途驾驶中降低疲劳、提升安全性的新能源车主及购车潜在用户。&lt;/p&gt;
+&lt;p&gt;这类用户普遍关注两个关键问题：&lt;/p&gt;
+&lt;p&gt;各品牌城市NOA在不同城市、路况下的表现差异；&lt;/p&gt;
+&lt;p&gt;智驾能力与整车价格之间的性价比。&lt;/p&gt;
+&lt;p&gt;智能驾驶的核心价值在于：在用户监管下，系统能够预判潜在风险、辅助完成复杂驾驶动作，从而减轻认知负担、降低事故风险。尤其在城市NOA场景中，系统需完成红绿灯识别、路口博弈、避让行人、自主换道等行为，对系统泛化能力、策略鲁棒性和人机交互体验提出更高要求。&lt;/p&gt;
+&lt;p&gt;因此，城市NOA不仅是“功能拓展”，更代表了整车系统智能化水平的“天花板”。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;&lt;strong&gt;竞品分析&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;本篇章节主要对于特斯拉，以蔚来理想小鹏为代表的头部企业在“城市导航辅助驾驶功能”的进展上进行对比分析，除此之外还包括，硬件系统方案，软件算法，功能配置，交互逻辑，运营方案，亮点场景等对比。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.1 调研洞察摘要&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;城市NOA的落地，标志着行业正从规则驱动向数据驱动、从模块化架构向端到端大模型架构转变。以下趋势尤为明显：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术架构趋同：&lt;/strong&gt; 特斯拉、小鹏、蔚来等主流厂商均采用BEV+Transformer+Occupancy Network感知结构，逐步引入端到端神经网络控制器替代传统状态机，提升整体智驾稳定性。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;算力平台升级：&lt;/strong&gt; 主流平台从原先144TOPS提升至500–1000TOPS以上，大算力平台成为支持端到端大模型部署的基础设施。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数据闭环能力强化：&lt;/strong&gt; 具备自动采集、筛选、标注、仿真重建与在线训练能力的“数据-模型-闭环”体系，成为城市NOA性能提升的核心引擎。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;用户体验导向增强：&lt;/strong&gt; 城市NOA正加速从试点区域向全国多城落地，主机厂纷纷围绕“全国都能开、用户真愿用”目标，推动功能迭代与大模型泛化能力提升。&lt;/p&gt;
+&lt;p&gt;结论：&lt;strong&gt;在城市NOA成为新一代智能驾驶标配的背景下，能否构建“低成本、高泛化、大闭环”的自研体系，将成为厂商能否突围的核心分水岭。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.2 技术方案演进与“去高精地图化”&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高速NOA因场景结构稳定，长期采用规则驱动+高精地图方式实现；而城市NOA因存在海量动态变量与非结构化场景，传统Rule-based方案难以覆盖，&lt;strong&gt;技术路线普遍演进为以下三个阶段：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;基于高精地图的三段式结构：&lt;/strong&gt; 感知–规划–控制，依赖静态地图与有限状态机；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;BEV+Transformer感知融合结构：&lt;/strong&gt; 引入Occupancy Network构建3D空间占据图，提升遮挡处理与障碍识别能力；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;端到端 + 多模态语义推理架构（VLA）：&lt;/strong&gt; 引入视觉语言模型、扩散策略网络、博弈推理模块等，实现感知–理解–决策一体化。&lt;/p&gt;
+&lt;p&gt;“去高精地图化”已成为城市NOA发展的行业共识，各家方案通过Occupancy Network、弱地图辅助、分布式建图等方式逐步替代静态地图依赖，以提升系统泛化能力与落地效率。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.2.1 特斯拉技术演进：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;/images/NOA_image1.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;自2014年发布AutoPilot 1.0以来，特斯拉持续引领辅助驾驶从规则驱动走向数据驱动、再走向端到端神经控制的范式演进。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;HW1.0 + Mobileye平台（2014–2016）：&lt;/strong&gt; 初代AutoPilot基于Mobileye方案，支持基本的巡航与车道保持功能，但受限于单摄像头配置与规则逻辑，系统泛化能力有限。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>汽车行业智能化下半场：人工智能时代的自研趋势以及产品力跃迁</title>
-      <link>//localhost:1313/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%811-2386b41b2b1780668d31c3327d727519/</link>
-      <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%811-2386b41b2b1780668d31c3327d727519/</guid>
+      <title>AI汽车、自研底座与产品力跃迁</title>
+      <link>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</link>
+      <pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>/posts/%E6%B1%BD%E8%BD%A6%E8%A1%8C%E4%B8%9A%E6%99%BA%E8%83%BD%E5%8C%96%E4%B8%8B%E5%8D%8A%E5%9C%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%97%B6%E4%BB%A3%E7%9A%84%E8%87%AA%E7%A0%94%E8%B6%8B%E5%8A%BF%E4%BB%A5%E5%8F%8A%E4%BA%A7%E5%93%81%E5%8A%9B%E8%B7%83%E8%BF%81/</guid>
       <description>&lt;p&gt;&lt;strong&gt;汽车行业智能化下半场：人工智能时代的自研趋势以及产品力跃迁&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;本报告基于对当前中国主流智能车企技术路径的梳理，重点聚焦AI时代自研趋势、技术栈重构与用户体验跃迁路径，提出自研芯片+操作系统在产品竞争力打造中的关键价值。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;一、引言：智能驾驶竞争进入“底层能力为王”阶段&lt;/strong&gt;&lt;/p&gt;
@@ -142,734 +103,163 @@
 &lt;p&gt;与自研芯片联合优化，可实现端到端时延&amp;lt;10ms、异常恢复时间&amp;lt;100ms的性能表现&lt;/p&gt;</description>
     </item>
     <item>
-      <title>用户旅程地图与上线场景梳理的关系</title>
-      <link>//localhost:1313/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</link>
+      <title>NOP主要功能设计逻辑图（状态机）</title>
+      <link>/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/</guid>
-      <description>&lt;p&gt;&lt;img alt=&#34;用户旅程地图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png&#34;&gt;
-用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;一用户旅程地图是什么&#34;&gt;一、用户旅程地图是什么&lt;/h2&gt;
-&lt;p&gt;用户旅程（User Journey）是用户完成某个任务或者达到某个目标的全过程, 它是分析用户旅程的可视化工具之一。它是一个有方向的信息图表（按照时间线，从左往右），从用户的角度出发、以讲故事的方式，清晰地描述用户在某个业务场景下完成任务或达到目标时的详细过程和体验。&lt;/p&gt;
-&lt;p&gt;完整的用户旅程包含用户模型、可视化的体验过程和机会点三部分。&lt;/p&gt;
-&lt;h3 id=&#34;1-用户模型&#34;&gt;1. 用户模型&lt;/h3&gt;
-&lt;p&gt;要构造用户旅程地图，我们首先需要构建用户模型。即用户群体是谁，想要在什么样的业务场景下，达成什么样的目标。&lt;/p&gt;
-&lt;p&gt;这部分的信息通常来源于用户研究，比如用户访谈、问卷调查、及实地观察等。&lt;/p&gt;
-&lt;h3 id=&#34;2-可视化的体验过程&#34;&gt;2. 可视化的体验过程&lt;/h3&gt;
-&lt;p&gt;这是用户旅程地图中最重要的组成部分，描述用户在达成目标时的全过程，及在每个过程中的情感体验。这部分的信息可以来自于用户研究，也可以邀请用户一起完成。&lt;/p&gt;
-&lt;p&gt;它包含 5 个元素：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;关键活动&lt;/strong&gt;：用户在该业务场景下达成目标时的关键活动，按时间顺序排列。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;具体行为&lt;/strong&gt;：每个关键活动下的具体操作步骤。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;触点&lt;/strong&gt;：用户在每个行为中接触的工具、系统或产品功能。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;心情曲线&lt;/strong&gt;：用户在行为过程中的情绪高低，通常用线图或 Emoji 表示。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;痛点&lt;/strong&gt;：行为过程中遇到的挑战或不适体验。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;3-机会点&#34;&gt;3. 机会点&lt;/h3&gt;
-&lt;p&gt;这是从体验过程中挖掘到的优化用户旅程的洞见、改善用户痛点的契机等。&lt;br&gt;
-机会点不是来源于用户，而是由产品经理或需求分析人员通过“对心情曲线与痛点的理解”推导得出。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二用户旅程地图与上线场景的联动关系&#34;&gt;二、用户旅程地图与上线场景的联动关系&lt;/h2&gt;
-&lt;p&gt;用户旅程地图不仅可以用来讲述用户故事，更是连接“用户需求”与“功能上线规划”的桥梁：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;用户调研 / 产品目标
-    ↓
-用户需求分析（用户目标、行为、痛点）
-    ↓           ←←←←←←←←←←←←←←
-用户旅程地图（阶段划分 + 用户行为 + 系统反应 + 情绪）
-    ↓                            ↑
-上线场景梳理（功能需求表）       ↑ 可用于校验场景完整性
-    ↓
-功能子目标拆解 + 模块设计 + 投放节奏图
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&#34;三用户旅程地图与上线场景的对照示例&#34;&gt;三、用户旅程地图与上线场景的对照示例&lt;/h2&gt;
-&lt;p&gt;以自动变道为例：&lt;/p&gt;
+      <guid>/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
+      <description>&lt;h1 id=&#34;全域领航辅助nop&#34;&gt;全域领航辅助NOP+&lt;/h1&gt;
+&lt;h2 id=&#34;1-产品概述&#34;&gt;1. 产品概述&lt;/h2&gt;
+&lt;p&gt;全域领航辅助NOP+是一种舒适性功能，它是能让车辆根据导航规划好的路线进行行驶的辅助驾驶功能，能够完成如&lt;strong&gt;路口通行&lt;/strong&gt;、导航变道、超车变道、绕向车辆等驾驶任务。在面对&lt;strong&gt;施工区域、通用障碍物等场景时，车辆具有&lt;/strong&gt;安全能力，能够提供联通地面道路与城市快速路、高速公路的辅助驾驶体验。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;image.png&#34; loading=&#34;lazy&#34; src=&#34;/images/nop_image.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2-车型配置&#34;&gt;2. 车型配置&lt;/h2&gt;
+&lt;p&gt;本文档中提出的 &lt;strong&gt;NOP+&lt;/strong&gt; 全域领航辅助功能，配置在 ES8车型上。&lt;/p&gt;
+&lt;h2 id=&#34;3-参考文档&#34;&gt;&lt;strong&gt;3. 参考文档&lt;/strong&gt;&lt;/h2&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
-          &lt;th&gt;阶段&lt;/th&gt;
-          &lt;th&gt;用户旅程地图中的表达&lt;/th&gt;
-          &lt;th&gt;上线场景表中的表达&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;自动变道&lt;/td&gt;
-          &lt;td&gt;用户希望无操作也能高效超车，担心变道是否安全&lt;/td&gt;
-          &lt;td&gt;系统需在安全条件满足时触发自动变道策略&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;痛点机会&lt;/td&gt;
-          &lt;td&gt;用户想知道变道的理由&lt;/td&gt;
-          &lt;td&gt;系统应提供变道决策依据或提示信息&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;系统反应&lt;/td&gt;
-          &lt;td&gt;策略触发变道，执行控制&lt;/td&gt;
-          &lt;td&gt;轨迹规划模块 + 安全判断模块 + 控制模块&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;</description>
-    </item>
-    <item>
-      <title>自动驾驶行业技术分析</title>
-      <link>//localhost:1313/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</link>
-      <pubDate>Thu, 20 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/</guid>
-      <description>&lt;h1 id=&#34;1研究目的&#34;&gt;1.研究目的&lt;/h1&gt;
-&lt;p&gt;本篇报告主要围绕这几个问题展开:&lt;/p&gt;
-&lt;ol start=&#34;0&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;#1%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA&#34;&gt;背景与研究动机&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2%E8%87%AA%E9%A9%BE%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%E4%B8%BB%E6%94%BB%E7%9B%AE%E6%A0%87&#34;&gt;自驾技术发展方向/主攻目标&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#3%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94&#34;&gt;自动驾驶方案提供商的技术方案对比&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#4%E5%B8%82%E5%9C%BA%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%BD%9C%E5%9C%A8%E7%9A%84%E5%B8%82%E5%9C%BA&#34;&gt;市场大小和未被开发的市场&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#5%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98%E5%92%8C%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF&#34;&gt;技术趋势和突破点&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;（部分信息可能覆盖不全，主要在于部分公司信息不够公开，需要进一步调研或者查看行业报告或第三方分析）&lt;/p&gt;
-&lt;h1 id=&#34;1-背景与研究动机&#34;&gt;1. 背景与研究动机&lt;/h1&gt;
-&lt;p&gt;行业趋势:
-地图: 对于高精度地图的鲜度依赖过高,导致城市路段的辅助驾驶进度难以继续,出于安全冗余的考虑，目前业内更认可的作法是“重感知、轻地图”的路线。
-小鹏汽车和智己汽车（合作方为Momenta），目前都已经从研发端切换到“重感知”的路线上，并且试图摆脱对高精地图的依赖。
-但如果没有高精地图，车辆行驶到路口时，系统需要依靠感知和计算作出正确判断。目前，毫末是通过迁移学习领域中的混合迁移训练方法，将仿真数据和真实数据进行混合训练，从而提高红绿灯识别度。此外，还通过用Transformer做时间和空间上的前融合方式，解决“空间感知碎片化”和“时间感知不连续”的问题，有效识别城市道路车道线。&lt;/p&gt;
-&lt;h1 id=&#34;2自驾技术发展方向主攻目标&#34;&gt;2.自驾技术发展方向、主攻目标&lt;/h1&gt;
-&lt;h2 id=&#34;21城市无图noa导航辅助驾驶&#34;&gt;2.1城市无图NOA（导航辅助驾驶）&lt;/h2&gt;
-&lt;p&gt;随着智能驾驶技术的不断突破和消费者需求的日益升级，从L2等级到更高级的L2++自动驾驶辅助系统正逐步扩展至各类车型。&lt;/p&gt;
-&lt;p&gt;无图NOA 是“感知驱动的决策规划系统”，感知是输入，决策规划是核心，本质是完整的智能驾驶决策架构，它的核心目标是：&lt;strong&gt;在没有高精地图的情况下，仅凭车辆自身感知，实时理解环境并做出安全、合理的驾驶决策。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;高速和城市NOA（导航辅助驾驶），以及APA（自动泊车）等功能的渗透率不断提升,城市NOA已成为高阶智能驾驶技术的重要发展方向，而第三方智驾供应商在其中扮演着至关重要的角色。&lt;/p&gt;
-&lt;p&gt;Momenta、HUAWEIinside（华为Hi模式）、Bosch+WeRide（博世+文远知行）、Apollo（百度自动驾驶平台）和深圳元戎启行科技有限公司这五家供应商是无图NOA方案战场中的主要玩家。&lt;/p&gt;
-&lt;h3 id=&#34;22无图化noa实现方式&#34;&gt;2.2无图化NOA实现方式&lt;/h3&gt;
-&lt;p&gt;无图方案不是完全摒弃高精地图，下游轨迹预测/规控仍然依赖&lt;strong&gt;高精地图&lt;/strong&gt;的输入。『无图』实际指的是不再依赖厂商提供的高精地图，转而使用车载算法实时感知的『局部在线高精地图』。&lt;/p&gt;
-&lt;p&gt;因此无图方案的核心在于&lt;strong&gt;实时在线地图&lt;/strong&gt;构建的准确性，从技术层面来讲，正常情况下无图的上限就是有图；而在传统高精地图更新不及时的区域（比如施工路段、道路重构路段等），无图方案是更有优势的。在线高精地图的发展也有两年多了，无图一直致力于从『能用』走向『好用』。&lt;/p&gt;
-&lt;p&gt;底图绘制设备：包含摄像头、高精度GPS、高精度IMU，及用于深度学习和SLAM的计算芯片，并对搭载的传感器设置高精度的时间同步，整套设备价格在1000美金左右。Momenta不会对产品进行单独的售卖，而选择和主机厂、出租车队、物流车队等合作，或将传感器设备搭载在自有测试车队上完成底图绘制；&lt;/p&gt;
-&lt;p&gt;地图更新设备：地图更新设备的成本相较底图绘制设备，要低很多。Momenta将更新设备分为后装和前装两种方式进行部署。后装方式，即将众包更新方案搭载在Momenta后装产品设备“途铃”，完成地图更新。前装方式是Momenta将通过与主机厂合作共同研发“定位盒子”，并搭载Momenta地图更新方案。&lt;/p&gt;
-&lt;p&gt;相关工作
-Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Mapping&lt;/p&gt;
-&lt;p&gt;论文链接：https://arxiv.org/abs/2409.05352v1&lt;/p&gt;
-&lt;p&gt;阿里巴巴和西交团队的工作：高精地图（HD地图）对于自动驾驶汽车的精确导航和决策至关重要，但其创建和维护带来了巨大的成本和及时性挑战。使用车载传感器在线构建高精地图已成为一种有前景的解决方案；然而，由于遮挡和恶劣天气，这些方法可能会受到不完整数据的阻碍。本文提出了PriorDrive框架，通过利用先验地图的力量来解决这些局限性，显著提高了在线高精地图构建的鲁棒性和准确性。我们的方法整合了各种先前的地图，如OpenStreetMap的标准定义地图（SD地图）、供应商过时的高精地图以及来自历史车辆数据的本地构建地图。为了将这些先验信息有效地编码到在线见图模型中，PriorDrive提出了一种混合先验表示（HPQuery），该表示对不同地图元素的表示进行了标准化。PriorDrive的核心是统一矢量编码器（UVE），它采用双编码机制来处理矢量数据。矢量内编码器捕获细粒度的局部特征，而矢量间编码器集成全局上下文。此外提出了一种segment-level和point-level的预训练策略，使UVE能够学习矢量数据的先验分布，从而提高编码器的泛化能力和性能。通过对nuScenes数据集的广泛测试，PriorDrive与各种在线地图模型高度兼容，并大大提高了地图预测能力。通过PriorDrive框架整合先前的地图，为单一感知数据的挑战提供了一个强大的解决方案，为更可靠的自动驾驶汽车导航铺平了道路。&lt;/p&gt;
-&lt;p&gt;Neural HD Map Generation from Multiple Vectorized Tiles Locally Produced by Autonomous Vehicles&lt;/p&gt;
-&lt;p&gt;论文链接：https://arxiv.org/abs/2409.03445v1&lt;/p&gt;
-&lt;p&gt;高精地图厂商四维图新的工作：高精地图是自动驾驶系统的基本组成部分，因为它可以提供有关驾驶场景的精确环境信息。最近关于矢量化地图生成的工作，车辆运行一次只能在自车周围生成65%的局部地图元素，这就留下了一个难题，即如何在高质量标准下构建投影在世界坐标系中的全局高精地图。为了解决这个问题，我们将GNMap作为一个端到端的生成神经网络来自动构建具有多个矢量化图块的高精地图，这些图块是由自动驾驶汽车通过多次旅行在本地生成的。它利用多层和基于注意力的自动编码器作为共享网络，其中的参数是从两个不同的任务（即分别进行预训练和微调）中学习的，以确保生成的映射的完整性和元素类别的正确性。对真实世界的数据集进行了大量的定性评估，实验结果表明，GNMap可以超过SOTA方法5%以上的F1分数，只需少量手动修改即可达到工业使用水平。我们已经在有限公司Navinfo公司部署了它，作为自动构建自动驾驶系统高精地图的不可或缺的软件。&lt;/p&gt;
-&lt;p&gt;Enhancing Vectorized Map Perception with Historical Rasterized Maps（ECCV2024）&lt;/p&gt;
-&lt;p&gt;论文链接：https://arxiv.org/abs/2409.00620v1&lt;/p&gt;
-&lt;p&gt;开源链接：https://github.com/HXMap/HRMapNet&lt;/p&gt;
-&lt;p&gt;无图NOA以来，研究人员focus在端到端的在线矢量地图构建上，该技术在鸟瞰图（BEV）空间中实现，希望能够替代传统成本较高的离线高精（HD）地图。但是当前方法在恶劣环境下的准确性和鲁棒性很容易受限。为此本文提出了HRMapNet，其利用低成本的历史光栅化地图来增强在线矢量化地图的感知能力。历史光栅化地图来源于先前预测的结果，因此可以提供当前帧一定的先验信息。为了充分利用历史地图，作者设计了两个模块来增强BEV特征和地图元素的查询。对于BEV特征，本文设计了特征聚合模块，以编码图像和历史地图的特征。对于地图元素的查询，则设计了一个查询初始化模块，以赋予查询从历史地图中得到的先验信息。这两个模块对于在在线感知中利用地图信息至关重要。HRMapNet能够与大多数现有的在线矢量化地图感知方法集成。问鼎nuScenes和Argoverse 2 SOTA。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>智能驾驶功能版本节奏管理经验总结</title>
-      <link>//localhost:1313/posts/adas-feature-roadmap/</link>
-      <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/adas-feature-roadmap/</guid>
-      <description>&lt;h2 id=&#34;一版本节奏管理的目的与核心价值&#34;&gt;一、版本节奏管理的目的与核心价值&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;目标&lt;/strong&gt;：确保在 SOP（量产节点）/OTS（测试节点）前，核心功能稳定上线、策略迭代有序、用户体验持续提升；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;价值&lt;/strong&gt;：
-&lt;ul&gt;
-&lt;li&gt;支持跨模块协同（感知-规划-控制）；&lt;/li&gt;
-&lt;li&gt;管理功能从“可用”到“好用”的演进；&lt;/li&gt;
-&lt;li&gt;支撑量产目标达成，规避后期堆叠风险；&lt;/li&gt;
-&lt;li&gt;聚焦子目标分批验证，降低系统集成风险。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二功能模块节奏规划机制&#34;&gt;二、功能模块节奏规划机制&lt;/h2&gt;
-&lt;h3 id=&#34;1-版本节奏图的制定流程&#34;&gt;1. 版本节奏图的制定流程&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;步骤&lt;/th&gt;
-          &lt;th&gt;内容&lt;/th&gt;
+          &lt;th&gt;序号&lt;/th&gt;
+          &lt;th&gt;文档编号&lt;/th&gt;
+          &lt;th&gt;文档名&lt;/th&gt;
       &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
           &lt;td&gt;1&lt;/td&gt;
-          &lt;td&gt;明确主功能目标（如 NOP、APA）及上线场景目标&lt;/td&gt;
+          &lt;td&gt;GBT 20608-2006&lt;/td&gt;
+          &lt;td&gt;智能运输系统-自适应巡航控制系统-性能要求与检测方法&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;2&lt;/td&gt;
-          &lt;td&gt;拆解为 10~20 个子目标（可感知、可验证）&lt;/td&gt;
+          &lt;td&gt;ISO 15622-2018&lt;/td&gt;
+          &lt;td&gt;Intelligent Transport Systems-Adaptive Cruise Control&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;System-Performance Requirements and Test Procedures&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;3&lt;/td&gt;
-          &lt;td&gt;评估各子目标所依赖模块（感知/定位/规划/控制/交互）&lt;/td&gt;
+          &lt;td&gt;ISO 22179-2009&lt;/td&gt;
+          &lt;td&gt;Intelligent Transport Systems-Full Speed Range Adaptive Cruise&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Control (FSRA) Systems- Performance Requirements and Test&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Procedures&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;4&lt;/td&gt;
-          &lt;td&gt;与各模块 owner 共创投放节奏与资源计划&lt;/td&gt;
+          &lt;td&gt;SAE J2399&lt;/td&gt;
+          &lt;td&gt;Adaptive Cruise Control (ACC) Operating Characteristics and&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;User Interface&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;5&lt;/td&gt;
-          &lt;td&gt;制定阶段性投放图，标注每个阶段策略迭代目标与接口稳定性要求&lt;/td&gt;
+          &lt;td&gt;i-VISTA GM-MM-A0-2020&lt;/td&gt;
+          &lt;td&gt;中国智能汽车指数管理办法 2020 版&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;6&lt;/td&gt;
-          &lt;td&gt;工具绘图（Excel 甘特图、Jira Advanced Roadmap、Visio）&lt;/td&gt;
+          &lt;td&gt;i-VISTA SM-ADAS-ICAR-A0-2019&lt;/td&gt;
+          &lt;td&gt;智能行车辅助评价规程 2020 版&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;7&lt;/td&gt;
-          &lt;td&gt;周/月同步会议动态调整&lt;/td&gt;
+          &lt;td&gt;i-VISTA SM-ADAS-ICAT-A0-2019&lt;/td&gt;
+          &lt;td&gt;智能行车辅助试验规程 2020 版&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;8&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;中华人民共和国道路交通安全法&lt;/code&gt;&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img alt=&#34;版本节奏图&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/output.png&#34;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;示例图形： NOP版本迭代节奏图，描述每一版本功能合入&lt;br&gt;
-横坐标代表迭代版本（Alpha → Final），纵坐标代表功能子目标，颜色代表完成状态或优先级（灰色：未开始，橙色：已规划，金色：开发中，绿色：已完成）。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;三子功能验证目标的梳理与拆分逻辑&#34;&gt;三、子功能验证目标的梳理与拆分逻辑&lt;/h2&gt;
-&lt;h3 id=&#34;以-nopnavigate-on-pilot为例&#34;&gt;以 NOP（Navigate on Pilot）为例：&lt;/h3&gt;
+&lt;h2 id=&#34;4-名词解释&#34;&gt;4. 名词解释&lt;/h2&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
-          &lt;th&gt;主功能&lt;/th&gt;
-          &lt;th&gt;子功能示例&lt;/th&gt;
-          &lt;th&gt;用户价值&lt;/th&gt;
+          &lt;th&gt;序号&lt;/th&gt;
+          &lt;th&gt;缩写&lt;/th&gt;
+          &lt;th&gt;全称&lt;/th&gt;
+          &lt;th&gt;注释&lt;/th&gt;
       &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
-          &lt;td&gt;高速自主巡航&lt;/td&gt;
-          &lt;td&gt;保持车道行驶&lt;/td&gt;
-          &lt;td&gt;提供舒适稳态巡航体验&lt;/td&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;ACC&lt;/td&gt;
+          &lt;td&gt;Adaptive Cruise Control&lt;/td&gt;
+          &lt;td&gt;自适应巡航控制&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;变道触发判断&lt;/td&gt;
-          &lt;td&gt;前车慢、旁车安全&lt;/td&gt;
-          &lt;td&gt;提高效率&lt;/td&gt;
+          &lt;td&gt;2&lt;/td&gt;
+          &lt;td&gt;Stop&amp;amp;Go&lt;/td&gt;
+          &lt;td&gt;Stop and Go&lt;/td&gt;
+          &lt;td&gt;自动启停&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;自动变道执行&lt;/td&gt;
-          &lt;td&gt;目标轨迹稳定，控制平顺&lt;/td&gt;
-          &lt;td&gt;增强信任感&lt;/td&gt;
+          &lt;td&gt;3&lt;/td&gt;
+          &lt;td&gt;Override&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;超驰&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;入口识别与汇入&lt;/td&gt;
-          &lt;td&gt;场景识别准确，决策合理&lt;/td&gt;
-          &lt;td&gt;完成复杂融合任务&lt;/td&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;ODC&lt;/td&gt;
+          &lt;td&gt;Operational Design Condition&lt;/td&gt;
+          &lt;td&gt;运行设计条件&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;出匝道与导航联动&lt;/td&gt;
-          &lt;td&gt;与导航结构联动决策&lt;/td&gt;
-          &lt;td&gt;实现端到端任务闭环&lt;/td&gt;
+          &lt;td&gt;5&lt;/td&gt;
+          &lt;td&gt;HMI&lt;/td&gt;
+          &lt;td&gt;Human-Machine Interface&lt;/td&gt;
+          &lt;td&gt;人机交互界面&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;6&lt;/td&gt;
+          &lt;td&gt;TTC&lt;/td&gt;
+          &lt;td&gt;Time To Collision&lt;/td&gt;
+          &lt;td&gt;碰撞时间&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;7&lt;/td&gt;
+          &lt;td&gt;LCC&lt;/td&gt;
+          &lt;td&gt;Lane Centering Control&lt;/td&gt;
+          &lt;td&gt;车道居中辅助&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;8&lt;/td&gt;
+          &lt;td&gt;NP&lt;/td&gt;
+          &lt;td&gt;Nio Pilot&lt;/td&gt;
+          &lt;td&gt;包括highway pilot、拥堵自动辅助驾驶traffic jam pilot&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;9&lt;/td&gt;
+          &lt;td&gt;NOP&lt;/td&gt;
+          &lt;td&gt;Navigation on Pilot&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;增强车道居中辅助&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;10&lt;/td&gt;
+          &lt;td&gt;NOP+&lt;/td&gt;
+          &lt;td&gt;Navigation on Pilot+&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;全域领航辅助&lt;/strong&gt;&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;子功能编号&lt;/th&gt;
-          &lt;th&gt;子功能目标&lt;/th&gt;
-          &lt;th&gt;依赖模块&lt;/th&gt;
-          &lt;th&gt;验证点&lt;/th&gt;
-          &lt;th&gt;所属阶段&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-01&lt;/td&gt;
-          &lt;td&gt;车道线保持LKA&lt;/td&gt;
-          &lt;td&gt;感知 / 控制&lt;/td&gt;
-          &lt;td&gt;横向偏差 &amp;lt; 0.3m，控制稳定无抖动&lt;/td&gt;
-          &lt;td&gt;Alpha&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-02&lt;/td&gt;
-          &lt;td&gt;前车跟随控制ACC&lt;/td&gt;
-          &lt;td&gt;感知 / 控制&lt;/td&gt;
-          &lt;td&gt;跟车时距控制在安全区间（1~2s）&lt;/td&gt;
-          &lt;td&gt;Alpha&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-03&lt;/td&gt;
-          &lt;td&gt;自动变道触发判断&lt;/td&gt;
-          &lt;td&gt;感知 / 规划&lt;/td&gt;
-          &lt;td&gt;正确识别变道意图与安全空隙&lt;/td&gt;
-          &lt;td&gt;Beta&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-04&lt;/td&gt;
-          &lt;td&gt;自动变道轨迹生成&lt;/td&gt;
-          &lt;td&gt;规划 / 控制&lt;/td&gt;
-          &lt;td&gt;轨迹无切换突变，控制平滑&lt;/td&gt;
-          &lt;td&gt;Beta&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-05&lt;/td&gt;
-          &lt;td&gt;变道后轨迹融合&lt;/td&gt;
-          &lt;td&gt;控制&lt;/td&gt;
-          &lt;td&gt;跟主车道轨迹融合自然，无震荡&lt;/td&gt;
-          &lt;td&gt;Beta&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-06&lt;/td&gt;
-          &lt;td&gt;出口识别&lt;/td&gt;
-          &lt;td&gt;感知 / 定位&lt;/td&gt;
-          &lt;td&gt;能提前100m以上识别正确匝道口&lt;/td&gt;
-          &lt;td&gt;Beta&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-07&lt;/td&gt;
-          &lt;td&gt;匝道汇入识别&lt;/td&gt;
-          &lt;td&gt;感知 / 定位&lt;/td&gt;
-          &lt;td&gt;能判断主路车流情况，择机切入&lt;/td&gt;
-          &lt;td&gt;Gamma&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-08&lt;/td&gt;
-          &lt;td&gt;与导航结构联动&lt;/td&gt;
-          &lt;td&gt;交互 / 规划&lt;/td&gt;
-          &lt;td&gt;能正确匹配导航路径并触发控制动作&lt;/td&gt;
-          &lt;td&gt;Gamma&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-09&lt;/td&gt;
-          &lt;td&gt;弯道曲率自适应&lt;/td&gt;
-          &lt;td&gt;感知 / 控制&lt;/td&gt;
-          &lt;td&gt;曲率大时减速及时，控制无甩尾&lt;/td&gt;
-          &lt;td&gt;Gamma&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;NOP-10&lt;/td&gt;
-          &lt;td&gt;用户手动变道提示策略&lt;/td&gt;
-          &lt;td&gt;交互 / 规划&lt;/td&gt;
-          &lt;td&gt;手动变道引导提示及时、易理解&lt;/td&gt;
-          &lt;td&gt;Final&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;拆分原则&#34;&gt;拆分原则：&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;验证点清晰&lt;/strong&gt;：每个子目标需能单独测试；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;功能依赖优先级&lt;/strong&gt;：有些功能 是其他功能的基础依赖，必须先上线&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;依赖模块最小化&lt;/strong&gt;：优先推进感知、定位等前置模块；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;策略难度可控&lt;/strong&gt;：先上线“安全可用”，再迭代“体验更佳”。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;功能依赖&#34;&gt;功能依赖：&lt;/h3&gt;
-&lt;p&gt;比如车道保持LKA是所有横向控制的基础，ACC是所有纵向跟车策略的基础，同时功能成熟度高，测试覆盖充分，风险&amp;amp;联动复杂度小，因此在Alpha版本实现，优先投放；&lt;br&gt;
-变道触发判断是所有变道策略的起点，先于规划于执行，并且只生成变道请求不直接控制，功能成熟度中等， 联动复杂度低，建议beta版本上线；&lt;br&gt;
-出口检测是所有导航联动的前提，必须先于导航联动上线。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>智能驾驶功能开发中的典型问题汇总</title>
-      <link>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</link>
-      <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/</guid>
-      <description>&lt;p&gt;以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;一变道类问题nop--noa&#34;&gt;一、变道类问题（NOP / NOA）&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;变道轨迹抖动 / 折线过多，影响车辆平顺性&lt;/li&gt;
-&lt;li&gt;动作触发延迟，导致错过变道时机&lt;/li&gt;
-&lt;li&gt;插队判断错误，未能正确识别目标车道间距&lt;/li&gt;
-&lt;li&gt;导航目标车道识别偏差，影响入口/出口变道&lt;/li&gt;
-&lt;li&gt;自主变道成功后未正确恢复至原始路径&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二泊车类问题apa&#34;&gt;二、泊车类问题（APA）&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;泊车位识别偏移，车辆偏离泊车线&lt;/li&gt;
-&lt;li&gt;倒车入位时轨迹溢出安全范围&lt;/li&gt;
-&lt;li&gt;APA 识别过程误将墙面、栏杆识别为车位&lt;/li&gt;
-&lt;li&gt;泊车起始位置不合理，导致 APA 无法生成可行轨迹&lt;/li&gt;
-&lt;li&gt;驻车后未触发自动切换 P 挡 / 驻车制动状态异常&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;三跟车类问题acc--tja&#34;&gt;三、跟车类问题（ACC / TJA）&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;前车减速响应延迟，跟车距离拉近过快&lt;/li&gt;
-&lt;li&gt;误判静止物体为运动目标导致急刹&lt;/li&gt;
-&lt;li&gt;在拥堵工况中频繁启停，舒适性差&lt;/li&gt;
-&lt;li&gt;跟车目标丢失时未及时降级退出 ACC 状态&lt;/li&gt;
-&lt;li&gt;默认加速度 / 跟车间距配置过大或过小，体验不一致&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;四横纵向控制类问题lka--planning&#34;&gt;四、横纵向控制类问题（LKA / Planning）&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;LKA 中车辆偏离车道线但未及时介入&lt;/li&gt;
-&lt;li&gt;弯道中曲率变化过快，导致控制器震荡&lt;/li&gt;
-&lt;li&gt;轨迹规划不连续，目标点抖动&lt;/li&gt;
-&lt;li&gt;控制指令变化陡峭，引发急转或急加速&lt;/li&gt;
-&lt;li&gt;转向指令与当前车速不匹配，导致过弯困难&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;五感知--状态识别类问题&#34;&gt;五、感知 &amp;amp; 状态识别类问题&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;静态障碍识别误报，影响轨迹生成&lt;/li&gt;
-&lt;li&gt;交通灯状态识别错误，导致刹停失败&lt;/li&gt;
-&lt;li&gt;车道线检测置信度低，影响路径规划&lt;/li&gt;
-&lt;li&gt;车辆定位误差大于可接受范围（&amp;gt; 0.5m）&lt;/li&gt;
-&lt;li&gt;上下匝道判断逻辑错误，导致路径漂移&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;六模块接口--策略交互类问题&#34;&gt;六、模块接口 / 策略交互类问题&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;感知与规划模块的坐标系不一致&lt;/li&gt;
-&lt;li&gt;置信度阈值设置不合理，导致过早/过晚触发切换&lt;/li&gt;
-&lt;li&gt;策略端参数配置未与实际功能同步（如最大变道时间）&lt;/li&gt;
-&lt;li&gt;轨迹下发频率与控制器采样周期不匹配&lt;/li&gt;
-&lt;li&gt;模块状态切换条件不一致，影响降级退出流程&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;七用户体验--非功能性问题&#34;&gt;七、用户体验 / 非功能性问题&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;变道过程中方向盘突然介入，造成“吓人”体验&lt;/li&gt;
-&lt;li&gt;倒车过程中音响提示与车速不一致&lt;/li&gt;
-&lt;li&gt;自动泊车未显示进度/状态信息，缺乏可感知反馈&lt;/li&gt;
-&lt;li&gt;能力触发门槛过高，用户难以体验完整流程&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    <item>
-      <title>需求分析与功能设计</title>
-      <link>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</link>
-      <pubDate>Tue, 21 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/</guid>
-      <description>&lt;p&gt;基于用户体验目标与典型使用场景，对需求进行逐步细化，最终转化为可实现的功能设计。&lt;/p&gt;
-&lt;h3 id=&#34;以nop和apa为例&#34;&gt;以NOP和APA为例&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;NOP(Navigation On Pilot)
-&lt;ul&gt;
-&lt;li&gt;功能目标：高速场景下的智能导航驾驶&lt;/li&gt;
-&lt;li&gt;上线场景（典型使用场景）：
-&lt;ul&gt;
-&lt;li&gt;高速主路&lt;/li&gt;
-&lt;li&gt;自动变道（超车 / 躲避慢车）&lt;/li&gt;
-&lt;li&gt;主路汇入匝道&lt;/li&gt;
-&lt;li&gt;匝道驶出并与导航交互&lt;/li&gt;
-&lt;li&gt;弯道曲率适配控制&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;NOP（Navigate on Pilot）功能需求与设计拆解表&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;上线场景&lt;/th&gt;
-          &lt;th&gt;功能需求（What）&lt;/th&gt;
-          &lt;th&gt;子需求（细化 What）&lt;/th&gt;
-          &lt;th&gt;所属模块&lt;/th&gt;
-          &lt;th&gt;功能设计（How）&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;高速主路巡航&lt;/td&gt;
-          &lt;td&gt;保持车辆在当前车道稳定巡航&lt;/td&gt;
-          &lt;td&gt;识别清晰车道线，维持居中行驶&lt;/td&gt;
-          &lt;td&gt;感知 / 控制&lt;/td&gt;
-          &lt;td&gt;车道线识别 + 轨迹偏移计算 + PID 控制器&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;抑制车道线虚假识别干扰&lt;/td&gt;
-          &lt;td&gt;感知&lt;/td&gt;
-          &lt;td&gt;多源融合 + 稳定性判别机制&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;主路跟车&lt;/td&gt;
-          &lt;td&gt;前方有车时能稳定跟随并保持安全车距&lt;/td&gt;
-          &lt;td&gt;实时识别前车位置与速度&lt;/td&gt;
-          &lt;td&gt;感知&lt;/td&gt;
-          &lt;td&gt;雷达+视觉融合检测，计算相对距离&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;动态调整跟车距离与加速度&lt;/td&gt;
-          &lt;td&gt;控制 / 策略&lt;/td&gt;
-          &lt;td&gt;ACC控制策略 + 自适应速度规划&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;自动变道（超车/避障）&lt;/td&gt;
-          &lt;td&gt;根据策略与环境条件安全触发并完成变道动作&lt;/td&gt;
-          &lt;td&gt;判断变道时机（前车慢、侧方可变道）&lt;/td&gt;
-          &lt;td&gt;感知 / 策略&lt;/td&gt;
-          &lt;td&gt;速度判断 + 安全空隙评估模块&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;规划变道路径并执行横向平滑过渡&lt;/td&gt;
-          &lt;td&gt;规划 / 控制&lt;/td&gt;
-          &lt;td&gt;五阶轨迹规划 + LQR横向控制器&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;主路汇入匝道&lt;/td&gt;
-          &lt;td&gt;在即将进入匝道前自动切入合适车道&lt;/td&gt;
-          &lt;td&gt;提前识别出口与汇入点&lt;/td&gt;
-          &lt;td&gt;定位 / 感知&lt;/td&gt;
-          &lt;td&gt;HD地图出口匹配 + 定位融合模块&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;生成合理汇入路径并协调控制器执行&lt;/td&gt;
-          &lt;td&gt;规划 / 控制&lt;/td&gt;
-          &lt;td&gt;插入轨迹规划 + 速度过渡控制&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;匝道驶出与导航联动&lt;/td&gt;
-          &lt;td&gt;出高速并进入本地路段，顺利切换控制与路线逻辑&lt;/td&gt;
-          &lt;td&gt;出口匹配导航并生成分岔路线决策&lt;/td&gt;
-          &lt;td&gt;感知 / 交互&lt;/td&gt;
-          &lt;td&gt;导航路径同步模块 + 分岔点策略决策&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;平滑完成车道切换并保持目标路线&lt;/td&gt;
-          &lt;td&gt;控制 / 状态机&lt;/td&gt;
-          &lt;td&gt;状态迁移控制逻辑 + 轨迹融合&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;弯道曲率适配控制&lt;/td&gt;
-          &lt;td&gt;根据道路曲率调整车速与横向控制，保证安全与舒适性&lt;/td&gt;
-          &lt;td&gt;实时感知路段曲率，并动态控制转向&lt;/td&gt;
-          &lt;td&gt;感知 / 控制&lt;/td&gt;
-          &lt;td&gt;曲率计算模块 + 控制器参数调节&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;弯道内速度限制及横向加速度限制策略&lt;/td&gt;
-          &lt;td&gt;策略 / 控制&lt;/td&gt;
-          &lt;td&gt;最大侧向加速度阈值设定 + 速度规划器&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;apa&#34;&gt;APA&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;APA（Auto Parkign Assist）
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>模块分工与接口定义表</title>
-      <link>//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</link>
-      <pubDate>Sun, 21 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/</guid>
-      <description>&lt;h1 id=&#34;模块通信接口定义文档感知--规划--控制&#34;&gt;模块通信接口定义文档（感知 / 规划 / 控制）&lt;/h1&gt;
-&lt;p&gt;本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。&lt;/p&gt;
-&lt;h1 id=&#34;模块分工与接口定义表感知--规划--控制&#34;&gt;模块分工与接口定义表（感知 / 规划 / 控制）&lt;/h1&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;模块&lt;/th&gt;
-          &lt;th&gt;主要职责&lt;/th&gt;
-          &lt;th&gt;输入接口&lt;/th&gt;
-          &lt;th&gt;输出接口&lt;/th&gt;
-          &lt;th&gt;依赖参数 / 配置&lt;/th&gt;
-          &lt;th&gt;典型异常情况&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;感知模块&lt;/td&gt;
-          &lt;td&gt;提供环境建图、障碍物检测、车道线识别等基础信息&lt;/td&gt;
-          &lt;td&gt;摄像头、雷达、超声波、IMU 原始数据&lt;/td&gt;
-          &lt;td&gt;- 障碍物列表&lt;!-- raw HTML omitted --&gt;- 车道线模型&lt;!-- raw HTML omitted --&gt;- 可通行区域Mask&lt;!-- raw HTML omitted --&gt;- 动态物体预测轨迹&lt;/td&gt;
-          &lt;td&gt;感知置信度阈值&lt;!-- raw HTML omitted --&gt;障碍物融合策略&lt;/td&gt;
-          &lt;td&gt;静态物体误识别&lt;!-- raw HTML omitted --&gt;车道线断裂&lt;!-- raw HTML omitted --&gt;预测轨迹跳变&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;规划模块&lt;/td&gt;
-          &lt;td&gt;基于感知结果和导航目标，生成轨迹并动态调整行为策略&lt;/td&gt;
-          &lt;td&gt;- 当前车辆状态&lt;!-- raw HTML omitted --&gt;- 障碍物列表&lt;!-- raw HTML omitted --&gt;- 可通行区域&lt;!-- raw HTML omitted --&gt;- 全局路径&lt;/td&gt;
-          &lt;td&gt;- 局部轨迹（轨迹点序列）&lt;!-- raw HTML omitted --&gt;- 行为决策（变道 / 跟车 / 停止）&lt;/td&gt;
-          &lt;td&gt;最远预测距离&lt;!-- raw HTML omitted --&gt;轨迹重规划频率&lt;!-- raw HTML omitted --&gt;变道策略参数&lt;/td&gt;
-          &lt;td&gt;轨迹折线过多&lt;!-- raw HTML omitted --&gt;变道触发不合理&lt;!-- raw HTML omitted --&gt;变道后不恢复原车道&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;控制模块&lt;/td&gt;
-          &lt;td&gt;接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行&lt;/td&gt;
-          &lt;td&gt;- 规划轨迹&lt;!-- raw HTML omitted --&gt;- 当前车速 / 横摆角&lt;!-- raw HTML omitted --&gt;- 控制目标点&lt;/td&gt;
-          &lt;td&gt;- 方向盘角度&lt;!-- raw HTML omitted --&gt;- 加速度 / 油门开度&lt;!-- raw HTML omitted --&gt;- 制动指令&lt;/td&gt;
-          &lt;td&gt;控制频率&lt;!-- raw HTML omitted --&gt;控制器类型（PID/MPC）&lt;!-- raw HTML omitted --&gt;跟踪误差阈值&lt;/td&gt;
-          &lt;td&gt;指令跳变&lt;!-- raw HTML omitted --&gt;横向控制震荡&lt;!-- raw HTML omitted --&gt;刹车响应滞后&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;1-模块功能分工&#34;&gt;1. 模块功能分工&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;模块&lt;/th&gt;
-          &lt;th&gt;主要职责&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;感知模块&lt;/td&gt;
-          &lt;td&gt;环境建图、车道线识别、障碍物检测与跟踪&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;规划模块&lt;/td&gt;
-          &lt;td&gt;行为决策（如变道、跟车）、轨迹生成&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;控制模块&lt;/td&gt;
-          &lt;td&gt;控制命令输出（转向、加减速），完成车辆运动控制&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;2-模块间通信接口定义&#34;&gt;2. 模块间通信接口定义&lt;/h2&gt;
-&lt;h3 id=&#34;-21-感知--规划&#34;&gt;🔹 2.1 感知 → 规划&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;接口名称&lt;/th&gt;
-          &lt;th&gt;数据类型&lt;/th&gt;
-          &lt;th&gt;发布频率&lt;/th&gt;
-          &lt;th&gt;数据字段示例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/perception/obstacles&lt;/td&gt;
-          &lt;td&gt;ObstacleArray&lt;/td&gt;
-          &lt;td&gt;20 Hz&lt;/td&gt;
-          &lt;td&gt;id, position(x,y), velocity, type, confidence&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/perception/lane&lt;/td&gt;
-          &lt;td&gt;LaneModel&lt;/td&gt;
-          &lt;td&gt;20 Hz&lt;/td&gt;
-          &lt;td&gt;lane_id, coeffs(a,b,c), confidence&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/perception/area&lt;/td&gt;
-          &lt;td&gt;DrivableArea&lt;/td&gt;
-          &lt;td&gt;10 Hz&lt;/td&gt;
-          &lt;td&gt;polygon_mask, timestamp&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;-22-规划--控制&#34;&gt;🔹 2.2 规划 → 控制&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;接口名称&lt;/th&gt;
-          &lt;th&gt;数据类型&lt;/th&gt;
-          &lt;th&gt;发布频率&lt;/th&gt;
-          &lt;th&gt;数据字段示例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/planning/trajectory&lt;/td&gt;
-          &lt;td&gt;Trajectory&lt;/td&gt;
-          &lt;td&gt;50 Hz&lt;/td&gt;
-          &lt;td&gt;points[x,y,v,acc,yaw], timestamp&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/planning/behavior&lt;/td&gt;
-          &lt;td&gt;BehaviorState&lt;/td&gt;
-          &lt;td&gt;10 Hz&lt;/td&gt;
-          &lt;td&gt;state_type (lane_following, lane_change, stop), duration&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;-23-感知--控制直接辅助控制冗余通道&#34;&gt;🔹 2.3 感知 → 控制（直接辅助控制冗余通道）&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;接口名称&lt;/th&gt;
-          &lt;th&gt;数据类型&lt;/th&gt;
-          &lt;th&gt;发布频率&lt;/th&gt;
-          &lt;th&gt;说明&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/perception/yaw_rate&lt;/td&gt;
-          &lt;td&gt;Float32&lt;/td&gt;
-          &lt;td&gt;100 Hz&lt;/td&gt;
-          &lt;td&gt;高频率反馈用于横向控制辅助&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;/imu/data&lt;/td&gt;
-          &lt;td&gt;IMUData&lt;/td&gt;
-          &lt;td&gt;100 Hz&lt;/td&gt;
-          &lt;td&gt;惯性导航传感器数据&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;3-配置参数依赖项&#34;&gt;3. 配置参数依赖项&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;模块&lt;/th&gt;
-          &lt;th&gt;参数名称&lt;/th&gt;
-          &lt;th&gt;描述&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;感知&lt;/td&gt;
-          &lt;td&gt;lane_conf_threshold&lt;/td&gt;
-          &lt;td&gt;车道线识别的最低置信度&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;规划&lt;/td&gt;
-          &lt;td&gt;lane_change_timeout&lt;/td&gt;
-          &lt;td&gt;变道超时时间设置&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;控制&lt;/td&gt;
-          &lt;td&gt;lateral_ctrl_gain&lt;/td&gt;
-          &lt;td&gt;横向 PID 控制器增益参数&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;4-常见接口问题与调试建议&#34;&gt;4. 常见接口问题与调试建议&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;问题描述&lt;/th&gt;
-          &lt;th&gt;可能原因&lt;/th&gt;
-          &lt;th&gt;调试建议&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;轨迹点跳变 / 抖动&lt;/td&gt;
-          &lt;td&gt;感知误差大，置信度低&lt;/td&gt;
-          &lt;td&gt;检查感知数据时间同步与滤波器配置&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;控制器响应滞后&lt;/td&gt;
-          &lt;td&gt;轨迹点更新频率低&lt;/td&gt;
-          &lt;td&gt;提高轨迹发布频率，调整控制器采样率&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;行为状态误判（频繁进入lane_change）&lt;/td&gt;
-          &lt;td&gt;规则配置阈值过低 / 误判插队&lt;/td&gt;
-          &lt;td&gt;优化状态机转移条件，结合多维输入决策&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;5-接口格式示例ros-message&#34;&gt;5. 接口格式示例（ROS Message）&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Trajectory.msg&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Header header
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TrajectoryPoint[] points
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# TrajectoryPoint.msg&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 x
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 v
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 acc
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;float64 yaw
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
-&lt;p&gt;本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。&lt;/p&gt;</description>
+&lt;h2 id=&#34;5-子功能介绍&#34;&gt;5. 子功能介绍&lt;/h2&gt;
+&lt;p&gt;自动辅助驾驶Pilot包括&lt;strong&gt;高速自动辅助驾驶（highway pilot）&lt;/strong&gt;、&lt;strong&gt;拥堵自动辅助驾驶（traffic jam pilot)两种功能,&lt;/strong&gt; 主要适用于车道线清晰及有进入限制的封闭道路上使用，譬如高速和高架的主路及拥堵路段，&lt;strong&gt;且在本车道内行驶，不会换道变道行驶&lt;/strong&gt;。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成 | </title>
 <meta name="keywords" content="四叉树, 占用图, 凸包, 路径规划, 局部避障">
 <meta name="description" content="详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/posts/quadtree_safearea/">
+<link rel="canonical" href="/posts/quadtree_safearea/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/quadtree_safearea/">
+<link rel="alternate" hreflang="en" href="/posts/quadtree_safearea/">
 <noscript>
     <style>
         #theme-toggle,
@@ -55,7 +55,75 @@
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/posts/quadtree_safearea/">
+  <meta property="og:title" content="路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成">
+  <meta property="og:description" content="详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-16T00:00:00+00:00">
+    <meta property="article:tag" content="四叉树">
+    <meta property="article:tag" content="占用图">
+    <meta property="article:tag" content="凸包">
+    <meta property="article:tag" content="路径规划">
+    <meta property="article:tag" content="局部避障">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成">
+<meta name="twitter:description" content="详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成",
+      "item": "/posts/quadtree_safearea/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成",
+  "name": "路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成",
+  "description": "详解如何从占用图Occupancy Map生成QuadTree结构，并构建安全走廊区域用于机器人路径规划。",
+  "keywords": [
+    "四叉树", "占用图", "凸包", "路径规划", "局部避障"
+  ],
+  "articleBody": "在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。这里我采用 四叉树结构（QuadTree） 对占用图进行递归划分，再对空闲区域构建 凸包（Convex Hull），生成**连接图（Connectivity Graph）**从而生成可用于路径规划的安全走廊（Safe Corridor）。\n一、构建思路概览 参考了项目中 connective_quadtree.py 和 corridor_algorithm.py 中的实现，思路如下：\n1. 输入原始占用图（Occupancy Grid） 2. 使用 QuadTreeNode 递归划分空间, 根据RGB颜色判断： - 若区域为空（全白[255,255,255]或者接近全白）：标记为“自由区域” - 若包含障碍（RGB值大于白色）：继续细分（最多分到 min_size） - 黑色（[0,0,0]）表示障碍物 3. 收集所有自由叶子节点作为 Safe Area 候选 4. 为每个叶子节点生成其凸包边界 5. 输出凸包用于路径规划和约束构建 二、QuadTree 类详解（connective_quadtree.py） Quadtree: Quadtree 是一种树形数据结构，可以用于将二维空间递归划分成更小的矩形区域（占用和空闲区域）， 从整张地图作为根节点开始分裂出四个子区域，每个子区域根据RGB值判断是否有障碍物。 基于原始图像的RGB value来划分 树结构 QuadTree 类\n主要负责管理整个四叉树结构： root: 根节点 leaf_nodes: 所有自由（无障碍物）的叶节点列表 max_depth: 树的最大深度 QuadTreeNode 类\n表示四叉树中的单个节点： values: 节点对应的栅格值(RGB值比如[0,0,0])矩阵 _ru_indices: 节点在原始矩阵中的右上角索引 (i, j) id_sequence: 节点的ID序列，表示从根到该节点的路径 _neighbors: 节点的邻居 (左, 右, 上, 下) _children: 子节点列表 state: 节点状态 (FREE, MIX, FULL) 节点状态：\nFREE: 完全无障碍的区域， MIX: 包含障碍物和自由空间的混合区域，被作为下一个根节点继续分裂出四个子区域；一直划分到： 区域小于min_cell_size， 或者树达到最大深度max_depth FULL: 已达到最大深度的节点 分割过程：\n判断是否有障碍物 有障碍物，继续分割， 无障碍物，作为叶节点 递归处理每个子区域，直到达到最大深度或者子区域小于min_cell_size 收集所有FREE的叶节点 初始化： QuadTree类管理四叉树状态、更新地图、生成凸包、安全区域\nclass QuadTree: def __init__(self, value_matrix: np.ndarray, min_cell_size: int, num_splits:int=2): self.root = QuadTreeNode.init_root(value_matrix, self.max_depth, auto_split=True) self.leaf_nodes : list[QuadTreeNode] = [] self._collect_free_leaf_nodes(self.root) value_matrix: 占用图（二维矩阵），包含Occupancy grid的值 min_cell_size: 四叉树划分的最小区域 numb_split : 每个维度的分割次数，默认2 root 自动调用 QuadTreeNode.split() 对有障碍的区域递归分割 从占用栅格地图生成四叉树：\nquadtree = QuadTree(occupancy_grid, min_cell_size=5) 生成convex hull 什么是“凸包”？ 给定一组二维点，凸包就是 把所有点包围起来的最小凸多边形 就像用一根橡皮筋套住一堆钉子，松手后形成的边界线\n这里用SciPy 库中的 ConvexHull 算法，它基于 QuickHull 算法构建凸包\nhull = ConvexHull(points) 先确定两个距离最大的点，连接后构成线。然后寻找离线的最远的点，构成三角形。以此类推，向外快速扩展，直到所有点都在凸包内。\nquickhull： https://blog.csdn.net/shungry/article/details/104342366\n** 创建凸包函数** ：\n目标是生成安全区域凸包，即从所有 leaf node 中提取真实的可用点，然后对它们计算凸包 这里_create_convex_hulls 函数 提取了空闲点，针对free叶节点生成凸包 把这些点的局部坐标 [i, j] 转为全局地图上的 [y+i, x+j] 把这些点喂给 ConvexHull()，求出一个凸多边形边界线，将这些空闲点“包起来” 所以生成的是指定区域中安全区域的凸包 它是针对 每个叶子节点（即子块）分别做的 最终得到的是 多个小块区域中每块空闲区域的边界 from scipy.spatial import ConvexHull import numpy as np def _create_convex_hulls(self): \"\"\"Create convex hulls for leaf nodes. This method creates convex hulls for all free leaf nodes in the quadtree. The convex hulls are stored in the self.convex_hulls dictionary with the node's id_sequence as the key. \"\"\" self.convex_hulls = {} # 确保字典被初始化 for leaf_node in self.leaf_nodes: # 使用节点的正确属性获取顶点 vertices = np.array(leaf_node.vertices) # 检查顶点是否足够构成凸包（至少3个点） if len(vertices) \u003e= 3: # 计算凸包 hull = ConvexHull(vertices) # 存储凸包，使用节点的id_sequence作为键 self.convex_hulls[leaf_node.id_sequence] = hull else: # 如果点不足以形成凸包，可以跳过或记录警告 print(f\"Warning: Node {leaf_node.id_sequence} has insufficient vertices for convex hull\") subgrid_size 是当前四叉树节点对应子区域的边长。（比如64x64的格子，分裂三次，子区域就是8x8， 因为64/（2**3） = 8）\n更新四叉树 选择更新策略 局部更新 选择节点 直接筛选叶节点（当 叶节点少 或者障碍物多） 递归查找（叶节点多 或者障碍物少） 选择更新方式 基于占用地图更新 基于几何位置更新 更新凸包 全局更新 更新凸包 收集ref path上的节点（collect_tree_nodes_on_path） 转换参考路径到占用地图坐标 筛选接近路径的叶节点 转换节点信息回到原始几何坐标系 动态更新与规划 (dynamic_update_and_plan)\n遍历时间步长 更新地图 (update_quadtree_with_obstacle) 更新安全区域 (_create_convex_hulls) 调用规划器 (planner.plan) 执行单步动作 (robot.execute) 递归收集自由区域： def _collect_free_leaf_nodes(self, node: \"QuadTreeNode\"): if node.is_leaf and node.state == TreeNodeState.FREE: self.leaf_nodes.append(node) else: for child in node.children: self._collect_free_leaf_nodes(child) 只收集纯白区域（全为自由）的叶子节点作为路径候选区域。\n遇到动态障碍物更新局部地图 只更新靠近动态障碍物的节点：对障碍物所在区域进行分裂或者合并，其他地图部分保持不变 “is_node_affected”函数 用来判断某个四叉树节点是否被动态障碍物“影响”或“覆盖”\n只要障碍物的中心点在“节点的边界 + 半径扩展区域”内，就认为该节点被影响。\n节点是一个矩形区域\n把这个矩形向外扩张 obstacle_radius\n看障碍物的中心 (x, y) 有没有落在这个扩张后的区域内\nx_min - r \u003c= x \u003c= x_max + r and y_min - r \u003c= y \u003c= y_max + r def update_quadtree_with_obstacle(self, obstacle_position: tuple, obstacle_radius: float): def is_node_affected(node, obstacle_position, obstacle_radius): # Check if the node intersects with the obstacle's influence radius x_min, x_max, y_min, y_max = node.get_bounds() x, y = obstacle_position return ( x_min - obstacle_radius \u003c= x \u003c= x_max + obstacle_radius and y_min - obstacle_radius \u003c= y \u003c= y_max + obstacle_radius ) def recursive_update(node): if is_node_affected(node, obstacle_position, obstacle_radius): if not node.is_leaf(): # Recursively check children for child in node.children: recursive_update(child) else: # If it's a leaf node and affected, decide whether to split or mark as occupied if node.size \u003e self.min_cell_size: node.split() else: node.mark_occupied() # Mark the node as occupied elif node.is_leaf(): # Merge unaffected nodes if previously split node.merge() recursive_update(self.root) self._collect_free_leaf_nodes(self.root) 如果障碍物正好在两个路径中间？ 动态规划器需要重新规划局部路径 如果障碍物速度大于机器人？ 需要提前预测障碍物路径， 以及提高响应速度（通过缩短规划的窗口时间） 邻居节点关系更新：需要重新计算邻居节点（分裂、合并） # 邻居关系更新 def update_neighbors(node): \"\"\" Update the neighbor relationships for a given node. \"\"\" for neighbor in node.neighbors: if neighbor.is_leaf(): # Update neighbor relationship based on current structure neighbor.neighbors = [n for n in neighbor.get_adjacent_nodes()] 动态障碍更新convex hull： 更新地图：update_quadtree_with_obstacle() 更新安全区域凸包：_create_convex_hulls() 基于新的安全区域 convex hull 进行路径规划 基于最新空闲区域动态生成“可行走区域凸包” def dynamic_update_and_plan(self, obstacle_positions, time_horizon) 收集reference path 上的tree node 输出靠近路径的空闲区域块 找出所有靠近这条路径的 FREE 格子，把它们标记出来，给后续路径规划使用。 def collect_tree_nodes_on_path(self, reference_path: list[PathNode], height_occupancy: int, threshold: float, rescale_geo_occupancy: int, rescale_geo_inflated_occupancy:float): 与MPC集成 要将QuadTree生成的数据与MPC集成需要: 生成参考路径 使用QuadTree分析环境并提取安全区域 将安全区域作为MPC的约束条件 三、QuadTreeNode 如何判断状态？ QuadTreeNode具体区域块的状态、自主分裂、判断空闲/占用/边界\n@property def state(self) -\u003e TreeNodeState: if np.all(self.values \u003c 0.01): return TreeNodeState.FREE elif len(self.id_sequence) == self._max_depth: return TreeNodeState.FULL else: return TreeNodeState.MIX FREE: 纯白，无障碍的归为free状态 FULL: 不是纯白，但是已经到达最大深度，也记为有障碍物区域 MIX: 不是纯白，也不是最大深度，尚可继续划分 四、QuadTreeNode节点级别生成凸包用于安全区域 #节点级别凸包运算，返回的凸包列表可以直接用于路径规划、安全区域描述或导航约束。 def path_tree_nodes_convexhull(self, path_tree_nodes: dict[tuple, \"QuadTreeNode\"]): path_convex_hulls = [] for key, tn in path_tree_nodes.items(): vertices = np.array(tn.vertices) # Compute convex hull for transformed vertices hull = ConvexHull(tn.vertices) # Store convex hull along with transformed vertices in the dictionary path_convex_hulls.append(hull) return path_convex_hulls 然后update_Quadtree\nfor node in 当前的所有叶子节点: 提取对应新地图中的这块区域 new_subgrid if new_subgrid 有障碍物（值是 [0,0,0]）: if node 可以继续分裂: node.split() 替换掉原来的节点 else: 直接删掉这个叶子节点 else: 保持原样 在 corridor_algorithm.py 中，我们对自由节点生成凸包：\nfor leaf_node in self.leaf_nodes: points = np.array([[y, x], [y, x+size], [y+size, x+size], [y+size, x]]) hull = ConvexHull(points) self.convex_hulls.append(hull) 每个叶子节点四角为一组点，生成凸包用于边界描述。若多个凸包连续排列，可合并为更大的 Safe Corridor。\n五、可选增强：凸包与路径的交集过滤 reference_line = LineString(reference_cells_occupancy) for hull in self.convex_hulls: if Polygon(hull.points[hull.vertices]).intersects(reference_line): path_convex_hulls.append(hull) 该功能允许筛选出与路径相关的安全区域，用于构造 MPC 约束。\n六、小结与下一篇预告 这一部分完成了以下目标：\n输入占用图，构建四叉树结构； 识别自由空间，并生成其凸包； 可用于路径规划前的地图预处理和约束区域定义。 下一篇讲解如何合并多个 safe area 以简化规划图结构，并构造连接图（Connectivity Graph）用于强化路径连通性。\n",
+  "wordCount" : "680",
+  "inLanguage": "en",
+  "datePublished": "2025-05-16T00:00:00Z",
+  "dateModified": "2025-05-16T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/quadtree_safearea/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+
+
 </head>
 
 <body class="" id="top">
@@ -469,11 +537,11 @@
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="//localhost:1313/tags/%E5%9B%9B%E5%8F%89%E6%A0%91/">四叉树</a></li>
-      <li><a href="//localhost:1313/tags/%E5%8D%A0%E7%94%A8%E5%9B%BE/">占用图</a></li>
-      <li><a href="//localhost:1313/tags/%E5%87%B8%E5%8C%85/">凸包</a></li>
-      <li><a href="//localhost:1313/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/">路径规划</a></li>
-      <li><a href="//localhost:1313/tags/%E5%B1%80%E9%83%A8%E9%81%BF%E9%9A%9C/">局部避障</a></li>
+      <li><a href="/tags/%E5%9B%9B%E5%8F%89%E6%A0%91/">四叉树</a></li>
+      <li><a href="/tags/%E5%8D%A0%E7%94%A8%E5%9B%BE/">占用图</a></li>
+      <li><a href="/tags/%E5%87%B8%E5%8C%85/">凸包</a></li>
+      <li><a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/">路径规划</a></li>
+      <li><a href="/tags/%E5%B1%80%E9%83%A8%E9%81%BF%E9%9A%9C/">局部避障</a></li>
     </ul>
   </footer>
 </article>

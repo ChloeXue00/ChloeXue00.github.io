@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>自动驾驶 on </title>
-    <link>//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/</link>
+    <link>/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/</link>
     <description>Recent content in 自动驾驶 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Thu, 10 Apr 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>基于ResNet&#43;LSTM的端到端自动驾驶转向预测</title>
-      <link>//localhost:1313/posts/e2e-driving-resnet-lstm/</link>
+      <link>/posts/e2e-driving-resnet-lstm/</link>
       <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/e2e-driving-resnet-lstm/</guid>
+      <guid>/posts/e2e-driving-resnet-lstm/</guid>
       <description>&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;p&gt;本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。&lt;/p&gt;
 &lt;p&gt;此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。&lt;/p&gt;
@@ -23,7 +23,7 @@
 &lt;li&gt;&lt;strong&gt;LSTM 序列建模&lt;/strong&gt;：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;模型结构图&#34;&gt;模型结构图&lt;/h2&gt;
-&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;模型结构&#34; loading=&#34;lazy&#34; src=&#34;/images/model_diagram_v2.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;数据与预处理&#34;&gt;数据与预处理&lt;/h2&gt;
 &lt;p&gt;数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。&lt;/p&gt;
 &lt;ul&gt;
@@ -38,7 +38,7 @@
 &lt;h2 id=&#34;实验结果&#34;&gt;实验结果&lt;/h2&gt;
 &lt;p&gt;在测试集上，MSE 误差为 &lt;strong&gt;0.06&lt;/strong&gt;，对应角度误差约为 &lt;strong&gt;7°&lt;/strong&gt;。&lt;br&gt;
 模型在直线段表现稳定，在连续转弯段有一定预测延迟&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/loss_curve.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;loss_curve&#34; loading=&#34;lazy&#34; src=&#34;/images/loss_curve.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;关键代码片段&#34;&gt;关键代码片段：&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ResNetLSTMModel&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
@@ -57,10 +57,10 @@
 &lt;p&gt;为什么选择 ResNet 而不是简单 CNN：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>如何使用 C&#43;&#43; 编写一个 ROS 设备驱动节点</title>
-      <link>//localhost:1313/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
+      <title>如何使用 C&#43;&#43; 编写一个 ROS 节点</title>
+      <link>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
+      <guid>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
       <description>&lt;p&gt;通过本案例可以掌握：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如何使用 C++ 编写一个 ROS 设备驱动节点；&lt;/li&gt;
@@ -68,7 +68,7 @@
 &lt;li&gt;如何结合 rosbag 与 rqt_plot 分析传感器数据的稳定性；&lt;/li&gt;
 &lt;li&gt;为后续多传感器时间同步与融合（如 EKF）打下基础。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;-多传感器融合中的-ros-驱动开发实战案例&#34;&gt;🌐 多传感器融合中的 ROS 驱动开发实战案例&lt;/h1&gt;
+&lt;h1 id=&#34;多传感器融合中的-ros-驱动开发实战案例&#34;&gt;多传感器融合中的 ROS 驱动开发实战案例&lt;/h1&gt;
 &lt;p&gt;在自动驾驶系统中，IMU、GNSS 和雷达等传感器是实现环境感知和车辆定位的关键。本文以 ROS 框架为基础，讲解如何编写一个简单的传感器驱动节点，实现数据采集 → 解析 → 发布 → 可视化，并附带常见调试命令。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;1-项目结构&#34;&gt;1. 项目结构&lt;/h2&gt;
@@ -110,27 +110,6 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;src/imu_driver_node.cpp&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>LKA（车道保持辅助）功能设计</title>
-      <link>//localhost:1313/posts/lka_strategy/</link>
-      <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/lka_strategy/</guid>
-      <description>解析L2系统中LKA功能的子模块结构、控制策略、信号等内容</description>
-    </item>
-    <item>
-      <title>NOP（Navigate on Pilot）功能逻辑与子功能模块解析</title>
-      <link>//localhost:1313/posts/nop_strategy/</link>
-      <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/nop_strategy/</guid>
-      <description>系统梳理L2&#43;核心功能NOP的模块组成、控制逻辑与感知协同机制</description>
-    </item>
-    <item>
-      <title>ACC（自适应巡航控制）策略设计与问题集</title>
-      <link>//localhost:1313/posts/acc-strategy/</link>
-      <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/acc-strategy/</guid>
-      <description>解析L2/L2&#43;中的核心功能之一——ACC的策略设计、常见问题与测试要点</description>
     </item>
   </channel>
 </rss>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>DRL on </title>
-    <link>//localhost:1313/categories/drl/</link>
+    <link>/categories/drl/</link>
     <description>Recent content in DRL on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/categories/drl/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/categories/drl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DRL 常见算法对比</title>
-      <link>//localhost:1313/posts/drl-algorithm-comparison/</link>
+      <link>/posts/drl-algorithm-comparison/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/drl-algorithm-comparison/</guid>
+      <guid>/posts/drl-algorithm-comparison/</guid>
       <description>&lt;hr&gt;
 &lt;p&gt;深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。&lt;/p&gt;
 &lt;hr&gt;
@@ -67,9 +67,9 @@
     </item>
     <item>
       <title>DRL训练</title>
-      <link>//localhost:1313/posts/how-to-train-drl-model/</link>
+      <link>/posts/how-to-train-drl-model/</link>
       <pubDate>Fri, 02 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/how-to-train-drl-model/</guid>
+      <guid>/posts/how-to-train-drl-model/</guid>
       <description>&lt;p&gt;在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。&lt;/p&gt;
 &lt;p&gt;整个训练流程不是一行 &lt;code&gt;.fit()&lt;/code&gt; 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。&lt;/p&gt;
 &lt;hr&gt;
@@ -146,9 +146,9 @@
     </item>
     <item>
       <title>强化学习环境之 Gymnasium</title>
-      <link>//localhost:1313/posts/what-is-gymnasium/</link>
+      <link>/posts/what-is-gymnasium/</link>
       <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/what-is-gymnasium/</guid>
+      <guid>/posts/what-is-gymnasium/</guid>
       <description>&lt;p&gt;&lt;code&gt;Gymnasium&lt;/code&gt; 是 Python 中一个标准化的强化学习环境库（它是原始 &lt;code&gt;OpenAI Gym&lt;/code&gt; 的升级版）。它的作用是：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。&lt;/p&gt;&lt;/blockquote&gt;
@@ -182,10 +182,65 @@
 &lt;p&gt;你给环境的输入是一个“动作”，比如：&lt;/p&gt;</description>
     </item>
     <item>
-      <title>强化学习的状态空间和动作空间是什么</title>
-      <link>//localhost:1313/posts/state-action-space/</link>
+      <title>如何使用 C&#43;&#43; 编写一个 ROS 节点</title>
+      <link>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/state-action-space/</guid>
+      <guid>/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/</guid>
+      <description>&lt;p&gt;通过本案例可以掌握：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何使用 C++ 编写一个 ROS 设备驱动节点；&lt;/li&gt;
+&lt;li&gt;如何调试 ROS 发布频率、时间戳和消息内容；&lt;/li&gt;
+&lt;li&gt;如何结合 rosbag 与 rqt_plot 分析传感器数据的稳定性；&lt;/li&gt;
+&lt;li&gt;为后续多传感器时间同步与融合（如 EKF）打下基础。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;多传感器融合中的-ros-驱动开发实战案例&#34;&gt;多传感器融合中的 ROS 驱动开发实战案例&lt;/h1&gt;
+&lt;p&gt;在自动驾驶系统中，IMU、GNSS 和雷达等传感器是实现环境感知和车辆定位的关键。本文以 ROS 框架为基础，讲解如何编写一个简单的传感器驱动节点，实现数据采集 → 解析 → 发布 → 可视化，并附带常见调试命令。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-项目结构&#34;&gt;1. 项目结构&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;my_sensor_driver/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── launch/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── sensor_driver.launch
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── src/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_driver_node.cpp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── include/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_driver.hpp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── config/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── imu_config.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── CMakeLists.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── package.xml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;my_sensor_driver： ROS package 根目录，所有内容都放在这里&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;launch/sensor_driver.launch：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ROS 的启动脚本，用 XML 格式描述：
+&lt;ul&gt;
+&lt;li&gt;启动哪个节点（node）&lt;/li&gt;
+&lt;li&gt;使用哪些参数文件（如 config/imu_config.yaml）&lt;/li&gt;
+&lt;li&gt;是否输出日志到屏幕等&lt;/li&gt;
+&lt;li&gt;用法：&lt;strong&gt;roslaunch my_sensor_driver sensor_driver.launch&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;示例：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-launch&#34; data-lang=&#34;launch&#34;&gt;&amp;lt;launch&amp;gt;
+&amp;lt;!-- 加载 IMU 参数配置 --&amp;gt;
+&amp;lt;rosparam file=&amp;#34;$(find my_sensor_driver)/config/imu_config.yaml&amp;#34; command=&amp;#34;load&amp;#34;/&amp;gt;
+
+&amp;lt;!-- 启动 IMU 驱动节点 --&amp;gt;
+&amp;lt;node name=&amp;#34;imu_driver&amp;#34; pkg=&amp;#34;my_sensor_driver&amp;#34; type=&amp;#34;imu_driver_node&amp;#34; output=&amp;#34;screen&amp;#34;/&amp;gt;
+&amp;lt;/launch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;src/imu_driver_node.cpp&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>强化学习的状态空间和动作空间是什么</title>
+      <link>/posts/state-action-space/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>/posts/state-action-space/</guid>
       <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
 &lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
 &lt;hr&gt;
@@ -267,9 +322,9 @@
     </item>
     <item>
       <title>数据结构与算法(自动驾驶应用方向)</title>
-      <link>//localhost:1313/posts/data_structure_and_algorithm/</link>
+      <link>/posts/data_structure_and_algorithm/</link>
       <pubDate>Thu, 02 May 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/data_structure_and_algorithm/</guid>
+      <guid>/posts/data_structure_and_algorithm/</guid>
       <description>&lt;h1 id=&#34;数据结构与算法自动驾驶应用方向&#34;&gt;数据结构与算法（自动驾驶应用方向）&lt;/h1&gt;
 &lt;p&gt;在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对&lt;strong&gt;数据的高效组织和计算方法的选择&lt;/strong&gt;。&lt;/p&gt;
 &lt;hr&gt;

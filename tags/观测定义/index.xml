@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>观测定义 on </title>
-    <link>//localhost:1313/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/</link>
+    <link>/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/</link>
     <description>Recent content in 观测定义 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sun, 17 Nov 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>强化学习的状态空间和动作空间是什么</title>
-      <link>//localhost:1313/posts/state-action-space/</link>
+      <link>/posts/state-action-space/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/state-action-space/</guid>
+      <guid>/posts/state-action-space/</guid>
       <description>&lt;p&gt;在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。&lt;/p&gt;
 &lt;p&gt;在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。&lt;/p&gt;
 &lt;hr&gt;

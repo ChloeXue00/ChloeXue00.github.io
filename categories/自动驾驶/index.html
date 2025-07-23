@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>自动驾驶 | </title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="//localhost:1313/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/index.xml">
+<link rel="alternate" hreflang="en" href="//localhost:1313/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+  <main id="main">
+    <h1 class="page-title">自动驾驶</h1>
+
+    
+    
+
+    
+      <h2 style="margin-top: 2rem;">Projects</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/quadtree_integrate_mpc/">四叉树与 MPC 集成在机器人导航中的应用</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><hr>
+<h2 id="总览">总览</h2>
+<p>本篇文档介绍了如何将<strong>四叉树（QuadTree）空间表示法</strong>与**模型预测控制（MPC）**集成，用于复杂环境下的机器人路径规划。</p>
+<p>该架构的优势在于：</p>
+<ol>
+<li><strong>四叉树</strong> 提供了适应环境复杂度的空间划分与凸包区域</li>
+<li><strong>MPC</strong> 可在动态、带约束的前瞻性框架下生成最优控制</li>
+</ol>
+<p>核心思想是：将四叉树节点生成的<strong>凸包区域</strong>转化为<strong>线性不等式约束</strong>，供 MPC 在轨迹优化中使用，完成避障与路径限制。</p>
+<hr>
+<h2 id="架构图">架构图</h2>
+<pre tabindex="0"><code>   
+环境地图 ────► 四叉树分解 ────►凸包生成 
+
+                                            │
+                                            ▼
+
+机器人控制 ◄──── MPC优化器 ◄────线性几何约束
+</code></pre><hr>
+<h2 id="四叉树地图表示">四叉树地图表示</h2>
+<p>四叉树将环境划分为不同分辨率的空间单元：</p>
+<ul>
+<li>开放区域使用较大的节点</li>
+<li>障碍物附近使用更小的细节节点</li>
+<li>仅保留表示自由区域的叶子节点</li>
+</ul>
+<h3 id="优势">优势</h3>
+<ul>
+<li><strong>自适应分辨率</strong>：按需细化，避免资源浪费</li>
+<li><strong>内存友好</strong>：比统一网格更节省存储</li>
+<li><strong>支持多分辨率路径规划</strong></li>
+</ul>
+<hr>
+<h2 id="凸包区域构建">凸包区域构建</h2>
+<p>四叉树分解完成后：</p>
+<ol>
+<li>将每个自由叶子节点看作不规则区域</li>
+<li>为每个叶子节点生成一个凸包（Convex Hull）</li>
+<li>这些凸包表示机器人可以安全通行的区域</li>
+<li>邻接凸包间连接形成路径图
+<img alt="四叉树分解链接凸包形成路径图" loading="lazy" src="/images/quadtree_path_planning.png"></li>
+</ol>
+<hr>
+<h2 id="mpc-所需的约束生成方式">MPC 所需的约束生成方式</h2>
+<p>对于路径经过的每个凸包区域：</p>
+<ol>
+<li>凸包每条边转化为半空间线性约束 <code>ax + by + c ≤ 0</code></li>
+<li>约束的法向量需朝向<strong>凸包外部</strong></li>
+<li>保证 MPC 优化轨迹始终在凸包（安全区）内</li>
+</ol>
+<p>数学上，对于边 <code>(x₁,y₁)</code> → <code>(x₂,y₂)</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>a = -(y₂ - y₁)
+</span></span><span style="display:flex;"><span>b =  (x₂ - x₁)
+</span></span><span style="display:flex;"><span>c = -ax₁ - by₁
+</span></span></code></pre></div><p>约束形式为：<code>ax + by + c ≤ 0</code></p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 17, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/narrow_exploration/">如何训练用于狭窄通道规划的 DRL 策略？</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><hr>
+<h2 id="狭窄通道">在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
+<img alt="狭窄通道" loading="lazy" src="/images/hybrid_image_result.png"></h2>
+<h2 id="1-使用的算法与损失函数">1. 使用的算法与损失函数</h2>
+<p>我们使用 <strong>TD3 或 DDPG</strong> 算法，分别训练策略网络（Actor）和价值网络（Critic）。</p>
+<h3 id="ddpg">DDPG</h3>
+<p>DDPG 有时能够实现出色的性能，但它在超参数和其他类型的调优方面往往很脆弱。DDPG 的一个常见故障模式是，学习到的 Q 函数开始大幅高估 Q 值，从而导致策略破坏，因为它利用了 Q 函数中的误差。</p>
+<h3 id="td3">TD3</h3>
+<p>td3 在DDPG基础上做到了三个技巧的更新，解决DDPG Q值过高的问题</p>
+<ul>
+<li>
+<p>技巧1： 裁剪双Q学习
+TD3学习两个Q函数 而不是一个（因此称为twin），并使用两个Q值比较小的一个作为bellman误差损失函数中的目标</p>
+</li>
+<li>
+<p>技巧2： “延迟”策略更新
+TD3 更新策略和目标网络的频率低于Q函数，本文建议没更新两次Q函数就进行依次策略更新</p>
+</li>
+<li>
+<p>技巧2： 目标策略平滑
+TD3为目标动作添加了噪声，通过平滑动作中的Q的变化，使策略更难利用Q函数误差
+这三个技巧可以显著提高baseline DDPG 的性能</p>
+</li>
+<li>
+<p>TD3 是一种off-policy algorithm</p>
+</li>
+<li>
+<p>TD3 只能用于具有连续动作空间的环境</p>
+</li>
+<li>
+<p>TD3 的Spinning up实现不支持并行化</p>
+</li>
+</ul>
+<p>关键方程式：
+TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_phi_2， 其方式于DDPG学习单个Q函数的方式几乎相同，
+为了准确展示TD3的实现方式， 以及它与普通DDPG的区别，我们将从损失函数的最内层向外进行讲解。</p>
+<ul>
+<li>
+<p>第一：目标策略平滑
+用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &lt;= alpha &lt;= alpha_high）。因此，目标动作如下：
+<img alt="目标动作方程" loading="lazy" src="/images/td3_target_action.png">
+目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
+它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
+这种情况可以通过平滑类似动作的Q函数来避免，
+而这正是目标策略平滑的设计初衷。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 17, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/quadtree_to_mpc/">路径规划（三） 如何将 QuadTree 输出路径接入 MPC 控制器进行轨迹优化？</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h2 id="背景介绍路径规划--控制的解耦-vs-联合">背景介绍：路径规划 + 控制的解耦 vs 联合</h2>
+<p>在移动机器人导航中，路径规划（如基于地图构建的搜索）与轨迹跟踪（如模型预测控制 MPC）通常被拆解为两个阶段：</p>
+<ul>
+<li><strong>规划模块</strong>：找到一条从起点到目标的无碰路径</li>
+<li><strong>控制模块</strong>：跟随这条路径，使机器人平稳、可控地到达目标</li>
+</ul>
+<p>但在复杂环境中，尤其是动态障碍物、曲折通道等场景中，如果不能做好两者的耦合与接口设计，系统效果会受到很大限制。</p>
+<p>本项目采用 <strong>四叉树（QuadTree）划分安全区域 + MPC 控制器跟踪轨迹</strong> 的结构，成功实现了一个典型的路径→控制联合流程。</p>
+<hr>
+<h2 id="第一步通过-quadtree-提取可行路径">第一步：通过 QuadTree 提取可行路径</h2>
+<p>我们使用 <code>connective_quadtree</code> 构建了一个基于图的四叉树分区系统，它可以：</p>
+<ul>
+<li>在任意障碍物地图上生成 QuadTree 结构</li>
+<li>快速查询从 <code>start_pos</code> 到 <code>goal_pos</code> 的路径节点</li>
+<li>每个叶子节点有 <code>center()</code>，表示其几何中心</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>path_nodes <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>quadtree<span style="color:#f92672">.</span>find_path(start_pos[:<span style="color:#ae81ff">2</span>], goal_pos[:<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>path_points <span style="color:#f92672">=</span> [node<span style="color:#f92672">.</span>center() <span style="color:#66d9ef">for</span> node_id <span style="color:#f92672">in</span> path_nodes]
+</span></span></code></pre></div><p>这里输出的是一个 [(x0, y0), (x1, y1), &hellip;] 的路径点序列，尚不能直接用于控制器输入。</p>
+<hr>
+<h2 id="第二步mpc-控制器的输入格式要求">第二步：MPC 控制器的输入格式要求</h2>
+<p>为了让 MPC 能正常运行，需要如下格式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>initial_state <span style="color:#f92672">=</span> [x, y, yaw, v]  <span style="color:#75715e"># 当前状态</span>
+</span></span><span style="display:flex;"><span>reference_trajectory <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([[x0, y0], [x1, y1], <span style="color:#f92672">...</span>])
+</span></span></code></pre></div><p>控制器内部会基于参考轨迹进行插值、预测、代价优化。</p>
+<hr>
+<h2 id="第三步桥接逻辑实现完整整合流程">第三步：桥接逻辑实现（完整整合流程）</h2>
+<p>我们在 <code>trajectory_generator.py</code> 中实现了完整的桥接类 <code>TrajectoryGenerator</code>，封装逻辑如下：</p>
+<h3 id="路径转为-mpc-输入轨迹">路径转为 MPC 输入轨迹</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ref_path <span style="color:#f92672">=</span> PathNodeList([PathNode(p[<span style="color:#ae81ff">0</span>], p[<span style="color:#ae81ff">1</span>]) <span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> path_points])
+</span></span><span style="display:flex;"><span>self<span style="color:#f92672">.</span>set_ref_trajectory(ref_path)
+</span></span></code></pre></div><p>这一过程自动插值生成 <code>TrajectoryNodeList</code>（x, y, theta），最终用于 MPC 滑窗轨迹。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 16, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/quadtree_safearea/">路径规划（二）从占用图到安全区域：四叉树（QuadTree）构建与凸包生成</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>在自主移动机器人中，快速判断哪些区域是可通行的、哪些区域需要避障，是路径规划系统的关键。这里我采用 <strong>四叉树结构（QuadTree）</strong> 对占用图进行递归划分，再对空闲区域构建 <strong>凸包（Convex Hull）</strong>，生成**连接图（Connectivity Graph）**从而生成可用于路径规划的安全走廊（Safe Corridor）。</p>
+<hr>
+<h2 id="一构建思路概览">一、构建思路概览</h2>
+<p>参考了项目中 <code>connective_quadtree.py</code> 和 <code>corridor_algorithm.py</code> 中的实现，思路如下：</p>
+<pre tabindex="0"><code>1. 输入原始占用图（Occupancy Grid）
+2. 使用 QuadTreeNode 递归划分空间, 根据RGB颜色判断：
+    - 若区域为空（全白[255,255,255]或者接近全白）：标记为“自由区域”
+    - 若包含障碍（RGB值大于白色）：继续细分（最多分到 min_size）
+    - 黑色（[0,0,0]）表示障碍物
+3. 收集所有自由叶子节点作为 Safe Area 候选
+4. 为每个叶子节点生成其凸包边界
+5. 输出凸包用于路径规划和约束构建
+</code></pre><hr>
+<h2 id="二quadtree-类详解connective_quadtreepy">二、QuadTree 类详解（connective_quadtree.py）</h2>
+<h3 id="quadtree">Quadtree:</h3>
+<pre tabindex="0"><code>Quadtree 是一种树形数据结构，可以用于将二维空间递归划分成更小的矩形区域（占用和空闲区域），
+从整张地图作为根节点开始分裂出四个子区域，每个子区域根据RGB值判断是否有障碍物。
+</code></pre><p>基于原始图像的RGB value来划分
+<img alt="四叉树二维图" loading="lazy" src="/images/Design_Course_map3__3__3.png"></p>
+<p>树结构
+<img alt="四叉树树结构" loading="lazy" src="/images/Design_Course_map4_4.png"></p>
+<ol>
+<li>
+<p><strong>QuadTree 类</strong></p>
+<ul>
+<li>主要负责管理整个四叉树结构：</li>
+<li>root: 根节点</li>
+<li>leaf_nodes: 所有自由（无障碍物）的叶节点列表</li>
+<li>max_depth: 树的最大深度</li>
+</ul>
+</li>
+<li>
+<p><strong>QuadTreeNode 类</strong></p>
+<ul>
+<li>表示四叉树中的单个节点：</li>
+<li>values: 节点对应的栅格值(RGB值比如[0,0,0])矩阵</li>
+<li>_ru_indices: 节点在原始矩阵中的右上角索引 (i, j)</li>
+<li>id_sequence: 节点的ID序列，表示从根到该节点的路径</li>
+<li>_neighbors: 节点的邻居 (左, 右, 上, 下)</li>
+<li>_children: 子节点列表</li>
+<li>state: 节点状态 (FREE, MIX, FULL)</li>
+</ul>
+</li>
+<li>
+<p><strong>节点状态</strong>：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 16, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/hybrid-planner-integration/">为什么以及如何集成四叉树 &#43; MPC &#43; DRL 进行机器人轨迹规划？</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>在复杂的动态环境中，单一的路径规划或控制策略常常难以兼顾全局最优性与局部可行性。本篇博客介绍一个结合了 <strong>四叉树（QuadTree）+ 模型预测控制（MPC）+ 深度强化学习（DRL）</strong> 的混合轨迹规划框架，该方案的主模块集中在 <code>helper_main_continous.py</code> 文件中，具备良好的模块化与通用性。
+<img alt="机器人DRL轨迹图" loading="lazy" src="/images/hybrid_control_result.png"></p>
+<h2 id="一模块概览">一、模块概览</h2>
+<h3 id="1-地图生成与表示">1. 地图生成与表示</h3>
+<ul>
+<li><code>generate_map()</code>：支持多场景自动生成地图，包括边界、静态/动态障碍物与目标点。</li>
+<li><code>get_geometric_map()</code>：将地图对象转换为可用于膨胀和路径推理的几何结构。</li>
+<li><code>Inflator</code> 类：对障碍物轮廓进行 buffer 膨胀，提升安全冗余。</li>
+</ul>
+<h3 id="2-四叉树路径规划模块">2. 四叉树路径规划模块</h3>
+<ul>
+<li>由外部函数 <code>create_quadtree_from_occupancy_map()</code> 从栅格占用地图创建四叉树划分空间</li>
+<li><code>quadtree_to_mpc_constraints()</code>（外部实现）：提取四叉树路径节点所在区域的凸包，生成可传递给 MPC 的约束区域。</li>
+</ul>
+<h3 id="3-mpc-控制器接口">3. MPC 控制器接口</h3>
+<ul>
+<li><code>InterfaceMpc</code>（外部模块）：支持静态/动态障碍物约束注入与轨迹生成。</li>
+<li><code>integrate_quadtree_with_mpc()</code>：将自由空间区域和动态障碍一起传入 MPC，生成优化轨迹。</li>
+</ul>
+<h3 id="4-drl-策略控制">4. DRL 策略控制</h3>
+<ul>
+<li>控制逻辑中支持调用训练好的 DDPG / TD3 策略模型预测动作。</li>
+<li>动作 smoothness 与可行性在 <code>Metrics</code> 中有单独评估指标。</li>
+</ul>
+<h3 id="5-智能切换模块">5. 智能切换模块</h3>
+<ul>
+<li><code>HintSwitcher</code>：在 MPC 不再可行或目标区域过于复杂时，切换至 DRL 策略接管。</li>
+<li>切换机制基于当前轨迹与障碍物距离，具备滞回机制避免频繁切换。</li>
+</ul>
+<hr>
+<h2 id="二系统整体工作流程">二、系统整体工作流程</h2>
+<p>以下代码片段概括了系统的主要运行步骤：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Step 1: 创建地图对象</span>
+</span></span><span style="display:flex;"><span>map_data <span style="color:#f92672">=</span> generate_map()
+</span></span><span style="display:flex;"><span>mpc_controller <span style="color:#f92672">=</span> InterfaceMpc(map_data)
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> Configurator()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 2: 四叉树路径规划</span>
+</span></span><span style="display:flex;"><span>quadtree <span style="color:#f92672">=</span> create_quadtree_from_occupancy_map(occupancy_map)
+</span></span><span style="display:flex;"><span>constraints <span style="color:#f92672">=</span> quadtree_to_mpc_constraints(quadtree, current_state, goal_state)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 3: MPC 轨迹生成</span>
+</span></span><span style="display:flex;"><span>mpc_controller<span style="color:#f92672">.</span>update_static_constraints(constraints)
+</span></span><span style="display:flex;"><span>trajectory <span style="color:#f92672">=</span> mpc_controller<span style="color:#f92672">.</span>generate_trajectory(current_state, goal_state)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 4: 智能控制切换（DRL or MPC）</span>
+</span></span><span style="display:flex;"><span>switcher <span style="color:#f92672">=</span> HintSwitcher(max_switch_distance<span style="color:#f92672">=</span><span style="color:#ae81ff">5.0</span>, min_detach_distance<span style="color:#f92672">=</span><span style="color:#ae81ff">8.0</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> switcher<span style="color:#f92672">.</span>switch(current_position, original_traj, new_traj, obstacle_list):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> drl_model<span style="color:#f92672">.</span>predict(observation)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> mpc_controller<span style="color:#f92672">.</span>get_control_action()
+</span></span></code></pre></div><hr>
+<h2 id="三关键函数解读">三、关键函数解读</h2>
+<h3 id="quadtree_to_mpc_constraints"><code>quadtree_to_mpc_constraints</code></h3>
+<p>将路径所经过的四叉树节点提取对应的多边形凸包作为可通行区域，转换为 MPC 优化器所需的约束形式。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 7, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/merge_safe_areas/">如何合并多个 Safe Area 以简化规划图结构？</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><hr>
+<h2 id="背景为什么要合并-safe-area">背景：为什么要合并 Safe Area？</h2>
+<p>在使用 QuadTree 构建环境分区时，每一个 <code>FREE</code> 类型的叶子节点都会生成一个凸包（Convex Hull）作为局部的 Safe Area。但随着环境分辨率提高或障碍物分布稠密，Safe Area 数量可能激增，带来以下问题：</p>
+<ul>
+<li>路径图节点数量过多，导致 A* 搜索复杂度提升</li>
+<li>MPC 控制器的参考轨迹中断多，规划不平滑</li>
+<li>可视化和维护困难</li>
+</ul>
+<p>因此，<strong>将临近的 Safe Area 合并为更大的安全区域</strong> 是简化规划图结构、提高控制性能的重要手段。</p>
+<hr>
+<h2 id="合并判据设计">合并判据设计</h2>
+<p>在 <code>connective_quadtree.py</code> 和 <code>utils_geo.py</code> 中，我们可以基于以下原则实现 Safe Area 合并：</p>
+<ol>
+<li><strong>邻接性</strong>：两个凸包边界是否接近或重合</li>
+<li><strong>几何相容性</strong>：合并后的点集是否仍然可以构成一个有效凸包</li>
+<li><strong>面积提升评估</strong>：合并后凸包面积未显著膨胀，避免引入死角区域</li>
+</ol>
+<p>利用 <code>shapely</code> 和 <code>scipy.spatial.ConvexHull</code>，可以进行合并模拟与几何判断。</p>
+<hr>
+<h2 id="合并过程实现思路">合并过程实现思路</h2>
+<p>合并逻辑可以封装为 <code>merge_safe_areas()</code> 函数，并添加到 <code>QuadTree</code> 类中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_safe_areas</span>(self, distance_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>):
+</span></span><span style="display:flex;"><span>    merged <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    used <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>    keys <span style="color:#f92672">=</span> list(self<span style="color:#f92672">.</span>convex_hulls<span style="color:#f92672">.</span>keys())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(keys)):
+</span></span><span style="display:flex;"><span>        id1 <span style="color:#f92672">=</span> keys[i]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> id1 <span style="color:#f92672">in</span> used: <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        hull1 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>convex_hulls[id1]
+</span></span><span style="display:flex;"><span>        points1 <span style="color:#f92672">=</span> hull1<span style="color:#f92672">.</span>points[hull1<span style="color:#f92672">.</span>vertices]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, len(keys)):
+</span></span><span style="display:flex;"><span>            id2 <span style="color:#f92672">=</span> keys[j]
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> id2 <span style="color:#f92672">in</span> used: <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>            hull2 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>convex_hulls[id2]
+</span></span><span style="display:flex;"><span>            points2 <span style="color:#f92672">=</span> hull2<span style="color:#f92672">.</span>points[hull2<span style="color:#f92672">.</span>vertices]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 判断是否可合并（如边界相近、联合后仍凸）</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> can_merge(points1, points2, distance_threshold):
+</span></span><span style="display:flex;"><span>                combined <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>vstack((points1, points2))
+</span></span><span style="display:flex;"><span>                new_hull <span style="color:#f92672">=</span> ConvexHull(combined)
+</span></span><span style="display:flex;"><span>                merged<span style="color:#f92672">.</span>append(new_hull)
+</span></span><span style="display:flex;"><span>                used<span style="color:#f92672">.</span>update([id1, id2])
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>convex_hulls <span style="color:#f92672">=</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;merged_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>: hull <span style="color:#66d9ef">for</span> i, hull <span style="color:#f92672">in</span> enumerate(merged)}
+</span></span></code></pre></div><p>其中 <code>can_merge()</code> 可以使用 <code>shapely.Polygon</code> 判断是否相交或几何接近。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Apr 17, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/e2e-driving-resnet-lstm/">基于ResNet&#43;LSTM的端到端自动驾驶转向预测</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h2 id="项目背景">项目背景</h2>
+<p>本项目旨在探索如何使用卷积神经网络（ResNet）提取图像空间特征，并结合LSTM对时序依赖进行建模，从而预测车辆在自动驾驶中的转向角度。</p>
+<p>此任务属于端到端自动驾驶建模的一部分，重点在于将连续图像帧映射为连续控制输出（方向盘角度）。</p>
+<h2 id="模型结构概览">模型结构概览</h2>
+<p>整体结构采用两阶段：</p>
+<ol>
+<li><strong>ResNet 特征提取</strong>：对每帧输入图像进行空间编码,提取每一帧的空间语义信息，如车道线、前车位置等。</li>
+<li><strong>LSTM 序列建模</strong>：将序列化的图像特征送入LSTM，实现对短期历史状态的记忆和对当前状态的连续预测,预测未来1~N帧的角度</li>
+</ol>
+<h2 id="模型结构图">模型结构图</h2>
+<p><img alt="模型结构" loading="lazy" src="/images/model_diagram_v2.png"></p>
+<h2 id="数据与预处理">数据与预处理</h2>
+<p>数据来源为模拟驾驶场景中的中心摄像头图像，标签为方向盘角度。</p>
+<ul>
+<li>输入帧尺寸统一为 224x224</li>
+<li>标签为每帧角度（可选包含扭矩、车速）</li>
+<li>图像预处理：resize → normalize → batch</li>
+<li>标签标准化：使用均值/方差归一化角度值</li>
+<li>损失函数：MSE 均方误差损失</li>
+<li>优化器：Adam, 学习率 = 1e-4</li>
+<li>序列长度：T = 5（即每个样本为连续5帧）</li>
+</ul>
+<h2 id="实验结果">实验结果</h2>
+<p>在测试集上，MSE 误差为 <strong>0.06</strong>，对应角度误差约为 <strong>7°</strong>。<br>
+模型在直线段表现稳定，在连续转弯段有一定预测延迟</p>
+<p><img alt="loss_curve" loading="lazy" src="/images/loss_curve.png"></p>
+<h2 id="关键代码片段">关键代码片段：</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ResNetLSTMModel</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>resnet <span style="color:#f92672">=</span> resnet18(pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>lstm <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LSTM(input_size<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>, hidden_size<span style="color:#f92672">=</span><span style="color:#ae81ff">128</span>, batch_first<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x_seq):
+</span></span><span style="display:flex;"><span>        batch, seq_len, C, H, W <span style="color:#f92672">=</span> x_seq<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> [self<span style="color:#f92672">.</span>resnet(x_seq[:, i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(seq_len)]
+</span></span><span style="display:flex;"><span>        feats <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>stack(feats, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># [B, T, D]</span>
+</span></span><span style="display:flex;"><span>        out, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(feats)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>fc(out[:, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</span></span></code></pre></div><h2 id="模型选择与对比分析">模型选择与对比分析</h2>
+<p>为什么选择 ResNet 而不是简单 CNN：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Apr 10, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/map-structure-explained/">路径规划（一）几何地图与占用地图在路径规划中的应用</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>在移动机器人路径规划项目中，地图的表达形式对规划算法的效率与可行性起着决定性作用。本文将介绍两种核心地图结构 —— <code>GeometricMap</code> 与 <code>OccupancyMap</code>，并结合代码逻辑说明它们与四叉树（QuadTree）在路径规划中的协作方式。</p>
+<hr>
+<h2 id="一occupancymap-占用地图">一、OccupancyMap 占用地图</h2>
+<p><code>OccupancyMap</code> 是通过图像（通常是.png地图或实时图像）生成的像素级地图，用于表示每个区域是否可通行。
+<img alt="占用地图" loading="lazy" src="/images/Occupancy_grid.png"></p>
+<p>占用网格图将空间离散化为任意分辨率的正方形,为每个正方形分配一个二进制值0/1标志被占用或者空闲
+<img alt="占用地图" loading="lazy" src="/images/occupancy_grid2.png"></p>
+<p>一旦将空间表示为图，就有经典的最短路径图算法可以保证在给定无限的计算时间和资源的情况下找到最短路径。</p>
+<h3 id="功能概述">功能概述</h3>
+<ul>
+<li>接收一张地图图像 <code>map_image</code>，支持 RGB 或灰度图；</li>
+<li>将图像转为灰度图后，基于 <code>occupancy_threshold</code> 生成二值图（黑=障碍，白=可通行）；
+<img alt="occupancygridmap" loading="lazy" src="/images/grid_map_visualization.png"></li>
+</ul>
+<p><img alt="二值图" loading="lazy" src="/images/grid_map.png"></p>
+<ul>
+<li>可返回背景图、灰度图或二值图；</li>
+<li>支持从图像提取边界与障碍的几何信息（返回 <code>boundary_coords</code> 和 <code>obstacle_list</code>）。
+<img alt="边界提取" loading="lazy" src="/images/map_visualization.png"></li>
+</ul>
+<h3 id="典型代码片段">典型代码片段</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>occupancy_map <span style="color:#f92672">=</span> OccupancyMap(map_image)
+</span></span><span style="display:flex;"><span>boundary_coords, obstacle_list <span style="color:#f92672">=</span> occupancy_map<span style="color:#f92672">.</span>get_geometric_map()
+</span></span></code></pre></div><h3 id="在项目中的作用">在项目中的作用</h3>
+<ul>
+<li>提供最原始的环境表达方式</li>
+<li>可以作为输入转为 <code>GeometricMap</code></li>
+<li>支持动态更新：如结合摄像头识别障碍，实时构建地图</li>
+</ul>
+<hr>
+<h2 id="二geometricmap-几何地图">二、GeometricMap 几何地图</h2>
+<p><code>GeometricMap</code> 用于几何表达方式表示边界和障碍，以便生成高精度的导航地图（用于后续凸包、安全走廊、参考路径的构建）。</p>
+<h3 id="geometricmap-是几何表达形式的地图用于">GeometricMap 是“几何表达形式的地图”，用于：</h3>
+<table>
+  <thead>
+      <tr>
+          <th>元素</th>
+          <th>表示内容</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>boundary</code></td>
+          <td>整个地图的边界轮廓</td>
+          <td>外围矩形 / 不规则多边形</td>
+      </tr>
+      <tr>
+          <td><code>obstacles</code></td>
+          <td>障碍物的几何形状</td>
+          <td>车、箱子、墙，表示为多边形</td>
+      </tr>
+      <tr>
+          <td><code>inflator</code>（可选）</td>
+          <td>将障碍物形状向外膨胀</td>
+          <td>提供安全冗余</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="它不是图像地图而是-多边形表达的结构地图">它不是图像地图，而是 <strong>多边形表达的结构地图</strong></h3>
+<p>例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>boundary <span style="color:#f92672">=</span> [(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>), (<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">10</span>)]
+</span></span><span style="display:flex;"><span>obstacle_list <span style="color:#f92672">=</span> [[(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>), (<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">2</span>), (<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">3</span>), (<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)]]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>map <span style="color:#f92672">=</span> GeometricMap(boundary, obstacle_list)
+</span></span></code></pre></div><p>这里就表达了一个 10x10 的区域，里面有一个 1x1 的方形障碍物。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Dec 15, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+      <h2 style="margin-top: 2rem;">ADAS</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/lka_strategy/">LKA（车道保持辅助）功能设计</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="1-功能概述function-overview">1. 功能概述（Function Overview）</h1>
+<p>LKA（Lane Keeping Assist，车道保持辅助系统）是一项基于车道线识别与方向盘控制的主动安全技术，属于车辆横向控制功能的一部分。系统通过摄像头等感知设备识别车道线，并结合车辆当前的横向位置和偏移趋势，判断是否存在偏离风险。一旦检测到车辆即将偏离车道且驾驶员未主动干预，LKA系统将自动输出轻微的方向盘转角，辅助驾驶员将车辆引导回车道中央区域，从而提升行车安全性与稳定性。</p>
+<h2 id="11-设计背景">1.1 设计背景</h2>
+<p>随着高级驾驶辅助系统（ADAS）功能不断普及，驾驶安全性和驾驶员负荷降低已成为新一代乘用车系统设计的核心关注点。研究表明，车道偏离是高速和城市快速路行车事故的主要诱因之一，特别是在驾驶员注意力不集中、疲劳驾驶或短暂分心的情况下。LKA系统可作为传统LDW（车道偏离预警）的主动升级方案，在预警基础上提供方向干预控制，是实现L2级自动驾驶的重要组成模块。</p>
+<h2 id="12-功能定位与边界">1.2 功能定位与边界</h2>
+<p>LKA系统主要定位于 <strong>车道内的横向稳定辅助控制</strong>，其功能边界如下：</p>
+<ul>
+<li><strong>目标工况</strong>：高速公路、城市快速路等具有明确车道线标识的路段；</li>
+<li><strong>速度范围</strong>：通常适用于 20–70 km/h 区间；</li>
+<li><strong>工作条件</strong>：光照充足、车道线清晰、无打转向灯或刹车干预；</li>
+<li><strong>系统行为</strong>：在满足启用条件时自动激活；驾驶员主动控制方向时自动退出；</li>
+<li><strong>与LDW关系</strong>：LKA为主动控制系统，需与LDW系统共享感知信息并进行协同工作。</li>
+</ul>
+<h2 id="13-功能组成概览">1.3 功能组成概览</h2>
+<p>LKA系统主要包括以下核心模块：</p>
+<ul>
+<li><strong>感知输入模块</strong>：负责车道线识别、车辆偏离量计算；</li>
+<li><strong>横向偏离速度模块</strong>：计算车辆在车道内的横向偏移趋势；</li>
+<li><strong>偏离预警逻辑模块</strong>：判断车辆是否即将偏离车道；</li>
+<li><strong>期望转角计算模块</strong>：基于Ackermann模型计算方向盘目标转角；</li>
+<li><strong>使能控制模块</strong>：判断LKA是否满足启用/退出条件；</li>
+<li><strong>状态管理与接口模块</strong>：负责功能状态发布、HMI交互和转向控制信号输出。</li>
+</ul>
+<p>系统设计需保证干预柔和、控制精准，并支持驾驶员优先权逻辑，避免产生突兀控制或误触发行为。</p>
+<hr>
+<h1 id="2-功能目标functional-goals">2. 功能目标（Functional Goals）</h1>
+<p>LKA（Lane Keeping Assist，车道保持辅助系统）旨在在驾驶员未主动控制方向的情况下，协助车辆维持在当前车道内安全行驶，降低因注意力分散、疲劳驾驶或视线偏移而导致的车道偏离风险。LKA系统通过感知前方车道线、估算车辆偏离趋势，并适时输出方向盘转角指令，引导车辆回到车道中心。</p>
+<h2 id="21-总体目标">2.1 总体目标</h2>
+<table>
+  <thead>
+      <tr>
+          <th>目标编号</th>
+          <th>功能目标描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>FG-1</td>
+          <td>实现对车道线的实时感知与偏离趋势预测</td>
+      </tr>
+      <tr>
+          <td>FG-2</td>
+          <td>提供平稳、及时的方向盘转角控制，保持车辆居中行驶</td>
+      </tr>
+      <tr>
+          <td>FG-3</td>
+          <td>避免在不合适场景（如打转向灯、车速过低）下误触发</td>
+      </tr>
+      <tr>
+          <td>FG-4</td>
+          <td>支持驾驶员主动退出（踩刹车/打灯）与自动恢复机制</td>
+      </tr>
+      <tr>
+          <td>FG-5</td>
+          <td>与LDW（车道偏离预警）协同工作，提升整体车道安全策略</td>
+      </tr>
+      <tr>
+          <td>FG-6</td>
+          <td>满足系统可用性与鲁棒性设计，支持信号丢失、暂时遮挡等容错情况</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="22-用户视角目标">2.2 用户视角目标</h2>
+<table>
+  <thead>
+      <tr>
+          <th>用户需求编号</th>
+          <th>用户体验目标</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>UFG-1</td>
+          <td>驾驶过程中能感知LKA介入但不引起突兀干预</td>
+      </tr>
+      <tr>
+          <td>UFG-2</td>
+          <td>在符合条件下，系统可自动维持车辆不偏离车道</td>
+      </tr>
+      <tr>
+          <td>UFG-3</td>
+          <td>用户可在App或HMI中自由启停LKA功能</td>
+      </tr>
+      <tr>
+          <td>UFG-4</td>
+          <td>系统退出后可自动恢复，不影响正常驾驶控制权</td>
+      </tr>
+      <tr>
+          <td>UFG-5</td>
+          <td>车道线丢失/恶劣天气等情况下不会误输出干预动作</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="23-性能目标可量化">2.3 性能目标（可量化）</h2>
+<table>
+  <thead>
+      <tr>
+          <th>性能目标编号</th>
+          <th>目标指标</th>
+          <th>备注</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>PG-1</td>
+          <td>LKA最大延迟时间 ≤ 100ms</td>
+          <td>感知 → 控制输出闭环延迟</td>
+      </tr>
+      <tr>
+          <td>PG-2</td>
+          <td>控制横向误差 ≤ ±0.25m</td>
+          <td>保持在车道中心附近运行</td>
+      </tr>
+      <tr>
+          <td>PG-3</td>
+          <td>系统触发响应率 ≥ 95%</td>
+          <td>在满足ODD场景下的正常激活成功率</td>
+      </tr>
+      <tr>
+          <td>PG-4</td>
+          <td>误触发率 ≤ 1%</td>
+          <td>不应在无偏离趋势时误介入</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h1 id="3-odd运行设计场景operational-design-domain">3. ODD运行设计场景（Operational Design Domain）</h1>
+<p>LKA系统的功能有效性依赖于其所运行的场景边界条件。ODD（Operational Design Domain）定义了LKA系统允许执行的<em>物理环境</em>、<em>动态状态</em>和<em>感知能力约束</em>。系统<em>仅在满足ODD条件的场景下才允许激活和发挥作用</em>，超出ODD范围将<em>自动退出LKA功能</em>或<em>切换至LDW模式</em>。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 29, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/nop_strategy/">NOP（Navigate on Pilot）功能逻辑与子功能模块解析</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="nopnavigate-on-pilot功能逻辑与子功能模块解析">NOP（Navigate on Pilot）功能逻辑与子功能模块解析</h1>
+<h2 id="一功能简介">一、功能简介</h2>
+<p>NOP（Navigate on Pilot，领航辅助驾驶）是典型的 L2+ 自动驾驶融合功能，依托导航系统、高精地图、感知系统与底层控制系统的深度集成，可在高精地图覆盖的高速及城市高架路段中，按导航路径执行一系列驾驶操作，包括：</p>
+<ul>
+<li>自动汇入主路；</li>
+<li>在主路中巡航行驶，并智能选择最优车道；</li>
+<li>根据导航规划自动切换至下一个高速/高架；</li>
+<li>自动驶离主路进入目标匝道。</li>
+</ul>
+<p>在此过程中，NOP 将实时感知限速、前车、障碍物与道路结构信息，并与 ACC、LCC、ALC 等模块协同控制，动态调节纵横向控制输出。</p>
+<p>🚫 NOP 不适用于非结构化道路（如城区支路、乡村道路、无高精地图区域），系统会主动退出或提示驾驶员接管。</p>
+<hr>
+<h2 id="二功能层级与子模块">二、功能层级与子模块</h2>
+<table>
+  <thead>
+      <tr>
+          <th>功能模块</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>路径规划（Path Planning）</strong></td>
+          <td>从导航系统获取路径约束，结合车道线信息进行车道级轨迹规划</td>
+      </tr>
+      <tr>
+          <td><strong>车道保持（LCC）</strong></td>
+          <td>在当前车道保持居中行驶，适配路径规划要求</td>
+      </tr>
+      <tr>
+          <td><strong>自适应巡航（ACC）</strong></td>
+          <td>保持与前车安全距离，实现纵向控制</td>
+      </tr>
+      <tr>
+          <td><strong>自动变道（ALC）</strong></td>
+          <td>判断安全条件并在策略允许时执行变道</td>
+      </tr>
+      <tr>
+          <td><strong>HMI交互模块</strong></td>
+          <td>驾驶员授权、变道意图确认、功能状态显示</td>
+      </tr>
+      <tr>
+          <td><strong>策略管理与状态机</strong></td>
+          <td>统一调度所有子功能的启停条件、状态管理、优先级协调</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="三核心输入信号与传感器">三、核心输入信号与传感器</h2>
+<table>
+  <thead>
+      <tr>
+          <th>信号</th>
+          <th>来源</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>HDMap 车道级路径</td>
+          <td>高精地图</td>
+          <td>提供主路至出口的导航路径点</td>
+      </tr>
+      <tr>
+          <td>当前车道线边界</td>
+          <td>前向摄像头</td>
+          <td>用于 LCC/Lane Keep 模块参考</td>
+      </tr>
+      <tr>
+          <td>前车位置/速度</td>
+          <td>毫米波雷达 + 感知融合</td>
+          <td>ACC模块依赖的前车信息</td>
+      </tr>
+      <tr>
+          <td>侧后目标状态</td>
+          <td>盲区雷达 + 摄像头</td>
+          <td>ALC判断变道安全性使用</td>
+      </tr>
+      <tr>
+          <td>驾驶员意图状态</td>
+          <td>HMI/方向盘</td>
+          <td>用于变道确认与授权</td>
+      </tr>
+      <tr>
+          <td>转向灯状态</td>
+          <td>BCM</td>
+          <td>判断主动变道与退出需求</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四控制状态机与调度逻辑">四、控制状态机与调度逻辑</h2>
+<ol>
+<li><strong>功能激活条件</strong>：
+<ul>
+<li>结构化道路、导航有效、双车道线有效、自车速度在范围内</li>
+</ul>
+</li>
+<li><strong>模块调度优先级（示例）</strong>：
+<pre tabindex="0"><code>- 默认执行 LCC + ACC（车道保持 + 跟车）
+- 检测到出口/导航指令 → Path Plan 触发变道计划
+- 检查变道安全性（侧后方安全 + 目标车速差）
+- 安全 → ALC 执行变道 + 显示动画
+- 异常中断（转向灯、方向盘接管、车道线丢失） → 退出NOP，恢复普通辅助驾驶
+</code></pre></li>
+<li><strong>场景切换示意图</strong>（可后续补图）</li>
+</ol>
+<hr>
+<h2 id="五典型问题与设计对策">五、典型问题与设计对策</h2>
+<table>
+  <thead>
+      <tr>
+          <th>问题</th>
+          <th>原因</th>
+          <th>对策</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>误触发变道</td>
+          <td>导航路径误差 or 道路标识偏差</td>
+          <td>增加“变道缓冲区”逻辑，组合地图与感知一致性判断</td>
+      </tr>
+      <tr>
+          <td>驾驶员频繁接管</td>
+          <td>安全判断过于保守 or 控制不自然</td>
+          <td>优化ALC控制平滑度 + 引入驾驶员偏好模型</td>
+      </tr>
+      <tr>
+          <td>出口驶出失败</td>
+          <td>检测时机过晚，变道窗口关闭</td>
+          <td>提前发出“即将驶出”提示，延长策略窗口</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="六模块协同与功能节奏图">六、模块协同与功能节奏图</h2>
+<ul>
+<li>
+<p><strong>功能节奏节点示例</strong>（SOP前3个月内需完成）：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 15, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/acc-strategy/">ACC（自适应巡航控制）策略设计与问题集</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="acc自适应巡航控制策略设计与问题集">ACC（自适应巡航控制）策略设计与问题集</h1>
+<h2 id="一功能简介">一、功能简介</h2>
+<p>ACC（Adaptive Cruise Control，自适应巡航控制）是一种纵向控制系统，在设定车速范围内，能根据前方车辆距离动态调整车速，实现跟车与巡航的自动化。</p>
+<p>应用场景涵盖高速公路、城市快速路等，需要与AEB（自动紧急制动）、LKA等模块进行协同。</p>
+<h2 id="功能层级">功能层级</h2>
+<ul>
+<li>
+<p><strong>定速巡航模式（CC）</strong>：当前无前车干扰，车辆自动维持设定巡航速度</p>
+<ul>
+<li>支持直道、弯道、上下坡；</li>
+<li>控制精度 +-1km/h(平路)， +-2km/h(坡道)</li>
+<li>允许巡航速度 0-150km/h;</li>
+<li>激活逻辑：初始速度小于30km/h 设为30，否则为当前车速</li>
+</ul>
+</li>
+<li>
+<p><strong>自适应巡航模式（ACC）</strong>：在设定车速范围内，系统基于前方目标车与自车的相对距离、相对速度信息，动态调整纵向加速度，保持安全车距。</p>
+<ul>
+<li>支持识别静态/动态目标车辆（主要使用前向毫米波雷达 + 视觉融合）</li>
+<li>根据设定时距（如 1.5s）和当前车速计算期望跟车距离</li>
+<li>动态调整加速度，保证相对时距误差收敛</li>
+<li>控制加速度/减速度不能超过设定限值（如 ±3 m/s²）</li>
+<li>系统状态平滑切换（Cruise → Follow → Brake → Resume）
+核心输入信号：
+V_ego : 自车速度
+D_rel : 前车相对距离
+V_rel : 前车相对速度
+t_gap_set: 设定的时距
+ACC_SetSpeed: 驾驶员设定的目标速度
+TargetValid: 是否有有效目标车（用于状态判断）</li>
+</ul>
+<p>输出信号：
+ACC_CmdAccel ：期望纵向加速度
+ACC_State: 当前ACC子状态（Cruise, Follow, Brake等）
+DriverDisplayInfo: 人机界面显示信息： ACC激活状态，目标速度，前车图标等等</p>
+</li>
+<li>
+<p><strong>停走模式（Stop &amp; Go）</strong>：低速或拥堵场景下支持自动减速直至完全停止，并在前车起步后自动跟随（部分车型支持）
+1） 自车跟停后，开始计时，若跟停时间＜5min，前车起步，自车自动跟随起步；
+2） 若跟停时间≥5min，则通过HMI告知驾驶员自车处于Hold状态，需要驾驶员的确认【踩油门踏板】，才能继续自动起步
+3） 若0min≤跟停时间＜10min，收到驾驶员的确认【踩油门踏板】，车辆再次恢复到静止后，重新计时
+4） 若跟停时间＞10min，ACC功能自动退出，拉起EPB
+5） 前车起步，自车跟随起步的延迟不得大于2s【可标定】</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Apr 15, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/lcc_alc_strategy/">LCC（Lane Centering Control）与 ALC（Automatic Lane Change）策略解析</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="lcc车道居中控制与-alc自动变道策略解析">LCC（车道居中控制）与 ALC（自动变道）策略解析</h1>
+<h2 id="一功能简介">一、功能简介</h2>
+<p>LCC（Lane Centering Control）车道居中控制是 L2 自动驾驶的基础模块，目标是在双车道线清晰可见的情况下，让车辆持续保持在当前车道中线附近行驶，提升驾驶舒适性与安全性。</p>
+<p>ALC（Automatic Lane Change）则是在满足一定安全条件下，自动执行左右变道操作的模块。它通常建立在 LCC 的稳定控制之上，并与感知、HMI、策略等系统联动。</p>
+<hr>
+<h2 id="二功能层级与结构">二、功能层级与结构</h2>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>LCC 状态机管理</strong></td>
+          <td>判断是否满足激活条件（双车道线清晰、速度范围、驾驶员授权）</td>
+      </tr>
+      <tr>
+          <td><strong>车道线提取与预测</strong></td>
+          <td>基于前向摄像头识别左/右车道线，预测中线轨迹</td>
+      </tr>
+      <tr>
+          <td><strong>横向控制器（如 PID / LQR）</strong></td>
+          <td>根据当前与目标车道中心偏差（Lateral Error）与航向误差调整方向盘角</td>
+      </tr>
+      <tr>
+          <td><strong>ALC 触发策略管理</strong></td>
+          <td>接收导航路径或驾驶员变道指令，判断是否触发变道行为</td>
+      </tr>
+      <tr>
+          <td><strong>变道可行性判断模块</strong></td>
+          <td>基于侧后感知结果判断变道是否安全</td>
+      </tr>
+      <tr>
+          <td><strong>变道轨迹生成与跟踪</strong></td>
+          <td>生成曲率平滑、jerk 限制的变道轨迹并跟踪执行</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="三核心输入信号与感知要求">三、核心输入信号与感知要求</h2>
+<table>
+  <thead>
+      <tr>
+          <th>信号</th>
+          <th>来源</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>左/右车道线位置</td>
+          <td>前向摄像头</td>
+          <td>用于车道中线拟合与目标轨迹生成</td>
+      </tr>
+      <tr>
+          <td>自车航向角与位置</td>
+          <td>IMU + 高精地图</td>
+          <td>用于航向误差与位置误差计算</td>
+      </tr>
+      <tr>
+          <td>周围车辆信息</td>
+          <td>摄像头 + 雷达融合</td>
+          <td>判断变道可行性，监测盲区目标</td>
+      </tr>
+      <tr>
+          <td>驾驶员授权状态</td>
+          <td>HMI、转向灯</td>
+          <td>判断是否允许变道或保持自动控制</td>
+      </tr>
+      <tr>
+          <td>路段可变道标签</td>
+          <td>高精地图</td>
+          <td>禁止变道区识别（如施工路段、实线）</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四核心输出信号">四、核心输出信号</h2>
+<table>
+  <thead>
+      <tr>
+          <th>信号</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>SteeringCmd</td>
+          <td>横向控制指令（方向盘角或期望曲率）</td>
+      </tr>
+      <tr>
+          <td>LCC_State</td>
+          <td>当前车道保持状态（Active / Fault / Override）</td>
+      </tr>
+      <tr>
+          <td>ALC_Request</td>
+          <td>自动变道请求信号</td>
+      </tr>
+      <tr>
+          <td>ALC_State</td>
+          <td>当前变道状态（准备中 / 执行中 / 成功 / 中断）</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="五控制策略与流程">五、控制策略与流程</h2>
+<h3 id="lcc-控制流程简化">LCC 控制流程（简化）</h3>
+<ol>
+<li>识别左右车道线 → 中线拟合</li>
+<li>计算横向偏差、航向偏差</li>
+<li>使用 LQR/PID 控制器输出 SteeringCmd</li>
+<li>在偏差过大或车道线失效时退出控制</li>
+</ol>
+<h3 id="alc-控制流程">ALC 控制流程</h3>
+<pre tabindex="0"><code>- 接收导航或驾驶员变道指令
+- 查询高精地图判断是否允许变道
+- 检查目标车道是否存在车辆，计算相对距离/速度
+- 满足安全条件后 → 下发变道轨迹 → 控制横向指令
+- 变道完成后重新激活 LCC
+- 若过程中存在异常（驾驶员接管、前方车辆切入等） → 中断变道
+</code></pre><hr>
+<h2 id="六典型问题与对策">六、典型问题与对策</h2>
+<table>
+  <thead>
+      <tr>
+          <th>问题</th>
+          <th>原因</th>
+          <th>对策</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>车道保持“左右漂移”</td>
+          <td>中线预测不稳 / 控制参数未调优</td>
+          <td>优化车道线融合算法，提升控制器带宽</td>
+      </tr>
+      <tr>
+          <td>弯道控制不足</td>
+          <td>曲率模型过于简单</td>
+          <td>引入道路曲率预测 + 增加航向误差项</td>
+      </tr>
+      <tr>
+          <td>自动变道失败率高</td>
+          <td>感知误判侧后目标 or 控制不连贯</td>
+          <td>增强盲区感知 + 使用平滑轨迹生成器</td>
+      </tr>
+      <tr>
+          <td>驾驶员频繁接管</td>
+          <td>控制反应滞后 or 不舒适</td>
+          <td>限制控制jerk，加快响应速度</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="七模块协同与扩展方向">七、模块协同与扩展方向</h2>
+<ul>
+<li>与 ACC 协同控制曲率+速度联动，保障跟车时的横向安全</li>
+<li>与 HMI 联动展示变道状态、提示变道意图确认</li>
+<li>城市场景扩展：支持红绿灯感知下的变道判断、实线/虚线车道语义识别</li>
+<li>与导航系统集成：基于路径执行自动变道至目标车道</li>
+</ul>
+<hr>
+<h2 id="八总结">八、总结</h2>
+<p>LCC 与 ALC 是 NOP 领航辅助系统的重要基础模块。它们共同构成了 L2+ 系统的横向控制骨架，对控制器调校、感知策略准确性与地图标签一致性都提出了较高要求。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Apr 15, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+      <h2 style="margin-top: 2rem;">DRL</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/drl-algorithm-comparison/">DRL 常见算法对比</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><hr>
+<p>深度强化学习（Deep RL）发展出多个主流算法流派，包括基于值函数的 DQN、基于策略梯度的 REINFORCE/PPO，以及融合策略和值函数的 Actor-Critic 框架（如 A2C、DDPG、SAC）。每种方法适用于不同场景，选择合适算法将显著影响模型性能与训练效率。</p>
+<hr>
+<h2 id="三大算法流派对比">三大算法流派对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th>算法类型</th>
+          <th>特点</th>
+          <th>优点</th>
+          <th>局限</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Value-based</td>
+          <td>学习 Q(s, a) 并通过贪婪策略选动作</td>
+          <td>样本利用率高，适合离散动作空间</td>
+          <td>不适用于连续/高维动作</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Policy-based</td>
+          <td>直接建模并优化策略 π(a</td>
+          <td>s)</td>
+          <td>适合连续动作，训练稳定</td>
+          <td>样本效率低，梯度方差大</td>
+      </tr>
+      <tr>
+          <td>Actor-Critic</td>
+          <td>同时训练策略和价值函数</td>
+          <td>综合两者优势，适用于复杂控制问题</td>
+          <td>架构复杂，对超参数敏感</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="一dqndeep-q-network">一、DQN（Deep Q-Network）</h2>
+<p><strong>类型</strong>：Value-based</p>
+<p><strong>损失函数（均方 TD 误差）</strong>：</p>
+<blockquote>
+<p>L(θ) = 𝔼ₜ [(rₜ + γ · maxₐ′ Qθ⁻(sₜ₊₁, a′) − Qθ(sₜ, aₜ))²]</p></blockquote>
+<p>其中：</p>
+<ul>
+<li>θ 是 Q 网络参数</li>
+<li>θ⁻ 是目标网络参数（定期同步）</li>
+<li>使用贪婪策略选择 <code>a′ = argmax Q(s′, a′)</code></li>
+</ul>
+<p><strong>优化器</strong>：Adam 或 SGD，通过反向传播最小化 TD 误差更新 θ。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 17, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/how-to-train-drl-model/">DRL训练</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>在深度强化学习（Deep Reinforcement Learning）中，我们的目标是：训练一个智能体（Agent），使其能够在复杂环境中通过交互、试错和学习，掌握解决任务的策略。</p>
+<p>整个训练流程不是一行 <code>.fit()</code> 就能完成的，它涉及数据采集、策略评估、价值估计、梯度优化等多个协同模块。本文将逐步介绍训练所需的关键模块和完整流程。</p>
+<hr>
+<h2 id="drl-训练流程的核心结构">DRL 训练流程的核心结构</h2>
+<p>一个标准的 DRL 系统至少包括以下几个部分：</p>
+<h3 id="1-环境environment">1. 环境（Environment）</h3>
+<ul>
+<li>提供 <code>reset()</code> 和 <code>step(action)</code> 接口</li>
+<li>返回状态、奖励、终止信号和调试信息</li>
+<li>通常使用 Gymnasium 编写，也可以是仿真器（如 PyBullet、AirSim）或实际系统接口</li>
+</ul>
+<h3 id="2-策略网络policy-network">2. 策略网络（Policy Network）</h3>
+<ul>
+<li>输入当前状态，输出一个动作（或动作分布）</li>
+<li>对于离散动作空间，常见输出为 softmax 分布；连续动作空间则直接输出浮点数</li>
+<li>通常是 MLP（结构化输入）或 CNN（图像输入）网络</li>
+</ul>
+<h3 id="3-值函数网络critic-可选">3. 值函数网络（Critic, 可选）</h3>
+<ul>
+<li>用于评估当前策略下某状态的“好坏”，即状态值 V(s) 或动作值 Q(s,a)</li>
+<li>在 Actor-Critic 架构中，Actor 提出动作，Critic 提供反馈</li>
+</ul>
+<h3 id="4-回放缓存replay-buffer">4. 回放缓存（Replay Buffer）</h3>
+<ul>
+<li>保存经验 <code>(state, action, reward, next_state, done)</code></li>
+<li>支持随机采样，避免训练中数据高度相关</li>
+<li>对于 off-policy 算法（如 DDPG、TD3）是必要组件</li>
+</ul>
+<h3 id="5-优化器与更新规则optimizer">5. 优化器与更新规则（Optimizer）</h3>
+<ul>
+<li>根据策略梯度、TD 误差、KL 散度等损失函数对网络参数进行更新</li>
+<li>通常使用 Adam 优化器</li>
+</ul>
+<hr>
+<h2 id="强化学习算法的三种主流架构">强化学习算法的三种主流架构</h2>
+<table>
+  <thead>
+      <tr>
+          <th>方法类别</th>
+          <th>特点</th>
+          <th>代表算法</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Policy-based</td>
+          <td>直接建模并优化策略 π(a,s)，通过最大化期望回报更新策略</td>
+          <td>REINFORCE, PPO, TRPO</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Value-based</td>
+          <td>学习动作价值函数 Q(s,a)，通过贪婪策略导出动作选择</td>
+          <td>DQN, Double DQN, Dueling DQN</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Actor-Critic</td>
+          <td>同时学习策略和价值函数，策略用于决策，价值函数用于评估</td>
+          <td>A2C, A3C, DDPG, TD3, SAC, PPO</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li><strong>Policy-based</strong> 方法训练稳定性强、适合高维动作空间，但样本效率较低。</li>
+<li><strong>Value-based</strong> 方法样本效率较高，适用于离散动作任务，但连续控制较困难。</li>
+<li><strong>Actor-Critic</strong> 综合两者优势，是当前主流算法的主干框架。</li>
+</ul>
+<hr>
+<h2 id="一个完整训练循环的结构">一个完整训练循环的结构</h2>
+<p>以下是一个 off-policy 强化学习算法（如 DDPG）的大致流程：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 2, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/what-is-gymnasium/">强化学习环境之 Gymnasium</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p><code>Gymnasium</code> 是 Python 中一个标准化的强化学习环境库（它是原始 <code>OpenAI Gym</code> 的升级版）。它的作用是：</p>
+<blockquote>
+<p>把复杂问题（如机器人走路、自驾车避障）包装成统一的“游戏接口”，让强化学习模型可以跟它反复互动、学会做决策。</p></blockquote>
+<p>换句话说，它是一个统一标准，让算法和环境能“说上话”。只要环境符合 Gymnasium 接口，你就能直接套用主流算法如 PPO、DDPG、DQN 去训练。</p>
+<hr>
+<h2 id="如何安装-gymnasium">如何安装 Gymnasium？</h2>
+<p>在终端输入以下命令安装（建议使用虚拟环境）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium<span style="color:#f92672">[</span>all<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>如果你只用基本环境，不包括 Atari、Box2D 等，可以简化为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gymnasium
+</span></span></code></pre></div><hr>
+<h2 id="在代码中如何导入并使用">在代码中如何导入并使用</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;CartPole-v1&#34;</span>)
+</span></span><span style="display:flex;"><span>obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>sample()  <span style="color:#75715e"># 随机动作（一般训练中由模型决定）</span>
+</span></span><span style="display:flex;"><span>    obs, reward, terminated, truncated, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> terminated <span style="color:#f92672">or</span> truncated:
+</span></span><span style="display:flex;"><span>        obs, info <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span></code></pre></div><p>这段代码展示了标准的强化学习交互流程：</p>
+<ol>
+<li>初始化环境（<code>reset()</code>）</li>
+<li>持续循环：选择动作 → 执行动作 → 接收反馈</li>
+</ol>
+<hr>
+<h2 id="环境的输入与输出env-接口结构">环境的输入与输出：Env 接口结构</h2>
+<h3 id="输入action">输入：action</h3>
+<p>你给环境的输入是一个“动作”，比如：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Dec 17, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/state-action-space/">强化学习的状态空间和动作空间是什么</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。</p>
+<p>在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。</p>
+<hr>
+<h2 id="状态空间observation-space">状态空间（Observation Space）</h2>
+<p>状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。</p>
+<h3 id="常见类型">常见类型：</h3>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>示例</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Box(4,)</code></td>
+          <td><code>[-4.8, 4.8]</code> × 4</td>
+          <td>连续变量向量，如位置、速度等</td>
+      </tr>
+      <tr>
+          <td><code>Box(84, 84, 3)</code></td>
+          <td>图像输入</td>
+          <td>视觉输入，常用于端到端控制</td>
+      </tr>
+      <tr>
+          <td><code>Dict(...)</code></td>
+          <td>多通道输入</td>
+          <td>图像 + 雷达 + IMU 组合观测</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="本项目中的状态空间定义">本项目中的状态空间定义：</h3>
+<p>在本项目中，我们的状态空间通常包括：</p>
+<ul>
+<li><strong>图像帧</strong>：从机器人前置摄像头获取的 RGB 图像（如 <code>(224, 224, 3)</code>）</li>
+<li><strong>附加状态向量</strong>（可选）：如上一帧速度、转角、航向角等传感器读数</li>
+</ul>
+<p>状态空间结构可能是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Box(low<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span><span style="color:#ae81ff">255</span>, shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">3</span>), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>uint8)
+</span></span></code></pre></div><p>或</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Dict({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;image&#34;</span>: Box(<span style="color:#f92672">...</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;speed&#34;</span>: Box(<span style="color:#f92672">...</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;yaw&#34;</span>: Box(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><hr>
+<h2 id="动作空间action-space">动作空间（Action Space）</h2>
+<p>动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。</p>
+<h3 id="常见类型-1">常见类型：</h3>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>示例</th>
+          <th>用途说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Discrete(n)</code></td>
+          <td><code>Discrete(3)</code></td>
+          <td>离散控制，如左、右、直行</td>
+      </tr>
+      <tr>
+          <td><code>Box(...)</code></td>
+          <td><code>Box(-1, 1, (2,), float32)</code></td>
+          <td>连续动作，如转角和加速度控制</td>
+      </tr>
+      <tr>
+          <td><code>MultiBinary(n)</code></td>
+          <td><code>MultiBinary(5)</code></td>
+          <td>多位二进制开关组合</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="本项目中的动作空间定义">本项目中的动作空间定义：</h3>
+<p>我们通常使用连续动作空间来控制机器人，例如：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Nov 17, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/data_structure_and_algorithm/">数据结构与算法(自动驾驶应用方向)</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="数据结构与算法自动驾驶应用方向">数据结构与算法（自动驾驶应用方向）</h1>
+<p>在自动驾驶中，无论是路径规划、障碍物识别，还是实时控制，都离不开对<strong>数据的高效组织和计算方法的选择</strong>。</p>
+<hr>
+<h2 id="2-常见数据结构及自动驾驶应用">2. 常见数据结构（及自动驾驶应用）</h2>
+<table>
+  <thead>
+      <tr>
+          <th>数据结构</th>
+          <th>描述</th>
+          <th>应用示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>数组 / 向量</strong></td>
+          <td>连续存储，支持随机访问</td>
+          <td>储存历史轨迹点、车辆状态序列</td>
+      </tr>
+      <tr>
+          <td><strong>链表 / 环形队列</strong></td>
+          <td>灵活插入/删除</td>
+          <td>控制器中缓存最近速度或传感器数据</td>
+      </tr>
+      <tr>
+          <td><strong>栈 / 队列</strong></td>
+          <td>先进后出 / 先进先出</td>
+          <td>控制状态切换、命令排队处理</td>
+      </tr>
+      <tr>
+          <td><strong>哈希表（Hash Map）</strong></td>
+          <td>快速查找</td>
+          <td>建图中障碍物记录，传感器缓存索引</td>
+      </tr>
+      <tr>
+          <td><strong>堆（Heap）</strong></td>
+          <td>优先级队列</td>
+          <td>A*/Dijkstra路径搜索中寻找最短路径</td>
+      </tr>
+      <tr>
+          <td><strong>树 / 四叉树 / 八叉树</strong></td>
+          <td>分层组织空间</td>
+          <td>空间分割（如QuadTree用于2D路径规划）</td>
+      </tr>
+      <tr>
+          <td><strong>图（Graph）</strong></td>
+          <td>节点+边</td>
+          <td>路径规划地图、任务依赖图等</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-算法在自动驾驶中的典型应用">3. 算法在自动驾驶中的典型应用</h2>
+<h3 id="31-搜索与路径规划算法">3.1 搜索与路径规划算法</h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>A*</strong></td>
+          <td>地图中的最短路径搜索</td>
+      </tr>
+      <tr>
+          <td><strong>Dijkstra</strong></td>
+          <td>全局路径规划</td>
+      </tr>
+      <tr>
+          <td><strong>RRT/RRT*</strong></td>
+          <td>采样路径规划，适用于复杂动态场景</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-数学优化类算法">3.2 数学优化类算法</h3>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>MPC（Model Predictive Control）</strong></td>
+          <td>控制指令生成，预测未来行为</td>
+      </tr>
+      <tr>
+          <td><strong>最小均方（LMS）/最小二乘（LS）</strong></td>
+          <td>滤波器设计，状态估计等</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-搜索结构加速">3.3 搜索结构加速</h3>
+<table>
+  <thead>
+      <tr>
+          <th>技术</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>KD-Tree</td>
+          <td>快速搜索最近邻（如点云比对）</td>
+      </tr>
+      <tr>
+          <td>Hashing</td>
+          <td>快速定位地图块、路段编号</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-4-示例a-路径规划伪代码">🧪 4. 示例：A* 路径规划（伪代码）</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">A_star</span>(start, goal, map):
+</span></span><span style="display:flex;"><span>    open_list <span style="color:#f92672">=</span> PriorityQueue()
+</span></span><span style="display:flex;"><span>    open_list<span style="color:#f92672">.</span>put(start)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> open_list<span style="color:#f92672">.</span>empty():
+</span></span><span style="display:flex;"><span>        current <span style="color:#f92672">=</span> open_list<span style="color:#f92672">.</span>get()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> current <span style="color:#f92672">==</span> goal:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> reconstruct_path()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> neighbor <span style="color:#f92672">in</span> get_neighbors(current):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> visited(neighbor):
+</span></span><span style="display:flex;"><span>                cost <span style="color:#f92672">=</span> calculate_cost(current, neighbor)
+</span></span><span style="display:flex;"><span>                open_list<span style="color:#f92672">.</span>put(neighbor, cost)
+</span></span></code></pre></div><hr>
+<h2 id="-推荐学习资料">📘 推荐学习资料</h2>
+<ul>
+<li>《算法图解》：通俗易懂的入门书</li>
+<li>《数据结构与算法分析》：理论+实现</li>
+<li>LeetCode 专题：图、堆、树、搜索优化</li>
+<li>ROS Navigation Stack 源码分析</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 2, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+      <h2 style="margin-top: 2rem;">Product &amp; Project Management</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/nop%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%8E%E5%86%B3%E7%AD%96%E8%B7%AF%E5%BE%84/">NOP主要功能设计逻辑图（状态机 &#43; 决策路径）</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h2 id="nopnavigate-on-pilot主要功能设计逻辑概览">NOP（Navigate on Pilot）主要功能设计逻辑概览</h2>
+<p>NOP 是基于pilot功能基础上,实现高速变道超车,下匝道,</p>
+<p>NOP功能的状态跳转还是比较复杂的，涉及横向、纵向控制与功能降级等逻辑配合多源感知与导航模块完成行为判断与控制转换。</p>
+<hr>
+<h2 id="一设计目标">一、设计目标</h2>
+<ul>
+<li>提供高速公路场景下从“上高速 → 巡航 → 超车变道 → 导航出高速”的闭环智能驾驶体验</li>
+<li>支持用户切入、退出、过渡等操作</li>
+<li>在安全性优先的前提下，尽可能实现高效与流畅的驾驶控制</li>
+</ul>
+<hr>
+<h2 id="二核心状态机结构nop-functional-state-machine">二、核心状态机结构（NOP Functional State Machine）</h2>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">stateDiagram-v2
+    [*] --&gt; Idle
+    Idle --&gt; Activated : 用户开启NOP
+    Activated --&gt; Cruise : 成功识别车道 + 导航同步
+    Cruise --&gt; LaneChange : 策略触发变道
+    LaneChange --&gt; Cruise : 变道完成
+    Cruise --&gt; ExitPreparation : 出口识别提前准备
+    ExitPreparation --&gt; ExitExecution : 到达出口区
+    ExitExecution --&gt; Idle : NOP退出或用户接管
+</code></pre><hr>
+<h2 id="三状态说明">三、状态说明</h2>
+<table>
+  <thead>
+      <tr>
+          <th>状态名</th>
+          <th>含义说明</th>
+          <th>触发条件</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Idle</td>
+          <td>NOP未激活或退出状态</td>
+          <td>用户未启用NOP / 驶出高速</td>
+      </tr>
+      <tr>
+          <td>Activated</td>
+          <td>系统初始化并准备启用巡航</td>
+          <td>用户点击NOP按钮，车速/车道满足条件</td>
+      </tr>
+      <tr>
+          <td>Cruise</td>
+          <td>进入自动巡航，包括车道保持 + ACC跟车</td>
+          <td>系统感知良好，导航同步，无异常事件</td>
+      </tr>
+      <tr>
+          <td>LaneChange</td>
+          <td>触发主动变道（超车 / 路况避障）</td>
+          <td>策略模块判断变道条件满足</td>
+      </tr>
+      <tr>
+          <td>ExitPreparation</td>
+          <td>提前感知导航出口，准备变道至出口车道</td>
+          <td>与导航路径匹配，出口识别提前量足够</td>
+      </tr>
+      <tr>
+          <td>ExitExecution</td>
+          <td>实施出口变道与减速，并准备交接控制权</td>
+          <td>距离出口不足100m，车道和速度就绪</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四策略决策路径decision-logic-path">四、策略决策路径（Decision Logic Path）</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">启</span>动 → 是否满足最低NOP开启条件？
+</span></span><span style="display:flex;"><span>     → 是 → 判断导航是否同步？
+</span></span><span style="display:flex;"><span>         → 是 → 进入巡航状态（车道保持 + 跟车）
+</span></span><span style="display:flex;"><span>             → 前车趋势预判:前车慢？右侧车道是否可变:侧后空？→ 触发 变道意图 → 意图存在,自动打方向灯 → 控制模块执行变道
+</span></span><span style="display:flex;"><span>             → 导航出口匹配？提前变道？→ 出口准备
+</span></span><span style="display:flex;"><span>         → 否 → 保持手动驾驶或提示同步失败
+</span></span><span style="display:flex;"><span>     → 否 → 禁用NOP，提示“条件不满足”
+</span></span></code></pre></div><hr>
+<h2 id="五模块交互简图配合时序图使用">五、模块交互简图（配合时序图使用）</h2>
+<ul>
+<li>用户交互（启动、退出、转向灯） ↔ NOP 控制状态机</li>
+<li>感知输入（车道、车辆、障碍） → 策略模块（是否变道）</li>
+<li>导航模块（出口路径） → 策略模块（是否切换车道）</li>
+<li>控制模块 ← 状态机指令（加速、减速、横向控制）</li>
+</ul>
+<hr>
+<h2 id="小结">小结</h2>
+<p>该状态机设计确保了：</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 20, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE%E4%B8%8E%E4%B8%8A%E7%BA%BF%E5%9C%BA%E6%99%AF%E5%85%B3%E7%B3%BB/">用户旅程地图与上线场景梳理的关系</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p><img alt="用户旅程地图" loading="lazy" src="/images/%E7%94%A8%E6%88%B7%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9B%BE.png">
+用户旅程地图，它已成为需求分析和产品设计不可或缺的环节。用户旅程地图主要与需求分析联动，用于挖掘用户真实场景与行为动机；然后系统功能设计再从用户旅程中提取出具体的“上线场景”（功能需求）进入系统设计。</p>
+<hr>
+<h2 id="一用户旅程地图是什么">一、用户旅程地图是什么</h2>
+<p>用户旅程（User Journey）是用户完成某个任务或者达到某个目标的全过程, 它是分析用户旅程的可视化工具之一。它是一个有方向的信息图表（按照时间线，从左往右），从用户的角度出发、以讲故事的方式，清晰地描述用户在某个业务场景下完成任务或达到目标时的详细过程和体验。</p>
+<p>完整的用户旅程包含用户模型、可视化的体验过程和机会点三部分。</p>
+<h3 id="1-用户模型">1. 用户模型</h3>
+<p>要构造用户旅程地图，我们首先需要构建用户模型。即用户群体是谁，想要在什么样的业务场景下，达成什么样的目标。</p>
+<p>这部分的信息通常来源于用户研究，比如用户访谈、问卷调查、及实地观察等。</p>
+<h3 id="2-可视化的体验过程">2. 可视化的体验过程</h3>
+<p>这是用户旅程地图中最重要的组成部分，描述用户在达成目标时的全过程，及在每个过程中的情感体验。这部分的信息可以来自于用户研究，也可以邀请用户一起完成。</p>
+<p>它包含 5 个元素：</p>
+<ul>
+<li><strong>关键活动</strong>：用户在该业务场景下达成目标时的关键活动，按时间顺序排列。</li>
+<li><strong>具体行为</strong>：每个关键活动下的具体操作步骤。</li>
+<li><strong>触点</strong>：用户在每个行为中接触的工具、系统或产品功能。</li>
+<li><strong>心情曲线</strong>：用户在行为过程中的情绪高低，通常用线图或 Emoji 表示。</li>
+<li><strong>痛点</strong>：行为过程中遇到的挑战或不适体验。</li>
+</ul>
+<h3 id="3-机会点">3. 机会点</h3>
+<p>这是从体验过程中挖掘到的优化用户旅程的洞见、改善用户痛点的契机等。<br>
+机会点不是来源于用户，而是由产品经理或需求分析人员通过“对心情曲线与痛点的理解”推导得出。</p>
+<hr>
+<h2 id="二用户旅程地图与上线场景的联动关系">二、用户旅程地图与上线场景的联动关系</h2>
+<p>用户旅程地图不仅可以用来讲述用户故事，更是连接“用户需求”与“功能上线规划”的桥梁：</p>
+<pre tabindex="0"><code>用户调研 / 产品目标
+    ↓
+用户需求分析（用户目标、行为、痛点）
+    ↓           ←←←←←←←←←←←←←←
+用户旅程地图（阶段划分 + 用户行为 + 系统反应 + 情绪）
+    ↓                            ↑
+上线场景梳理（功能需求表）       ↑ 可用于校验场景完整性
+    ↓
+功能子目标拆解 + 模块设计 + 投放节奏图
+</code></pre><hr>
+<h2 id="三用户旅程地图与上线场景的对照示例">三、用户旅程地图与上线场景的对照示例</h2>
+<p>以自动变道为例：</p>
+<table>
+  <thead>
+      <tr>
+          <th>阶段</th>
+          <th>用户旅程地图中的表达</th>
+          <th>上线场景表中的表达</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自动变道</td>
+          <td>用户希望无操作也能高效超车，担心变道是否安全</td>
+          <td>系统需在安全条件满足时触发自动变道策略</td>
+      </tr>
+      <tr>
+          <td>痛点机会</td>
+          <td>用户想知道变道的理由</td>
+          <td>系统应提供变道决策依据或提示信息</td>
+      </tr>
+      <tr>
+          <td>系统反应</td>
+          <td>策略触发变道，执行控制</td>
+          <td>轨迹规划模块 + 安全判断模块 + 控制模块</td>
+      </tr>
+  </tbody>
+</table>
+<hr></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 20, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/noa/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%A1%8C%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90-1c06b41b2b1780f59ef7e2b98f6d4f5b/">自动驾驶行业技术分析</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="1研究目的">1.研究目的</h1>
+<p>本篇报告主要围绕这几个问题展开:</p>
+<ol start="0">
+<li><a href="#1%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA">背景与研究动机</a></li>
+<li><a href="#2%E8%87%AA%E9%A9%BE%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%E4%B8%BB%E6%94%BB%E7%9B%AE%E6%A0%87">自驾技术发展方向/主攻目标</a></li>
+<li><a href="#3%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94">自动驾驶方案提供商的技术方案对比</a></li>
+<li><a href="#4%E5%B8%82%E5%9C%BA%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%BD%9C%E5%9C%A8%E7%9A%84%E5%B8%82%E5%9C%BA">市场大小和未被开发的市场</a></li>
+<li><a href="#5%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98%E5%92%8C%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF">技术趋势和突破点</a></li>
+</ol>
+<p>（部分信息可能覆盖不全，主要在于部分公司信息不够公开，需要进一步调研或者查看行业报告或第三方分析）</p>
+<h1 id="1-背景与研究动机">1. 背景与研究动机</h1>
+<p>行业趋势:
+地图: 对于高精度地图的鲜度依赖过高,导致城市路段的辅助驾驶进度难以继续,出于安全冗余的考虑，目前业内更认可的作法是“重感知、轻地图”的路线。
+小鹏汽车和智己汽车（合作方为Momenta），目前都已经从研发端切换到“重感知”的路线上，并且试图摆脱对高精地图的依赖。
+但如果没有高精地图，车辆行驶到路口时，系统需要依靠感知和计算作出正确判断。目前，毫末是通过迁移学习领域中的混合迁移训练方法，将仿真数据和真实数据进行混合训练，从而提高红绿灯识别度。此外，还通过用Transformer做时间和空间上的前融合方式，解决“空间感知碎片化”和“时间感知不连续”的问题，有效识别城市道路车道线。</p>
+<h1 id="2自驾技术发展方向主攻目标">2.自驾技术发展方向、主攻目标</h1>
+<h2 id="21城市无图noa导航辅助驾驶">2.1城市无图NOA（导航辅助驾驶）</h2>
+<p>随着智能驾驶技术的不断突破和消费者需求的日益升级，从L2等级到更高级的L2++自动驾驶辅助系统正逐步扩展至各类车型。</p>
+<p>无图NOA 是“感知驱动的决策规划系统”，感知是输入，决策规划是核心，本质是完整的智能驾驶决策架构，它的核心目标是：<strong>在没有高精地图的情况下，仅凭车辆自身感知，实时理解环境并做出安全、合理的驾驶决策。</strong></p>
+<p>高速和城市NOA（导航辅助驾驶），以及APA（自动泊车）等功能的渗透率不断提升,城市NOA已成为高阶智能驾驶技术的重要发展方向，而第三方智驾供应商在其中扮演着至关重要的角色。</p>
+<p>Momenta、HUAWEIinside（华为Hi模式）、Bosch+WeRide（博世+文远知行）、Apollo（百度自动驾驶平台）和深圳元戎启行科技有限公司这五家供应商是无图NOA方案战场中的主要玩家。</p>
+<h3 id="22无图化noa实现方式">2.2无图化NOA实现方式</h3>
+<p>无图方案不是完全摒弃高精地图，下游轨迹预测/规控仍然依赖<strong>高精地图</strong>的输入。『无图』实际指的是不再依赖厂商提供的高精地图，转而使用车载算法实时感知的『局部在线高精地图』。</p>
+<p>因此无图方案的核心在于<strong>实时在线地图</strong>构建的准确性，从技术层面来讲，正常情况下无图的上限就是有图；而在传统高精地图更新不及时的区域（比如施工路段、道路重构路段等），无图方案是更有优势的。在线高精地图的发展也有两年多了，无图一直致力于从『能用』走向『好用』。</p>
+<p>底图绘制设备：包含摄像头、高精度GPS、高精度IMU，及用于深度学习和SLAM的计算芯片，并对搭载的传感器设置高精度的时间同步，整套设备价格在1000美金左右。Momenta不会对产品进行单独的售卖，而选择和主机厂、出租车队、物流车队等合作，或将传感器设备搭载在自有测试车队上完成底图绘制；</p>
+<p>地图更新设备：地图更新设备的成本相较底图绘制设备，要低很多。Momenta将更新设备分为后装和前装两种方式进行部署。后装方式，即将众包更新方案搭载在Momenta后装产品设备“途铃”，完成地图更新。前装方式是Momenta将通过与主机厂合作共同研发“定位盒子”，并搭载Momenta地图更新方案。</p>
+<p>相关工作
+Driving with Prior Maps: Unified Vector Prior Encoding for Autonomous Vehicle Mapping</p>
+<p>论文链接：https://arxiv.org/abs/2409.05352v1</p>
+<p>阿里巴巴和西交团队的工作：高精地图（HD地图）对于自动驾驶汽车的精确导航和决策至关重要，但其创建和维护带来了巨大的成本和及时性挑战。使用车载传感器在线构建高精地图已成为一种有前景的解决方案；然而，由于遮挡和恶劣天气，这些方法可能会受到不完整数据的阻碍。本文提出了PriorDrive框架，通过利用先验地图的力量来解决这些局限性，显著提高了在线高精地图构建的鲁棒性和准确性。我们的方法整合了各种先前的地图，如OpenStreetMap的标准定义地图（SD地图）、供应商过时的高精地图以及来自历史车辆数据的本地构建地图。为了将这些先验信息有效地编码到在线见图模型中，PriorDrive提出了一种混合先验表示（HPQuery），该表示对不同地图元素的表示进行了标准化。PriorDrive的核心是统一矢量编码器（UVE），它采用双编码机制来处理矢量数据。矢量内编码器捕获细粒度的局部特征，而矢量间编码器集成全局上下文。此外提出了一种segment-level和point-level的预训练策略，使UVE能够学习矢量数据的先验分布，从而提高编码器的泛化能力和性能。通过对nuScenes数据集的广泛测试，PriorDrive与各种在线地图模型高度兼容，并大大提高了地图预测能力。通过PriorDrive框架整合先前的地图，为单一感知数据的挑战提供了一个强大的解决方案，为更可靠的自动驾驶汽车导航铺平了道路。</p>
+<p>Neural HD Map Generation from Multiple Vectorized Tiles Locally Produced by Autonomous Vehicles</p>
+<p>论文链接：https://arxiv.org/abs/2409.03445v1</p>
+<p>高精地图厂商四维图新的工作：高精地图是自动驾驶系统的基本组成部分，因为它可以提供有关驾驶场景的精确环境信息。最近关于矢量化地图生成的工作，车辆运行一次只能在自车周围生成65%的局部地图元素，这就留下了一个难题，即如何在高质量标准下构建投影在世界坐标系中的全局高精地图。为了解决这个问题，我们将GNMap作为一个端到端的生成神经网络来自动构建具有多个矢量化图块的高精地图，这些图块是由自动驾驶汽车通过多次旅行在本地生成的。它利用多层和基于注意力的自动编码器作为共享网络，其中的参数是从两个不同的任务（即分别进行预训练和微调）中学习的，以确保生成的映射的完整性和元素类别的正确性。对真实世界的数据集进行了大量的定性评估，实验结果表明，GNMap可以超过SOTA方法5%以上的F1分数，只需少量手动修改即可达到工业使用水平。我们已经在有限公司Navinfo公司部署了它，作为自动构建自动驾驶系统高精地图的不可或缺的软件。</p>
+<p>Enhancing Vectorized Map Perception with Historical Rasterized Maps（ECCV2024）</p>
+<p>论文链接：https://arxiv.org/abs/2409.00620v1</p>
+<p>开源链接：https://github.com/HXMap/HRMapNet</p>
+<p>无图NOA以来，研究人员focus在端到端的在线矢量地图构建上，该技术在鸟瞰图（BEV）空间中实现，希望能够替代传统成本较高的离线高精（HD）地图。但是当前方法在恶劣环境下的准确性和鲁棒性很容易受限。为此本文提出了HRMapNet，其利用低成本的历史光栅化地图来增强在线矢量化地图的感知能力。历史光栅化地图来源于先前预测的结果，因此可以提供当前帧一定的先验信息。为了充分利用历史地图，作者设计了两个模块来增强BEV特征和地图元素的查询。对于BEV特征，本文设计了特征聚合模块，以编码图像和历史地图的特征。对于地图元素的查询，则设计了一个查询初始化模块，以赋予查询从历史地图中得到的先验信息。这两个模块对于在在线感知中利用地图信息至关重要。HRMapNet能够与大多数现有的在线矢量化地图感知方法集成。问鼎nuScenes和Argoverse 2 SOTA。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Feb 20, 2025</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/adas-feature-roadmap/">智能驾驶功能版本节奏管理经验总结</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h2 id="一版本节奏管理的目的与核心价值">一、版本节奏管理的目的与核心价值</h2>
+<ul>
+<li><strong>目标</strong>：确保在 SOP（量产节点）/OTS（测试节点）前，核心功能稳定上线、策略迭代有序、用户体验持续提升；</li>
+<li><strong>价值</strong>：
+<ul>
+<li>支持跨模块协同（感知-规划-控制）；</li>
+<li>管理功能从“可用”到“好用”的演进；</li>
+<li>支撑量产目标达成，规避后期堆叠风险；</li>
+<li>聚焦子目标分批验证，降低系统集成风险。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二功能模块节奏规划机制">二、功能模块节奏规划机制</h2>
+<h3 id="1-版本节奏图的制定流程">1. 版本节奏图的制定流程</h3>
+<table>
+  <thead>
+      <tr>
+          <th>步骤</th>
+          <th>内容</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>明确主功能目标（如 NOP、APA）及上线场景目标</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>拆解为 10~20 个子目标（可感知、可验证）</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>评估各子目标所依赖模块（感知/定位/规划/控制/交互）</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>与各模块 owner 共创投放节奏与资源计划</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>制定阶段性投放图，标注每个阶段策略迭代目标与接口稳定性要求</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>工具绘图（Excel 甘特图、Jira Advanced Roadmap、Visio）</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>周/月同步会议动态调整</td>
+      </tr>
+  </tbody>
+</table>
+<p><img alt="版本节奏图" loading="lazy" src="/images/output.png"></p>
+<blockquote>
+<p>示例图形： NOP版本迭代节奏图，描述每一版本功能合入<br>
+横坐标代表迭代版本（Alpha → Final），纵坐标代表功能子目标，颜色代表完成状态或优先级（灰色：未开始，橙色：已规划，金色：开发中，绿色：已完成）。</p></blockquote>
+<hr>
+<h2 id="三子功能验证目标的梳理与拆分逻辑">三、子功能验证目标的梳理与拆分逻辑</h2>
+<h3 id="以-nopnavigate-on-pilot为例">以 NOP（Navigate on Pilot）为例：</h3>
+<table>
+  <thead>
+      <tr>
+          <th>主功能</th>
+          <th>子功能示例</th>
+          <th>用户价值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速自主巡航</td>
+          <td>保持车道行驶</td>
+          <td>提供舒适稳态巡航体验</td>
+      </tr>
+      <tr>
+          <td>变道触发判断</td>
+          <td>前车慢、旁车安全</td>
+          <td>提高效率</td>
+      </tr>
+      <tr>
+          <td>自动变道执行</td>
+          <td>目标轨迹稳定，控制平顺</td>
+          <td>增强信任感</td>
+      </tr>
+      <tr>
+          <td>入口识别与汇入</td>
+          <td>场景识别准确，决策合理</td>
+          <td>完成复杂融合任务</td>
+      </tr>
+      <tr>
+          <td>出匝道与导航联动</td>
+          <td>与导航结构联动决策</td>
+          <td>实现端到端任务闭环</td>
+      </tr>
+  </tbody>
+</table>
+<table>
+  <thead>
+      <tr>
+          <th>子功能编号</th>
+          <th>子功能目标</th>
+          <th>依赖模块</th>
+          <th>验证点</th>
+          <th>所属阶段</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>NOP-01</td>
+          <td>车道线保持LKA</td>
+          <td>感知 / 控制</td>
+          <td>横向偏差 &lt; 0.3m，控制稳定无抖动</td>
+          <td>Alpha</td>
+      </tr>
+      <tr>
+          <td>NOP-02</td>
+          <td>前车跟随控制ACC</td>
+          <td>感知 / 控制</td>
+          <td>跟车时距控制在安全区间（1~2s）</td>
+          <td>Alpha</td>
+      </tr>
+      <tr>
+          <td>NOP-03</td>
+          <td>自动变道触发判断</td>
+          <td>感知 / 规划</td>
+          <td>正确识别变道意图与安全空隙</td>
+          <td>Beta</td>
+      </tr>
+      <tr>
+          <td>NOP-04</td>
+          <td>自动变道轨迹生成</td>
+          <td>规划 / 控制</td>
+          <td>轨迹无切换突变，控制平滑</td>
+          <td>Beta</td>
+      </tr>
+      <tr>
+          <td>NOP-05</td>
+          <td>变道后轨迹融合</td>
+          <td>控制</td>
+          <td>跟主车道轨迹融合自然，无震荡</td>
+          <td>Beta</td>
+      </tr>
+      <tr>
+          <td>NOP-06</td>
+          <td>出口识别</td>
+          <td>感知 / 定位</td>
+          <td>能提前100m以上识别正确匝道口</td>
+          <td>Beta</td>
+      </tr>
+      <tr>
+          <td>NOP-07</td>
+          <td>匝道汇入识别</td>
+          <td>感知 / 定位</td>
+          <td>能判断主路车流情况，择机切入</td>
+          <td>Gamma</td>
+      </tr>
+      <tr>
+          <td>NOP-08</td>
+          <td>与导航结构联动</td>
+          <td>交互 / 规划</td>
+          <td>能正确匹配导航路径并触发控制动作</td>
+          <td>Gamma</td>
+      </tr>
+      <tr>
+          <td>NOP-09</td>
+          <td>弯道曲率自适应</td>
+          <td>感知 / 控制</td>
+          <td>曲率大时减速及时，控制无甩尾</td>
+          <td>Gamma</td>
+      </tr>
+      <tr>
+          <td>NOP-10</td>
+          <td>用户手动变道提示策略</td>
+          <td>交互 / 规划</td>
+          <td>手动变道引导提示及时、易理解</td>
+          <td>Final</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="拆分原则">拆分原则：</h3>
+<ul>
+<li><strong>验证点清晰</strong>：每个子目标需能单独测试；</li>
+<li><strong>功能依赖优先级</strong>：有些功能 是其他功能的基础依赖，必须先上线</li>
+<li><strong>依赖模块最小化</strong>：优先推进感知、定位等前置模块；</li>
+<li><strong>策略难度可控</strong>：先上线“安全可用”，再迭代“体验更佳”。</li>
+</ul>
+<h3 id="功能依赖">功能依赖：</h3>
+<p>比如车道保持LKA是所有横向控制的基础，ACC是所有纵向跟车策略的基础，同时功能成熟度高，测试覆盖充分，风险&amp;联动复杂度小，因此在Alpha版本实现，优先投放；<br>
+变道触发判断是所有变道策略的起点，先于规划于执行，并且只生成变道请求不直接控制，功能成熟度中等， 联动复杂度低，建议beta版本上线；<br>
+出口检测是所有导航联动的前提，必须先于导航联动上线。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Dec 20, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/%E5%85%B8%E5%9E%8B%E9%97%AE%E9%A2%98/">智能驾驶功能开发中的典型问题汇总</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>以下问题均为系统集成、功能联调或用户体验验证中常见的“典型闭环问题”，适用于 NOP、APA、ACC、LKA 等功能场景。</p>
+<hr>
+<h2 id="一变道类问题nop--noa">一、变道类问题（NOP / NOA）</h2>
+<ul>
+<li>变道轨迹抖动 / 折线过多，影响车辆平顺性</li>
+<li>动作触发延迟，导致错过变道时机</li>
+<li>插队判断错误，未能正确识别目标车道间距</li>
+<li>导航目标车道识别偏差，影响入口/出口变道</li>
+<li>自主变道成功后未正确恢复至原始路径</li>
+</ul>
+<hr>
+<h2 id="二泊车类问题apa">二、泊车类问题（APA）</h2>
+<ul>
+<li>泊车位识别偏移，车辆偏离泊车线</li>
+<li>倒车入位时轨迹溢出安全范围</li>
+<li>APA 识别过程误将墙面、栏杆识别为车位</li>
+<li>泊车起始位置不合理，导致 APA 无法生成可行轨迹</li>
+<li>驻车后未触发自动切换 P 挡 / 驻车制动状态异常</li>
+</ul>
+<hr>
+<h2 id="三跟车类问题acc--tja">三、跟车类问题（ACC / TJA）</h2>
+<ul>
+<li>前车减速响应延迟，跟车距离拉近过快</li>
+<li>误判静止物体为运动目标导致急刹</li>
+<li>在拥堵工况中频繁启停，舒适性差</li>
+<li>跟车目标丢失时未及时降级退出 ACC 状态</li>
+<li>默认加速度 / 跟车间距配置过大或过小，体验不一致</li>
+</ul>
+<hr>
+<h2 id="四横纵向控制类问题lka--planning">四、横纵向控制类问题（LKA / Planning）</h2>
+<ul>
+<li>LKA 中车辆偏离车道线但未及时介入</li>
+<li>弯道中曲率变化过快，导致控制器震荡</li>
+<li>轨迹规划不连续，目标点抖动</li>
+<li>控制指令变化陡峭，引发急转或急加速</li>
+<li>转向指令与当前车速不匹配，导致过弯困难</li>
+</ul>
+<hr>
+<h2 id="五感知--状态识别类问题">五、感知 &amp; 状态识别类问题</h2>
+<ul>
+<li>静态障碍识别误报，影响轨迹生成</li>
+<li>交通灯状态识别错误，导致刹停失败</li>
+<li>车道线检测置信度低，影响路径规划</li>
+<li>车辆定位误差大于可接受范围（&gt; 0.5m）</li>
+<li>上下匝道判断逻辑错误，导致路径漂移</li>
+</ul>
+<hr>
+<h2 id="六模块接口--策略交互类问题">六、模块接口 / 策略交互类问题</h2>
+<ul>
+<li>感知与规划模块的坐标系不一致</li>
+<li>置信度阈值设置不合理，导致过早/过晚触发切换</li>
+<li>策略端参数配置未与实际功能同步（如最大变道时间）</li>
+<li>轨迹下发频率与控制器采样周期不匹配</li>
+<li>模块状态切换条件不一致，影响降级退出流程</li>
+</ul>
+<hr>
+<h2 id="七用户体验--非功能性问题">七、用户体验 / 非功能性问题</h2>
+<ul>
+<li>变道过程中方向盘突然介入，造成“吓人”体验</li>
+<li>倒车过程中音响提示与车速不一致</li>
+<li>自动泊车未显示进度/状态信息，缺乏可感知反馈</li>
+<li>能力触发门槛过高，用户难以体验完整流程</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 21, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%92%8C%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/">需求分析与功能设计</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>基于用户体验目标与典型使用场景，对需求进行逐步细化，最终转化为可实现的功能设计。</p>
+<h3 id="以nop和apa为例">以NOP和APA为例</h3>
+<ul>
+<li>NOP(Navigation On Pilot)
+<ul>
+<li>功能目标：高速场景下的智能导航驾驶</li>
+<li>上线场景（典型使用场景）：
+<ul>
+<li>高速主路</li>
+<li>自动变道（超车 / 躲避慢车）</li>
+<li>主路汇入匝道</li>
+<li>匝道驶出并与导航交互</li>
+<li>弯道曲率适配控制</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>NOP（Navigate on Pilot）功能需求与设计拆解表</p>
+<table>
+  <thead>
+      <tr>
+          <th>上线场景</th>
+          <th>功能需求（What）</th>
+          <th>子需求（细化 What）</th>
+          <th>所属模块</th>
+          <th>功能设计（How）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速主路巡航</td>
+          <td>保持车辆在当前车道稳定巡航</td>
+          <td>识别清晰车道线，维持居中行驶</td>
+          <td>感知 / 控制</td>
+          <td>车道线识别 + 轨迹偏移计算 + PID 控制器</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>抑制车道线虚假识别干扰</td>
+          <td>感知</td>
+          <td>多源融合 + 稳定性判别机制</td>
+      </tr>
+      <tr>
+          <td>主路跟车</td>
+          <td>前方有车时能稳定跟随并保持安全车距</td>
+          <td>实时识别前车位置与速度</td>
+          <td>感知</td>
+          <td>雷达+视觉融合检测，计算相对距离</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>动态调整跟车距离与加速度</td>
+          <td>控制 / 策略</td>
+          <td>ACC控制策略 + 自适应速度规划</td>
+      </tr>
+      <tr>
+          <td>自动变道（超车/避障）</td>
+          <td>根据策略与环境条件安全触发并完成变道动作</td>
+          <td>判断变道时机（前车慢、侧方可变道）</td>
+          <td>感知 / 策略</td>
+          <td>速度判断 + 安全空隙评估模块</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>规划变道路径并执行横向平滑过渡</td>
+          <td>规划 / 控制</td>
+          <td>五阶轨迹规划 + LQR横向控制器</td>
+      </tr>
+      <tr>
+          <td>主路汇入匝道</td>
+          <td>在即将进入匝道前自动切入合适车道</td>
+          <td>提前识别出口与汇入点</td>
+          <td>定位 / 感知</td>
+          <td>HD地图出口匹配 + 定位融合模块</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>生成合理汇入路径并协调控制器执行</td>
+          <td>规划 / 控制</td>
+          <td>插入轨迹规划 + 速度过渡控制</td>
+      </tr>
+      <tr>
+          <td>匝道驶出与导航联动</td>
+          <td>出高速并进入本地路段，顺利切换控制与路线逻辑</td>
+          <td>出口匹配导航并生成分岔路线决策</td>
+          <td>感知 / 交互</td>
+          <td>导航路径同步模块 + 分岔点策略决策</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>平滑完成车道切换并保持目标路线</td>
+          <td>控制 / 状态机</td>
+          <td>状态迁移控制逻辑 + 轨迹融合</td>
+      </tr>
+      <tr>
+          <td>弯道曲率适配控制</td>
+          <td>根据道路曲率调整车速与横向控制，保证安全与舒适性</td>
+          <td>实时感知路段曲率，并动态控制转向</td>
+          <td>感知 / 控制</td>
+          <td>曲率计算模块 + 控制器参数调节</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>弯道内速度限制及横向加速度限制策略</td>
+          <td>策略 / 控制</td>
+          <td>最大侧向加速度阈值设定 + 速度规划器</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="apa">APA</h3>
+<ul>
+<li>APA（Auto Parkign Assist）
+<ul>
+<li>
+<p>功能目标：在多种复杂车位场景中，系统能自动完成自动泊入/泊出，覆盖多类车位</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 21, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/%E8%81%94%E8%B0%83%E6%8E%A5%E5%8F%A3%E5%AF%B9%E9%BD%90/">模块分工与接口定义表</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><h1 id="模块通信接口定义文档感知--规划--控制">模块通信接口定义文档（感知 / 规划 / 控制）</h1>
+<p>本文档定义了智能驾驶系统中主要功能模块之间的数据通信接口，包含感知模块、规划模块和控制模块，明确其输入输出数据类型、频率、数据格式及依赖配置，确保系统联调与功能集成的稳定性和可扩展性。</p>
+<h1 id="模块分工与接口定义表感知--规划--控制">模块分工与接口定义表（感知 / 规划 / 控制）</h1>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>主要职责</th>
+          <th>输入接口</th>
+          <th>输出接口</th>
+          <th>依赖参数 / 配置</th>
+          <th>典型异常情况</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知模块</td>
+          <td>提供环境建图、障碍物检测、车道线识别等基础信息</td>
+          <td>摄像头、雷达、超声波、IMU 原始数据</td>
+          <td>- 障碍物列表<!-- raw HTML omitted -->- 车道线模型<!-- raw HTML omitted -->- 可通行区域Mask<!-- raw HTML omitted -->- 动态物体预测轨迹</td>
+          <td>感知置信度阈值<!-- raw HTML omitted -->障碍物融合策略</td>
+          <td>静态物体误识别<!-- raw HTML omitted -->车道线断裂<!-- raw HTML omitted -->预测轨迹跳变</td>
+      </tr>
+      <tr>
+          <td>规划模块</td>
+          <td>基于感知结果和导航目标，生成轨迹并动态调整行为策略</td>
+          <td>- 当前车辆状态<!-- raw HTML omitted -->- 障碍物列表<!-- raw HTML omitted -->- 可通行区域<!-- raw HTML omitted -->- 全局路径</td>
+          <td>- 局部轨迹（轨迹点序列）<!-- raw HTML omitted -->- 行为决策（变道 / 跟车 / 停止）</td>
+          <td>最远预测距离<!-- raw HTML omitted -->轨迹重规划频率<!-- raw HTML omitted -->变道策略参数</td>
+          <td>轨迹折线过多<!-- raw HTML omitted -->变道触发不合理<!-- raw HTML omitted -->变道后不恢复原车道</td>
+      </tr>
+      <tr>
+          <td>控制模块</td>
+          <td>接收轨迹并计算控制指令（转向 / 加减速）实现车辆执行</td>
+          <td>- 规划轨迹<!-- raw HTML omitted -->- 当前车速 / 横摆角<!-- raw HTML omitted -->- 控制目标点</td>
+          <td>- 方向盘角度<!-- raw HTML omitted -->- 加速度 / 油门开度<!-- raw HTML omitted -->- 制动指令</td>
+          <td>控制频率<!-- raw HTML omitted -->控制器类型（PID/MPC）<!-- raw HTML omitted -->跟踪误差阈值</td>
+          <td>指令跳变<!-- raw HTML omitted -->横向控制震荡<!-- raw HTML omitted -->刹车响应滞后</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="1-模块功能分工">1. 模块功能分工</h2>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>主要职责</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知模块</td>
+          <td>环境建图、车道线识别、障碍物检测与跟踪</td>
+      </tr>
+      <tr>
+          <td>规划模块</td>
+          <td>行为决策（如变道、跟车）、轨迹生成</td>
+      </tr>
+      <tr>
+          <td>控制模块</td>
+          <td>控制命令输出（转向、加减速），完成车辆运动控制</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="2-模块间通信接口定义">2. 模块间通信接口定义</h2>
+<h3 id="-21-感知--规划">🔹 2.1 感知 → 规划</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>数据字段示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/perception/obstacles</td>
+          <td>ObstacleArray</td>
+          <td>20 Hz</td>
+          <td>id, position(x,y), velocity, type, confidence</td>
+      </tr>
+      <tr>
+          <td>/perception/lane</td>
+          <td>LaneModel</td>
+          <td>20 Hz</td>
+          <td>lane_id, coeffs(a,b,c), confidence</td>
+      </tr>
+      <tr>
+          <td>/perception/area</td>
+          <td>DrivableArea</td>
+          <td>10 Hz</td>
+          <td>polygon_mask, timestamp</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="-22-规划--控制">🔹 2.2 规划 → 控制</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>数据字段示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/planning/trajectory</td>
+          <td>Trajectory</td>
+          <td>50 Hz</td>
+          <td>points[x,y,v,acc,yaw], timestamp</td>
+      </tr>
+      <tr>
+          <td>/planning/behavior</td>
+          <td>BehaviorState</td>
+          <td>10 Hz</td>
+          <td>state_type (lane_following, lane_change, stop), duration</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="-23-感知--控制直接辅助控制冗余通道">🔹 2.3 感知 → 控制（直接辅助控制冗余通道）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>接口名称</th>
+          <th>数据类型</th>
+          <th>发布频率</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/perception/yaw_rate</td>
+          <td>Float32</td>
+          <td>100 Hz</td>
+          <td>高频率反馈用于横向控制辅助</td>
+      </tr>
+      <tr>
+          <td>/imu/data</td>
+          <td>IMUData</td>
+          <td>100 Hz</td>
+          <td>惯性导航传感器数据</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-配置参数依赖项">3. 配置参数依赖项</h2>
+<table>
+  <thead>
+      <tr>
+          <th>模块</th>
+          <th>参数名称</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>感知</td>
+          <td>lane_conf_threshold</td>
+          <td>车道线识别的最低置信度</td>
+      </tr>
+      <tr>
+          <td>规划</td>
+          <td>lane_change_timeout</td>
+          <td>变道超时时间设置</td>
+      </tr>
+      <tr>
+          <td>控制</td>
+          <td>lateral_ctrl_gain</td>
+          <td>横向 PID 控制器增益参数</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="4-常见接口问题与调试建议">4. 常见接口问题与调试建议</h2>
+<table>
+  <thead>
+      <tr>
+          <th>问题描述</th>
+          <th>可能原因</th>
+          <th>调试建议</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>轨迹点跳变 / 抖动</td>
+          <td>感知误差大，置信度低</td>
+          <td>检查感知数据时间同步与滤波器配置</td>
+      </tr>
+      <tr>
+          <td>控制器响应滞后</td>
+          <td>轨迹点更新频率低</td>
+          <td>提高轨迹发布频率，调整控制器采样率</td>
+      </tr>
+      <tr>
+          <td>行为状态误判（频繁进入lane_change）</td>
+          <td>规则配置阈值过低 / 误判插队</td>
+          <td>优化状态机转移条件，结合多维输入决策</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="5-接口格式示例ros-message">5. 接口格式示例（ROS Message）</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Trajectory.msg</span>
+</span></span><span style="display:flex;"><span>Header header
+</span></span><span style="display:flex;"><span>TrajectoryPoint[] points
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># TrajectoryPoint.msg</span>
+</span></span><span style="display:flex;"><span>float64 x
+</span></span><span style="display:flex;"><span>float64 y
+</span></span><span style="display:flex;"><span>float64 v
+</span></span><span style="display:flex;"><span>float64 acc
+</span></span><span style="display:flex;"><span>float64 yaw
+</span></span></code></pre></div><hr>
+<p>本接口定义文档将随系统演进持续迭代更新，版本记录详见附录。</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Jan 21, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+      <h2 style="margin-top: 2rem;">Function Strategy &amp; UX Optimization</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/l2&#43;&#43;%E5%9C%BA%E6%99%AF%E8%90%BD%E5%9C%B0%E8%B7%AF%E5%BE%84%E7%A0%94%E7%A9%B6/">L2&#43;&#43; 智能驾驶典型场景落地路径研究</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>本篇文档主要分析落地场景和相应的技术路径</p>
+<h2 id="一l2典型落地场景总览">一、L2++典型落地场景总览</h2>
+<table>
+  <thead>
+      <tr>
+          <th>场景类型</th>
+          <th>场景示例</th>
+          <th>是否主流落地</th>
+          <th>代表功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高速场景</td>
+          <td>高速跟车、变道超车、上下匝道</td>
+          <td>已广泛部署</td>
+          <td>NOA、ACC、ALC</td>
+      </tr>
+      <tr>
+          <td>城市快速路</td>
+          <td>红绿灯通行、左转右转、避让行人非机动车</td>
+          <td>城市NOA核心区域</td>
+          <td>城市NOA、TJP</td>
+      </tr>
+      <tr>
+          <td>泊车场景</td>
+          <td>车位搜索、自动泊入泊出、记忆泊车</td>
+          <td>商业化广泛</td>
+          <td>APA、RPA、VPA</td>
+      </tr>
+      <tr>
+          <td>通勤路径</td>
+          <td>自定义路线记忆、熟路线高阶自动驾驶</td>
+          <td>差异化亮点</td>
+          <td>通勤NOA、记忆行驶</td>
+      </tr>
+      <tr>
+          <td>高速/城市融合</td>
+          <td>点到点导航，全程自动辅助驾驶</td>
+          <td>探索中</td>
+          <td>全域NOA、PPA</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二典型场景落地路径分析">二、典型场景落地路径分析</h2>
+<h3 id="1-高速场景最成熟的l2落地入口">1️ 高速场景：最成熟的L2++落地入口</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从ACC/LKA演进到NOA</li>
+<li>配合高精地图完成匝道上下、变道超车</li>
+<li>再演进为“无图NOA”</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>自动变道超车（ALC）</li>
+<li>自动上下匝道</li>
+<li>智能限速</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+蔚来NOP+、华为ADS、Momenta Mpilot、理想NOA</p>
+<hr>
+<h3 id="2-城市道路场景能力挑战最大战略重点场景">2️ 城市道路场景：能力挑战最大、战略重点场景</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>从城市主干道直行 → 红绿灯识别通行</li>
+<li>→ 支持交叉路口通行、无保护左转、避让行人等</li>
+<li>→ BEV感知+轻地图+规则策略并存</li>
+</ul>
+<p><strong>代表功能：</strong></p>
+<ul>
+<li>城市NOA</li>
+<li>红绿灯识别与响应</li>
+<li>异形障碍避让</li>
+<li>非保护转弯/礼让行人/加塞识别</li>
+</ul>
+<p><strong>代表落地品牌：</strong><br>
+Momenta、华为ADS 2.0、百度Apollo Max、文远WePilot</p>
+<hr>
+<h3 id="3-泊车类场景感知主导场景落地稳定">3️ 泊车类场景：感知主导场景、落地稳定</h3>
+<p><strong>路径演进：</strong></p>
+<ul>
+<li>APA → RPA → 记忆泊车 → 云图泊车</li>
+</ul>
+<p><strong>代表功能：</strong></p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Feb 15, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+      <h2 style="margin-top: 2rem;">自动驾驶感知模块</h2>
+      <div class="post-list">
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/ros%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/">如何使用 C&#43;&#43; 编写一个 ROS 设备驱动节点</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>通过本案例可以掌握：</p>
+<ul>
+<li>如何使用 C++ 编写一个 ROS 设备驱动节点；</li>
+<li>如何调试 ROS 发布频率、时间戳和消息内容；</li>
+<li>如何结合 rosbag 与 rqt_plot 分析传感器数据的稳定性；</li>
+<li>为后续多传感器时间同步与融合（如 EKF）打下基础。</li>
+</ul>
+<h1 id="-多传感器融合中的-ros-驱动开发实战案例">🌐 多传感器融合中的 ROS 驱动开发实战案例</h1>
+<p>在自动驾驶系统中，IMU、GNSS 和雷达等传感器是实现环境感知和车辆定位的关键。本文以 ROS 框架为基础，讲解如何编写一个简单的传感器驱动节点，实现数据采集 → 解析 → 发布 → 可视化，并附带常见调试命令。</p>
+<hr>
+<h2 id="1-项目结构">1. 项目结构</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>my_sensor_driver/
+</span></span><span style="display:flex;"><span>├── launch/
+</span></span><span style="display:flex;"><span>│   └── sensor_driver.launch
+</span></span><span style="display:flex;"><span>├── src/
+</span></span><span style="display:flex;"><span>│   └── imu_driver_node.cpp
+</span></span><span style="display:flex;"><span>├── include/
+</span></span><span style="display:flex;"><span>│   └── imu_driver.hpp
+</span></span><span style="display:flex;"><span>├── config/
+</span></span><span style="display:flex;"><span>│   └── imu_config.yaml
+</span></span><span style="display:flex;"><span>├── CMakeLists.txt
+</span></span><span style="display:flex;"><span>├── package.xml
+</span></span></code></pre></div><ul>
+<li>
+<p>my_sensor_driver： ROS package 根目录，所有内容都放在这里</p>
+</li>
+<li>
+<p>launch/sensor_driver.launch：</p>
+<ul>
+<li>ROS 的启动脚本，用 XML 格式描述：
+<ul>
+<li>启动哪个节点（node）</li>
+<li>使用哪些参数文件（如 config/imu_config.yaml）</li>
+<li>是否输出日志到屏幕等</li>
+<li>用法：<strong>roslaunch my_sensor_driver sensor_driver.launch</strong></li>
+<li>示例：</li>
+</ul>
+<pre tabindex="0"><code class="language-launch" data-lang="launch">&lt;launch&gt;
+&lt;!-- 加载 IMU 参数配置 --&gt;
+&lt;rosparam file=&#34;$(find my_sensor_driver)/config/imu_config.yaml&#34; command=&#34;load&#34;/&gt;
+
+&lt;!-- 启动 IMU 驱动节点 --&gt;
+&lt;node name=&#34;imu_driver&#34; pkg=&#34;my_sensor_driver&#34; type=&#34;imu_driver_node&#34; output=&#34;screen&#34;/&gt;
+&lt;/launch&gt;
+</code></pre></li>
+</ul>
+</li>
+<li>
+<p>src/imu_driver_node.cpp</p></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">Nov 17, 2024</span>
+  </footer>
+</article>
+
+        
+          <article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-title">
+      <a href="/posts/lidar_point_cloud_processing/">激光点云处理（Lidar Point Cloud Processing）</a>
+    </h2>
+  </header>
+  <section class="entry-content">
+    <p><p>激光雷达（Lidar）是自动驾驶中感知环境的核心传感器之一，它输出的是一帧帧<strong>点云数据（point cloud）</strong>，表示空间中障碍物的位置和形状。</p>
+<hr>
+<h2 id="1-什么是点云">1. 什么是点云？</h2>
+<p>点云是由一系列点（x, y, z, intensity）组成的数据集，每个点表示空间中某个反射物的坐标和强度信息。</p>
+<hr>
+<h2 id="2-点云数据结构">2. 点云数据结构</h2>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>x, y, z</td>
+          <td>三维坐标</td>
+      </tr>
+      <tr>
+          <td>intensity</td>
+          <td>激光反射强度</td>
+      </tr>
+      <tr>
+          <td>ring</td>
+          <td>激光束编号（多线雷达）</td>
+      </tr>
+      <tr>
+          <td>timestamp</td>
+          <td>每个点的时间戳</td>
+      </tr>
+      <tr>
+          <td>reflectivity / ambient</td>
+          <td>可选，反映表面材质或亮度</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="3-常见处理流程">3. 常见处理流程</h2>
+<h3 id="31-点云预处理">3.1 点云预处理</h3>
+<ul>
+<li><strong>体素滤波（VoxelGrid）</strong>：降低点云密度，加快处理速度</li>
+<li><strong>裁剪（CropBox）</strong>：去除远处或地面点，聚焦感兴趣区域</li>
+<li><strong>时间同步</strong>：与IMU/GNSS同步，统一坐标系</li>
+</ul>
+<h3 id="32-点云配准与融合">3.2 点云配准与融合</h3>
+<ul>
+<li><strong>ICP算法（Iterative Closest Point）</strong>：配准不同帧点云，构建地图</li>
+<li><strong>NDT算法</strong>：用于鲁棒配准，适应点云局部稀疏问题</li>
+<li><strong>多帧融合</strong>：提升障碍检测的完整性</li>
+</ul>
+<h3 id="33-点云感知">3.3 点云感知</h3>
+<ul>
+<li><strong>地面分割（Ground Segmentation）</strong>：识别并移除地面点</li>
+<li><strong>聚类（Euclidean Clustering）</strong>：提取独立目标（车辆、行人）</li>
+<li><strong>目标跟踪与识别</strong>：结合深度学习模型进行物体分类</li>
+</ul>
+<hr>
+<h2 id="4-使用工具与库">4. 使用工具与库</h2>
+<table>
+  <thead>
+      <tr>
+          <th>工具/库</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>PCL (Point Cloud Library)</strong></td>
+          <td>最主流的C++点云处理库</td>
+      </tr>
+      <tr>
+          <td><strong>Open3D</strong></td>
+          <td>Python友好，支持可视化与处理</td>
+      </tr>
+      <tr>
+          <td><strong>ROS + sensor_msgs/PointCloud2</strong></td>
+          <td>ROS中点云标准消息格式</td>
+      </tr>
+      <tr>
+          <td><strong>rviz</strong></td>
+          <td>可视化点云、障碍物、车辆模型</td>
+      </tr>
+      <tr>
+          <td><strong>Autoware/Apollo</strong></td>
+          <td>提供全套点云感知模块</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="5-示例pcl聚类伪代码">5. 示例：PCL聚类伪代码</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>pcl<span style="color:#f92672">::</span>EuclideanClusterExtraction<span style="color:#f92672">&lt;</span>pcl<span style="color:#f92672">::</span>PointXYZ<span style="color:#f92672">&gt;</span> ec;
+</span></span><span style="display:flex;"><span>ec.setClusterTolerance(<span style="color:#ae81ff">0.5</span>); <span style="color:#75715e">// 50cm内为一类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>ec.setMinClusterSize(<span style="color:#ae81ff">30</span>);
+</span></span><span style="display:flex;"><span>ec.setMaxClusterSize(<span style="color:#ae81ff">2500</span>);
+</span></span><span style="display:flex;"><span>ec.setSearchMethod(tree);
+</span></span><span style="display:flex;"><span>ec.setInputCloud(cloud_filtered);
+</span></span><span style="display:flex;"><span>ec.extract(cluster_indices);
+</span></span></code></pre></div><hr>
+<h2 id="推荐学习资料">推荐学习资料</h2>
+<ul>
+<li><a href="https://pointclouds.org/documentation/">PCL官方文档</a></li>
+<li><a href="http://www.open3d.org/docs/">Open3D教程</a></li>
+<li>Apollo / Autoware 点云处理模块源码分析</li>
+<li>Udacity Sensor Fusion Nanodegree</li>
+</ul></p>
+  </section>
+  <footer class="entry-footer">
+    <span class="entry-date">May 2, 2024</span>
+  </footer>
+</article>
+
+        
+      </div>
+    
+  </main>
+
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>强化学习的状态空间和动作空间是什么 | </title>
 <meta name="keywords" content="状态空间, 动作空间, gymnasium, 观测定义">
 <meta name="description" content="在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。
@@ -86,16 +86,16 @@ Dict({
 本项目中的动作空间定义：
 我们通常使用连续动作空间来控制机器人，例如：">
 <meta name="author" content="">
-<link rel="canonical" href="//localhost:1313/posts/state-action-space/">
+<link rel="canonical" href="/posts/state-action-space/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/state-action-space/">
+<link rel="alternate" hreflang="en" href="/posts/state-action-space/">
 <noscript>
     <style>
         #theme-toggle,
@@ -132,7 +132,158 @@ Dict({
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="/posts/state-action-space/">
+  <meta property="og:title" content="强化学习的状态空间和动作空间是什么">
+  <meta property="og:description" content="在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。
+在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。
+状态空间（Observation Space） 状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。
+常见类型： 类型 示例 含义说明 Box(4,) [-4.8, 4.8] × 4 连续变量向量，如位置、速度等 Box(84, 84, 3) 图像输入 视觉输入，常用于端到端控制 Dict(...) 多通道输入 图像 &#43; 雷达 &#43; IMU 组合观测 本项目中的状态空间定义： 在本项目中，我们的状态空间通常包括：
+图像帧：从机器人前置摄像头获取的 RGB 图像（如 (224, 224, 3)） 附加状态向量（可选）：如上一帧速度、转角、航向角等传感器读数 状态空间结构可能是：
+Box(low=0, high=255, shape=(224, 224, 3), dtype=np.uint8) 或
+Dict({ &#34;image&#34;: Box(...), &#34;speed&#34;: Box(...), &#34;yaw&#34;: Box(...) }) 动作空间（Action Space） 动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。
+常见类型： 类型 示例 用途说明 Discrete(n) Discrete(3) 离散控制，如左、右、直行 Box(...) Box(-1, 1, (2,), float32) 连续动作，如转角和加速度控制 MultiBinary(n) MultiBinary(5) 多位二进制开关组合 本项目中的动作空间定义： 我们通常使用连续动作空间来控制机器人，例如：">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-11-17T00:00:00+00:00">
+    <meta property="article:tag" content="状态空间">
+    <meta property="article:tag" content="动作空间">
+    <meta property="article:tag" content="Gymnasium">
+    <meta property="article:tag" content="观测定义">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="强化学习的状态空间和动作空间是什么">
+<meta name="twitter:description" content="在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。
+在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。
+
+状态空间（Observation Space）
+状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。
+常见类型：
+
+  
+      
+          类型
+          示例
+          含义说明
+      
+  
+  
+      
+          Box(4,)
+          [-4.8, 4.8] × 4
+          连续变量向量，如位置、速度等
+      
+      
+          Box(84, 84, 3)
+          图像输入
+          视觉输入，常用于端到端控制
+      
+      
+          Dict(...)
+          多通道输入
+          图像 &#43; 雷达 &#43; IMU 组合观测
+      
+  
+
+本项目中的状态空间定义：
+在本项目中，我们的状态空间通常包括：
+
+图像帧：从机器人前置摄像头获取的 RGB 图像（如 (224, 224, 3)）
+附加状态向量（可选）：如上一帧速度、转角、航向角等传感器读数
+
+状态空间结构可能是：
+Box(low=0, high=255, shape=(224, 224, 3), dtype=np.uint8)
+或
+Dict({
+    &#34;image&#34;: Box(...),
+    &#34;speed&#34;: Box(...),
+    &#34;yaw&#34;: Box(...)
+})
+
+动作空间（Action Space）
+动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。
+常见类型：
+
+  
+      
+          类型
+          示例
+          用途说明
+      
+  
+  
+      
+          Discrete(n)
+          Discrete(3)
+          离散控制，如左、右、直行
+      
+      
+          Box(...)
+          Box(-1, 1, (2,), float32)
+          连续动作，如转角和加速度控制
+      
+      
+          MultiBinary(n)
+          MultiBinary(5)
+          多位二进制开关组合
+      
+  
+
+本项目中的动作空间定义：
+我们通常使用连续动作空间来控制机器人，例如：">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "强化学习的状态空间和动作空间是什么",
+      "item": "/posts/state-action-space/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "强化学习的状态空间和动作空间是什么",
+  "name": "强化学习的状态空间和动作空间是什么",
+  "description": "在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。\n在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。\n状态空间（Observation Space） 状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。\n常见类型： 类型 示例 含义说明 Box(4,) [-4.8, 4.8] × 4 连续变量向量，如位置、速度等 Box(84, 84, 3) 图像输入 视觉输入，常用于端到端控制 Dict(...) 多通道输入 图像 + 雷达 + IMU 组合观测 本项目中的状态空间定义： 在本项目中，我们的状态空间通常包括：\n图像帧：从机器人前置摄像头获取的 RGB 图像（如 (224, 224, 3)） 附加状态向量（可选）：如上一帧速度、转角、航向角等传感器读数 状态空间结构可能是：\nBox(low=0, high=255, shape=(224, 224, 3), dtype=np.uint8) 或\nDict({ \u0026#34;image\u0026#34;: Box(...), \u0026#34;speed\u0026#34;: Box(...), \u0026#34;yaw\u0026#34;: Box(...) }) 动作空间（Action Space） 动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。\n常见类型： 类型 示例 用途说明 Discrete(n) Discrete(3) 离散控制，如左、右、直行 Box(...) Box(-1, 1, (2,), float32) 连续动作，如转角和加速度控制 MultiBinary(n) MultiBinary(5) 多位二进制开关组合 本项目中的动作空间定义： 我们通常使用连续动作空间来控制机器人，例如：\n",
+  "keywords": [
+    "状态空间", "动作空间", "gymnasium", "观测定义"
+  ],
+  "articleBody": "在强化学习中，状态空间（Observation Space）和动作空间（Action Space）是两个基础概念。理解这两个空间，就等于弄清楚“模型看到了什么”和“模型可以做什么”。\n在本项目中，我们使用的是基于图像和传感器输入的强化学习模型，用于端到端的控制任务，如预测方向、速度或操作行为。下面我们从通用概念讲起，最后具体说明本项目的定义。\n状态空间（Observation Space） 状态空间描述了智能体每一步能从环境中获取到的“状态信息”。这些信息构成了模型的输入，可以是一个向量，也可以是图像、组合信号等。\n常见类型： 类型 示例 含义说明 Box(4,) [-4.8, 4.8] × 4 连续变量向量，如位置、速度等 Box(84, 84, 3) 图像输入 视觉输入，常用于端到端控制 Dict(...) 多通道输入 图像 + 雷达 + IMU 组合观测 本项目中的状态空间定义： 在本项目中，我们的状态空间通常包括：\n图像帧：从机器人前置摄像头获取的 RGB 图像（如 (224, 224, 3)） 附加状态向量（可选）：如上一帧速度、转角、航向角等传感器读数 状态空间结构可能是：\nBox(low=0, high=255, shape=(224, 224, 3), dtype=np.uint8) 或\nDict({ \"image\": Box(...), \"speed\": Box(...), \"yaw\": Box(...) }) 动作空间（Action Space） 动作空间描述了模型每一步可以采取的动作范围，也就是输出的结构。\n常见类型： 类型 示例 用途说明 Discrete(n) Discrete(3) 离散控制，如左、右、直行 Box(...) Box(-1, 1, (2,), float32) 连续动作，如转角和加速度控制 MultiBinary(n) MultiBinary(5) 多位二进制开关组合 本项目中的动作空间定义： 我们通常使用连续动作空间来控制机器人，例如：\nBox(low=np.array([-1.0, -1.0]), high=np.array([1.0, 1.0]), dtype=np.float32) 这表示：\n第一个输出控制方向角（steering angle），范围 [-1, 1] 第二个输出控制加速度或速度，范围 [-1, 1] 动作会经过缩放，映射到实际的执行命令中，例如 [-1, 1] → [-30°, 30°]。\n状态空间和动作空间如何影响模型设计？ 模型输入必须匹配状态空间结构\n图像输入通常使用卷积神经网络（CNN）提取空间特征 结构化向量信息则传入多层感知机（MLP）网络，MLP 是一种基本的前馈神经网络，由多个全连接层组成，适合处理低维向量输入 [1] 模型输出应匹配动作空间格式\n如果是 Discrete，通常用 softmax 输出多个动作概率 如果是 Box，使用连续输出（如 tanh 激活）限定在动作范围内 示例：一个典型训练循环 obs, _ = env.reset() for step in range(200): action = policy(obs) # 模型根据 obs 生成动作 obs, reward, done, truncated, _ = env.step(action) if done or truncated: break obs 来自状态空间定义，action 必须符合动作空间定义。两者必须和 env.observation_space 与 env.action_space 严格匹配。\n总结 状态空间是模型的输入接口，反映了它感知世界的能力 动作空间是模型的输出接口，决定了它的控制能力 在实际项目中，状态空间和动作空间的设计直接决定了强化学习能否有效应用在任务中。理解它们，是进入 DRL 项目开发的第一步。\n参考资料： [1] Goodfellow, I., Bengio, Y., \u0026 Courville, A. (2016). Deep Learning. MIT Press. （第 6 章，Multilayer Perceptrons）\n上一篇:什么是 Gymnasium？强化学习中的环境是怎么定义的？\n下一篇:DRL 常见算法全景图：从 DQN 到 PPO，谁适合你的任务？\n",
+  "wordCount" : "176",
+  "inLanguage": "en",
+  "datePublished": "2024-11-17T00:00:00Z",
+  "dateModified": "2024-11-17T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/state-action-space/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+
+
 </head>
 
 <body class="" id="top">
@@ -321,10 +472,10 @@ Dict({
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="//localhost:1313/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4/">状态空间</a></li>
-      <li><a href="//localhost:1313/tags/%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4/">动作空间</a></li>
-      <li><a href="//localhost:1313/tags/gymnasium/">Gymnasium</a></li>
-      <li><a href="//localhost:1313/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/">观测定义</a></li>
+      <li><a href="/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4/">状态空间</a></li>
+      <li><a href="/tags/%E5%8A%A8%E4%BD%9C%E7%A9%BA%E9%97%B4/">动作空间</a></li>
+      <li><a href="/tags/gymnasium/">Gymnasium</a></li>
+      <li><a href="/tags/%E8%A7%82%E6%B5%8B%E5%AE%9A%E4%B9%89/">观测定义</a></li>
     </ul>
   </footer>
 </article>

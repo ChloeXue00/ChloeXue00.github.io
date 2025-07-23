@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>NOP主要功能设计逻辑图（状态机） | </title>
+<meta name="keywords" content="NOP, ADAS系统设计">
+<meta name="description" content="全域领航辅助NOP&#43;
+1. 产品概述
+全域领航辅助NOP&#43;是一种舒适性功能，它是能让车辆根据导航规划好的路线进行行驶的辅助驾驶功能，能够完成如路口通行、导航变道、超车变道、绕向车辆等驾驶任务。在面对施工区域、通用障碍物等场景时，车辆具有安全能力，能够提供联通地面道路与城市快速路、高速公路的辅助驾驶体验。
+
+2. 车型配置
+本文档中提出的 NOP&#43; 全域领航辅助功能，配置在 ES8车型上。
+3. 参考文档
+
+  
+      
+          序号
+          文档编号
+          文档名
+      
+  
+  
+      
+          1
+          GBT 20608-2006
+          智能运输系统-自适应巡航控制系统-性能要求与检测方法
+      
+      
+          2
+          ISO 15622-2018
+          Intelligent Transport Systems-Adaptive Cruise Control
+      
+      
+          System-Performance Requirements and Test Procedures
+          
+          
+      
+      
+          3
+          ISO 22179-2009
+          Intelligent Transport Systems-Full Speed Range Adaptive Cruise
+      
+      
+          Control (FSRA) Systems- Performance Requirements and Test
+          
+          
+      
+      
+          Procedures
+          
+          
+      
+      
+          4
+          SAE J2399
+          Adaptive Cruise Control (ACC) Operating Characteristics and
+      
+      
+          User Interface
+          
+          
+      
+      
+          5
+          i-VISTA GM-MM-A0-2020
+          中国智能汽车指数管理办法 2020 版
+      
+      
+          6
+          i-VISTA SM-ADAS-ICAR-A0-2019
+          智能行车辅助评价规程 2020 版
+      
+      
+          7
+          i-VISTA SM-ADAS-ICAT-A0-2019
+          智能行车辅助试验规程 2020 版
+      
+      
+          8
+          
+          中华人民共和国道路交通安全法
+      
+  
+
+4. 名词解释
+
+  
+      
+          序号
+          缩写
+          全称
+          注释
+      
+  
+  
+      
+          1
+          ACC
+          Adaptive Cruise Control
+          自适应巡航控制
+      
+      
+          2
+          Stop&amp;Go
+          Stop and Go
+          自动启停
+      
+      
+          3
+          Override
+          
+          超驰
+      
+      
+          4
+          ODC
+          Operational Design Condition
+          运行设计条件
+      
+      
+          5
+          HMI
+          Human-Machine Interface
+          人机交互界面
+      
+      
+          6
+          TTC
+          Time To Collision
+          碰撞时间
+      
+      
+          7
+          LCC
+          Lane Centering Control
+          车道居中辅助
+      
+      
+          8
+          NP
+          Nio Pilot
+          包括highway pilot、拥堵自动辅助驾驶traffic jam pilot
+      
+      
+          9
+          NOP
+          Navigation on Pilot
+          增强车道居中辅助
+      
+      
+          10
+          NOP&#43;
+          Navigation on Pilot&#43;
+          全域领航辅助
+      
+  
+
+5. 子功能介绍
+自动辅助驾驶Pilot包括高速自动辅助驾驶（highway pilot）、拥堵自动辅助驾驶（traffic jam pilot)两种功能, 主要适用于车道线清晰及有进入限制的封闭道路上使用，譬如高速和高架的主路及拥堵路段，且在本车道内行驶，不会换道变道行驶。">
+<meta name="author" content="">
+<link rel="canonical" href="//localhost:1313/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/%E5%85%A8%E5%9F%9F%E9%A2%86%E8%88%AA%E8%BE%85%E5%8A%A9nop&#43;/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      NOP主要功能设计逻辑图（状态机）
+    </h1>
+    <div class="post-meta"><span title='2025-05-20 00:00:00 +0000 UTC'>May 20, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="全域领航辅助nop">全域领航辅助NOP+<a hidden class="anchor" aria-hidden="true" href="#全域领航辅助nop">#</a></h1>
+<h2 id="1-产品概述">1. 产品概述<a hidden class="anchor" aria-hidden="true" href="#1-产品概述">#</a></h2>
+<p>全域领航辅助NOP+是一种舒适性功能，它是能让车辆根据导航规划好的路线进行行驶的辅助驾驶功能，能够完成如<strong>路口通行</strong>、导航变道、超车变道、绕向车辆等驾驶任务。在面对<strong>施工区域、通用障碍物等场景时，车辆具有</strong>安全能力，能够提供联通地面道路与城市快速路、高速公路的辅助驾驶体验。</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image.png"></p>
+<h2 id="2-车型配置">2. 车型配置<a hidden class="anchor" aria-hidden="true" href="#2-车型配置">#</a></h2>
+<p>本文档中提出的 <strong>NOP+</strong> 全域领航辅助功能，配置在 ES8车型上。</p>
+<h2 id="3-参考文档"><strong>3. 参考文档</strong><a hidden class="anchor" aria-hidden="true" href="#3-参考文档">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>序号</th>
+          <th>文档编号</th>
+          <th>文档名</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>GBT 20608-2006</td>
+          <td>智能运输系统-自适应巡航控制系统-性能要求与检测方法</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>ISO 15622-2018</td>
+          <td>Intelligent Transport Systems-Adaptive Cruise Control</td>
+      </tr>
+      <tr>
+          <td>System-Performance Requirements and Test Procedures</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>ISO 22179-2009</td>
+          <td>Intelligent Transport Systems-Full Speed Range Adaptive Cruise</td>
+      </tr>
+      <tr>
+          <td>Control (FSRA) Systems- Performance Requirements and Test</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Procedures</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>SAE J2399</td>
+          <td>Adaptive Cruise Control (ACC) Operating Characteristics and</td>
+      </tr>
+      <tr>
+          <td>User Interface</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>i-VISTA GM-MM-A0-2020</td>
+          <td>中国智能汽车指数管理办法 2020 版</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>i-VISTA SM-ADAS-ICAR-A0-2019</td>
+          <td>智能行车辅助评价规程 2020 版</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>i-VISTA SM-ADAS-ICAT-A0-2019</td>
+          <td>智能行车辅助试验规程 2020 版</td>
+      </tr>
+      <tr>
+          <td>8</td>
+          <td></td>
+          <td><code>中华人民共和国道路交通安全法</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="4-名词解释">4. 名词解释<a hidden class="anchor" aria-hidden="true" href="#4-名词解释">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>序号</th>
+          <th>缩写</th>
+          <th>全称</th>
+          <th>注释</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>ACC</td>
+          <td>Adaptive Cruise Control</td>
+          <td>自适应巡航控制</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>Stop&amp;Go</td>
+          <td>Stop and Go</td>
+          <td>自动启停</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>Override</td>
+          <td></td>
+          <td>超驰</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>ODC</td>
+          <td>Operational Design Condition</td>
+          <td>运行设计条件</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>HMI</td>
+          <td>Human-Machine Interface</td>
+          <td>人机交互界面</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>TTC</td>
+          <td>Time To Collision</td>
+          <td>碰撞时间</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>LCC</td>
+          <td>Lane Centering Control</td>
+          <td>车道居中辅助</td>
+      </tr>
+      <tr>
+          <td>8</td>
+          <td>NP</td>
+          <td>Nio Pilot</td>
+          <td>包括highway pilot、拥堵自动辅助驾驶traffic jam pilot</td>
+      </tr>
+      <tr>
+          <td>9</td>
+          <td>NOP</td>
+          <td>Navigation on Pilot</td>
+          <td><strong>增强车道居中辅助</strong></td>
+      </tr>
+      <tr>
+          <td>10</td>
+          <td>NOP+</td>
+          <td>Navigation on Pilot+</td>
+          <td><strong>全域领航辅助</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="5-子功能介绍">5. 子功能介绍<a hidden class="anchor" aria-hidden="true" href="#5-子功能介绍">#</a></h2>
+<p>自动辅助驾驶Pilot包括<strong>高速自动辅助驾驶（highway pilot）</strong>、<strong>拥堵自动辅助驾驶（traffic jam pilot)两种功能,</strong> 主要适用于车道线清晰及有进入限制的封闭道路上使用，譬如高速和高架的主路及拥堵路段，<strong>且在本车道内行驶，不会换道变道行驶</strong>。</p>
+<p>按照功能相关性，本章节按照ACC\LCC\NOP的顺序介绍各功能的内容。</p>
+<p><strong>高速自动辅助驾驶Highway Pilot</strong>子功能包括<strong>ACC自适应巡航、LCC的转向辅助。</strong></p>
+<p>ACC是一个驾驶辅助功能，它是在实现定速巡航功能的基础上，利用三母摄像头和毫米波雷达扽传感器实施探测行驶<strong>路径前方的车辆</strong>，进一步实现自动调节车距并保持车距；但ACC绝对不等于自动驾驶。ACC主要适用于在干燥且通常的标准化直路上长途行驶，如公路、高速公路、长直干道等。</p>
+<h3 id="501-acc">5.0.1 ACC<a hidden class="anchor" aria-hidden="true" href="#501-acc">#</a></h3>
+<p><strong>传感器配置</strong>：前视摄像头+前向毫米波雷达，实现对前方交通参与者种类、数量的识别以及距离、速度的探测</p>
+<p><strong>工作范围</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>ODC项</th>
+          <th></th>
+          <th>ODC范围</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td>半开放道路、全开放道路、封闭场地道路</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td>地面无明显反光，不会大幅降低摄像头的检测效果</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>好天气、轻度坏天气（阴天、小雨、小雪）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>白天、夜晚有路灯</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动状态</td>
+          <td>车辆已启动、上电，燃油车点火</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖状态</td>
+          <td>车辆的四门两盖关闭，充电口或加油口关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动状态</td>
+          <td>无制动</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>[0,130]km/h</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>软件、硬件均正常工作，无故障和异常</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>不处于OTA升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td>无疲劳和注意力分散，有随时接管车辆的能力</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>在座位上，系好安全带，不脱手</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>odc外</strong>：</p>
+<p>特殊或复杂路况下不建议使用ACC，可能影响ACC性能甚至引起ACC退出，包括但不限于：</p>
+<p>积水、泥泞、坑洼、冰雪路面，存在减速带的路面，存在障碍物的路面</p>
+<p>行人、自行车或者动物较多的交通路况</p>
+<p>复杂多变的交通路况，譬如繁忙的十字路口、高速公路匝道、拥挤的道路等</p>
+<p>蜿蜒曲折道路，急转弯道路</p>
+<p>上坡下坡道路</p>
+<p>狭窄道路</p>
+<p>隧道出入口</p>
+<p>非标准化道路</p>
+<p><strong>功能流程图</strong></p>
+<p><img alt="image1.png" loading="lazy" src="/images/nop_image%201.png"></p>
+<p><strong>功能定义</strong></p>
+<p><strong>定速巡航</strong>：适用于前方无交通参与者、畅通无阻的场景；效果是让车辆保持恒定的车速巡航行驶，该车速是由用户设定的速度值。</p>
+<ol>
+<li>ACC功能刚进入激活状态时，默认的巡航车速时此时车辆的实际车速</li>
+<li>用户能够通过方向盘按键设定巡航车速的值，作为目标车速；目标车速范围（30，130]km/h，交互方式可以上按键、滚轮或其他方式</li>
+<li>ACC能够控制车辆加速或减速，达到用户设定的车速之，加、减速的过程应保持车速先行变化，避免较大的纵向加速度值，让用户有舒适感</li>
+<li>达到用户新设定的巡航车速后，车辆能重新保持巡航车速，匀速平稳行驶，车速值的波动范围不超过2km/h</li>
+<li>只有在ACC处于激活状态时，才能设定和改变巡航车速的值；在其他状态尤其是待机状态时，用户对巡航车速的设置无效</li>
+</ol>
+<p><strong>跟随行驶</strong>：适用于前方有交通参与者，导致车辆低于目标车速行驶的场景；系哦啊过时将前方交通参与者作为目标物，让车辆保持恒定的距离跟随目标五行驶，该距离时由用户设定的时距值。</p>
+<ol>
+<li>用户能够通过某种方向盘按键，设定自车与前方目标物的时距；</li>
+<li>当前方有目标物处于用户设定的时距范围内，ACC控制车辆减速进入跟随行驶的状态，减速过程应保持车速先行变化，避免较大的加速度值</li>
+<li>达到跟随行驶状态后，系统控制车辆按用户设定的时距值平稳行驶</li>
+<li>用户可以随时通过方向盘按键改变时距的值，设定新的跟随时局</li>
+<li>只有在ACC处于激活状态时，才能设定和改变跟随时距的值；在其他状态尤其是待机状态时，用户对时距的设置无效</li>
+<li>前方目标物离开时距范围，系统能够控制车辆进入定速巡航状态，加速过程应保持车速先行变化，避免较大的加速度值</li>
+<li>当前方存在多个交通参与者时，仅将子车行驶路径上距离最近的交通参与者作为唯一的目标物。</li>
+</ol>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%202.png"></p>
+<p>跟随起停Stop&amp;Go：适用于前方目标物静止以及目标物从静止状态开始移动的场景，属于跟随行驶的特殊场景；效果时让车辆跟随前方目标物减速至停车状态，并能跟随目标物自动起步</p>
+<ol>
+<li>前方目标物处于静止状态时，系统控制车辆减速至停车状态，减速过程应保持车速线性变化，避免较大的加速度值；停车后，自车与目标物的距离应处于合理范围，通常时2m左右</li>
+<li>前方目标物从静止状态开始移动时，根据停车的市场，自车存在3种状态：停车时长≤5秒，自车自动跟随目标物起步，无需用户操作；5秒≤停车时长≤10秒，需用户踩加速踏板后，自车跟随前车起步；停车时长&gt;10秒，ACC功能退出，进入驻车状态，用户需重新通过方向盘左侧的1键激活ACC；</li>
+</ol>
+<p>用户介入：用户对ACC的介入，包括主动踩制动踏板干预、主动踩加速踏板干预以及接管纵向控制</p>
+<ol>
+<li>用户主动踩下制动踏板，车辆处于制动状态，不满足ODC，ACC完全退出且不可恢复</li>
+<li>用户主动踩下制动踏板，ACC暂时退出，允许用户自主控制车速，进入超驰状态（Override），用户松开加速踏板后，根据用户介入的时长，存在两种状态：介入时长≤ 5分钟，ACC可自动回复；介入时长&gt;5如果分钟，ACC不可自动恢复；</li>
+<li>用户踩下加速踏板，导致自车车速超过ACC工作车速的上限值130km/h，则不满足ODC，ACC完全退出且不可恢复</li>
+<li>当系统提示用户接管车辆且用户及时接管时，ACC应及时将车辆纵向运动的控制权转移给用户，转移过程应流畅无明显延迟和卡滞。</li>
+</ol>
+<p>信息交互：车辆向用户显示ACC功能的相关信息，在功能激活、功能降级时向用户发出提示，包括ACC功能的状态、各项子功能的显示、用户介入的提示</p>
+<p>ACC功能状态的显示：</p>
+<ol>
+<li><strong>不可用状态不显示</strong>任何图标，<strong>待机</strong>状态显示<strong>灰色</strong>的目标车速图标，<strong>激活</strong>状态显示<strong>蓝色</strong>的目标车速图标，<strong>故障</strong>状态显示专门的<strong>ACC故障图标</strong></li>
+</ol>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%203.png"></p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%204.png"></p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%205.png"></p>
+<ol>
+<li>功能状态发生变化时，通过显示图标+文字+电子提示音的方式，提示用户ACC的状态已经发生改变</li>
+</ol>
+<p>定速巡航显示</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%206.png"></p>
+<ol>
+<li>在TSI界面中，通过箭头显示自车的前进方向</li>
+<li>用户更改目标车速时，屏幕中显示的目标车速值实时变化，同时TSI界面显示车辆加速或减速的效果，类似赛车游戏中的动画效果</li>
+<li>目标车速达到极限值时，如果用户继续改变目标车速，则目标车速值不再变化，同时ACC功能状态图标闪烁，伴随电子提示音，提示用户目标车速以达到极限值。</li>
+</ol>
+<p>跟随行驶显示：除了定速巡航时的显示内容和效果外，还应显示跟随行驶的特定内容，主要是前方目标物信息以及跟随时距。</p>
+<ol>
+<li>进入跟随状态时，TSI界面中将前方目标物渲染成浅蓝色，表示已经锁定目标物；同时弹窗显示当前的跟随时距等级</li>
+<li>用户更改跟随时距的等级时，应弹窗显示新的时距等级，知道用户停止操作3s后，弹窗不再显示</li>
+</ol>
+<p>跟随起停显示：显示的内容与效果，基本与跟随行驶一致，另外当停车时间过长时，应该通过文字和声音，提示用户执行相应的动作，例如当5秒≤停车时长≤10秒时，提示“轻踩加速踏板已恢复自适应巡航”，档停车时长&gt;T2时，提示“停车时间过长，自适应巡航退出，请注意接管”。</p>
+<p>用户干预提示：用户干预时，及时发出提示，告知用户当前的车辆状态，以及用户需要执行的动作</p>
+<ol>
+<li>用户踩下制动踏板时，屏幕应有文字提示“自适应巡航退出，请注意接管”，并可伴随电子提示音或语音播报</li>
+<li>用户踩下加速踏板时，应有文字提示“加速踏板踩下，自适应巡航暂停工作”，伴随声音提示，TSI界面显示自车加速的动画效果；如果用户踩下加速踏板时间过长导致ACC退出，应有文字提示“加速时间过长，自适应巡航一退出”，伴随声音提示；如果用户控制车速超过ACC工作车速的上限值（130km/h），应有文字提示“车速过高，自适应巡航已退出”，伴随声音提示。</li>
+</ol>
+<p>接管提示：当遇到紧急情况，ACC无法保证行驶安全，需要用户紧急接管时，应通过视觉+听觉的方式，及时提示用户接管车辆</p>
+<h3 id="502-lcc">5.0.2 LCC<a hidden class="anchor" aria-hidden="true" href="#502-lcc">#</a></h3>
+<p><strong>5.0.2.1 工作范围</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>ODC项</th>
+          <th></th>
+          <th>ODC范围</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td>半开放道路、全开放道路、封闭场地道路</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td>车道线清晰，车道宽度符合国家标准范围</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td>地面无明显反光，不会大幅降低摄像头的检测效果</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td>机动车、非机动车、行人</td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>好天气、轻度坏天气（阴天、小雨、小雪）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>白天、夜晚有路灯</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动状态</td>
+          <td>车辆已启动，电动车上电、燃油车点火</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖状态</td>
+          <td>车辆的四门两盖关闭，充电口或加油口关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动状态</td>
+          <td>无制动</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>[0,130]km/h</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>软件、硬件均正常工作，无故障和异常</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>不处于OTA升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td>无疲劳和注意力分散，有随时接管车辆的能力</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>在座位上，系好安全带，不脱手</td>
+      </tr>
+  </tbody>
+</table>
+<p>**功能状态：**存在4种功能状态</p>
+<ol>
+<li>不可用状态：当前条件不满足ODC要求，LCC功能无法使用</li>
+<li>待机状态：当前条件满足ODC要求，但用户没有通过开关开启功能</li>
+<li>激活状态：当前条件满足ODC要求，用户主动开启功能，LCC正常工作</li>
+<li>故障状态：系统的软件或硬件发生故障，功能无法使用</li>
+</ol>
+<table>
+  <thead>
+      <tr>
+          <th>LCC功能状态</th>
+          <th>ODC</th>
+          <th>开关设置</th>
+          <th>故障状态</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>不可用状态</td>
+          <td>不满足</td>
+          <td>-</td>
+          <td>-</td>
+      </tr>
+      <tr>
+          <td>待机状态</td>
+          <td>满足</td>
+          <td>关闭</td>
+          <td>正常</td>
+      </tr>
+      <tr>
+          <td>激活状态</td>
+          <td>满足</td>
+          <td>开启</td>
+          <td>正常</td>
+      </tr>
+      <tr>
+          <td>故障状态</td>
+          <td>-</td>
+          <td>-</td>
+          <td>异常</td>
+      </tr>
+  </tbody>
+</table>
+<p>分为三个<strong>子功能</strong>：纵向自适应巡航、车道居中保持、减速过弯</p>
+<table>
+  <thead>
+      <tr>
+          <th>子功能</th>
+          <th>应用场景</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>纵向自适应巡航</td>
+          <td>同ACC</td>
+          <td>实现ACC的所有纵向运动控制效果</td>
+      </tr>
+      <tr>
+          <td>车道居中保持</td>
+          <td>车道内行驶，相邻车道无安全风险</td>
+          <td>横向控制车辆，保持在车道内居中行驶</td>
+      </tr>
+      <tr>
+          <td>减速过弯</td>
+          <td>弯道</td>
+          <td>弯道场景中适当减速，平稳通过弯道</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>功能逻辑：</strong></p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%207.png"></p>
+<p>功能定义：</p>
+<p>详细需求：</p>
+<p>纵向自适应巡航：LCC对车辆的纵向控制就是ACC的效果，需求与ACC一致</p>
+<p>车道居中保持：在控制车辆纵向运动的同时，LCC应能根据车道线或道路边缘信息，控制车辆保持在车道中央行驶</p>
+<ol>
+<li>将摄像头检测到的车道线，作为车辆居中行驶的参照，应能获取车道线的特征，至少能检测出车道线的线型，如果能区分颜色则更佳</li>
+<li>如果道路边缘无车道线，但有路肩、绿化带、锥桶、栏杆等作为道路边缘的分界线，应能够将这些道路附属物或障碍物，等同于车道线</li>
+<li>实时计算车辆中心线到两侧车道线的横向距离，控制车辆的横向运动；需保持加成的平稳性和舒适性，方向盘无大角度转动，无快速转动</li>
+<li>如果车辆不喂鱼车道中央，则施加转向例句，把车辆“拉”到车道中间位置；如果位置居中，则继续保持</li>
+<li>真实车道中，车辆很难完全在车道中央行驶，对居中度允许不超过10cm的偏差</li>
+<li>当短暂的无法识别车道显示，可你喝生成一段虚拟的车道线，保证功能体验的连续性和流畅性</li>
+<li>遇到车道分流或合流，即车道线一分二或二合一时，能控制车辆平稳地驶入新车道， 没有明显的晃动和横向超调现象</li>
+</ol>
+<p>减速过弯：弯道场景中，根据弯道曲率计算出合理的过弯车速，控制车辆按过弯车速行驶，平稳的通过弯道</p>
+<ol>
+<li>根据车道线和道路边缘的信息，判断车辆即将进入弯道或正在弯道中</li>
+<li>根据弯道曲率，计算出过弯车速，过弯车速需保证车辆能够保持在车道内平稳的居中行驶；根据公示a_y = v^2/r， 过弯车速v应能保证在曲率半径为r的弯道中，让车辆的侧向加速度保持在舒适范围内</li>
+<li>如果当前车速大于过弯车速，则控制车辆限行的减速至过弯车速，并避免加速度值过大；如果当前车速小雨过弯车速，则保持当前车速通过弯道</li>
+<li>通过弯道后，车辆应恢复到过弯前的车速，加速过程应保持车速线性变化，避免较大的加速度值</li>
+<li>在弯道中，系统对车辆的横向控制应平稳，避免方向盘和车身的明显晃动，尤其是反复左右晃动造成的“画龙”现象</li>
+</ol>
+<p>用户介入：包括主动踩制动踏板干预、主动踩加速踏板干预、主动转动方向盘干预、接管车辆运动控制</p>
+<ol>
+<li>用户主动踩下制动踏板时，车辆处于制动状态，不满足ODC，LCC完全退出且不可恢复</li>
+<li>用户主动踩下加速踏板时，相当于进入ACC中的超驰状态，LCC暂时退出，根据用户介入的时长，决定LCC能否自动恢复</li>
+<li>用户踩下加速踏板，导致车速超过LCC工作车速的上限值130km/h，则不满足ODC，LCC完全退出且不可恢复</li>
+<li>用户主动转动方向盘，LCC退出对车辆的横向控制，降级为ACC,仅保留对车辆的纵向控制，车辆横向运动由用户控制</li>
+<li>系统提示用户接管车辆，且用户及时接管时，应及时将车辆的控制权移给用户，转移过程应流畅，无明显延迟和卡滞</li>
+</ol>
+<p>功能设置：包含功能的开关和参数的设置，与ACC关联程度很高</p>
+<p>LCC开启与关闭：与ACC有关联，通过对同一硬开关的不同操作，区分ACC与LCC功能的开关；当使用拨杆方式时，拨动1次开启ACC功能，拨动2次开启LCC功能；当使用按键方式时，按下次开启ACC功能，快速按下2次开启LCC功能</p>
+<p>LCC参数设置：参数与ACC一致，设置方式也与 ACC一致</p>
+<p>信息交互：包括LCC功能的状态，LCC各项子功能的显示、用户介入的提示</p>
+<p>LCC功能状态显示：</p>
+<ol>
+<li>不可用状态不显示任何图标，待机状态显示灰色的方向盘图标，激活状态显示蓝色的方向盘图标，故障状态显示专门的LCC故障图标</li>
+<li>功能状态发生变化时，通过文字+电子提示音的方式提示用户LCC的状态已经改变</li>
+</ol>
+<p>纵向自适应巡航显示：内容与效果，与ACCyizhi</p>
+<p>车道居中保持显示：突出显示本车道的车道线效果，在TSI界面中将车道线蓝色高亮显示，以突出车道居中的效果</p>
+<p>减速过弯显示：在TSI界面显示车辆减速的动画效果，同时文字显示“正在减速通过弯道”，伴有语音播报</p>
+<p>用户干预提示：及时发出提示，告知用户当前的车辆状态，以及用户需要执行的动作</p>
+<ol>
+<li>用户踩下制动踏板或加速踏板时，提示的内容与ACC类似，将其中的“自适应巡航”更换成“车道居中控制”即可</li>
+<li>用户转动方向盘时，屏幕应有文字提示“车道居中控制降级，当前为自适应巡航，请控制方向盘”，并伴随电视提示音或语音播报</li>
+</ol>
+<p>接管提示：如需用户紧急接管，采用与ACC类似的方式，给予用户必要的提示；如果只需要用户接管横向控制，可以单独提示横向接管：“轻控制方向盘”</p>
+<h2 id="51-高速自动辅助驾驶highway-pilot工作范围及操作">5.1 <strong>高速自动辅助驾驶Highway Pilot工作范围及操作</strong><a hidden class="anchor" aria-hidden="true" href="#51-高速自动辅助驾驶highway-pilot工作范围及操作">#</a></h2>
+<p><strong>高速自动辅助驾驶HighwayPilot</strong>是在实现<strong>自适应巡航</strong>的车速控制及保持车距功能基础上，增加了<strong>车道保持</strong>的转向辅助功能，检测行驶路径前方的车辆，自动控制车速保持车距，并辅助转向使车辆保持在当前车道内。并在合适的路况，提供转向灯控制变道能力，即当驾驶员主动拨动转向灯，系统可控制车辆主动变道。</p>
+<p><strong>HighwayPilot</strong>是一个舒适性功能，而非防碰撞功能，其减速度小于紧急制动和手动驾驶时的最大减速度。</p>
+<h3 id="511-highwaypilot工作范围">5.1.1 <strong>HighwayPilot</strong>工作范围<a hidden class="anchor" aria-hidden="true" href="#511-highwaypilot工作范围">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>odd</th>
+          <th></th>
+          <th>odc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td><code>半开放道路、全开放道路、封闭场地道路</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>道路曲率半径不小于250m</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td><code>车道线清晰，车道宽度适中</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td><code>地面无明显反光，不会大幅降低摄像头的检测效果</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>不能识别人、动物、交通灯、墙、路障等非车辆目标、不能识别尾部遮挡的车、外形不规则的车、尾部垂直面低于一定高度的车、空载的载车交通工具等；可能漏检静止的活着行驶极为缓慢的车</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td>高速路上车辆</td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>非雨雾极端天气</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>正常日间光照</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动</td>
+          <td>车辆启动，ACC\LCC的所有组件都没有故障</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖</td>
+          <td>所有车门均关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动</td>
+          <td>驾驶员未踩制动踏板</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>有前车时，0-130km/h内激活pilot</td>
+      </tr>
+      <tr>
+          <td>无前车时，15-130km/h内激活pilot（激活时车速若低于30km/h，巡航车速将设置为30km/h；车速若高于30km/h，将设置当前车速为初始巡航车速。）</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>车辆处于D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>摄像头、雷达工作正常，视野清晰；方向盘转向角度不能过大；防抱死系统、牵引力控制系统、车辆稳定性控制系统未被触发</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>未在ota升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>ACC,LCC</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td><strong>驾驶员就座，系好安全带，并双手握方向盘</strong></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>必须手握方向盘，驾驶中</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="512-highway-pilot工作范围外">5.1.2 <strong>Highway Pilot</strong>工作范围外<a hidden class="anchor" aria-hidden="true" href="#512-highway-pilot工作范围外">#</a></h3>
+<p>Pilot无法实现所有状况下的转向辅助。在使用Pilot时，驾驶员应始终做好接管方向盘控制方向的准备；</p>
+<p>Pilot无法对人、动物、交通灯、墙、路障等非车辆目标做出反应。若前方存在此类目标，驾驶员需要随时准备接管车辆；</p>
+<p>Pilot不能覆盖所有天气条件和道路交通状况。在使用Pilot时，驾驶员必须始终保持对交通状况的时刻关注，随时准备接管车辆。</p>
+<p>Pilot是一个舒适性功能，而非防碰撞功能。在有碰撞风险时，驾驶员需要主动介入进行制动，而不能完全依赖Pilot的减速来避免碰撞。</p>
+<p>功能定义：</p>
+<p><strong>NOP（Navigate on Pilot，导航辅助驾驶）是高速自动辅助驾驶Highway Pilot</strong>功能中的高级子功能，其核心能力是在设定的导航路径引导下，自动完成包括巡航、车道保持的驾驶任务。</p>
+<p>该功能不具备对交通灯、非机动车、行人等目标的识别与反应能力，不适用于交叉口、匝道外、未覆盖地图区域、或存在复杂交通参与者的道路环境。</p>
+<p>传感器：毫米波雷达，摄像头</p>
+<table>
+  <thead>
+      <tr>
+          <th>序号</th>
+          <th>功能模块</th>
+          <th>应用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>定速巡航</td>
+          <td>前方无车，按设定车速行驶</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>跟车巡航</td>
+          <td>前方有车，跟车行驶</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>跟车起停stop&amp;go</td>
+          <td>前方车辆静止/起步</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>超驰override</td>
+          <td>驾驶员踩油门加速</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>车道居中行驶</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>减速过弯</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="513-highway-pilot操作方式以及功能状态">5.1.3 <strong>Highway Pilot</strong>操作方式以及功能状态<a hidden class="anchor" aria-hidden="true" href="#513-highway-pilot操作方式以及功能状态">#</a></h3>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%208.png"></p>
+<p>中键：激活或推出功能</p>
+<p>上键：增加或恢复巡航车速</p>
+<p>下键：减小巡航车速</p>
+<p>左键：减小跟车距离</p>
+<p>右键：增加跟车距离</p>
+<p>激活：</p>
+<p>在保证驾驶员在主驾就位、安全带系好、所有车门关闭、车辆为D档且未踩制动踏板的情况下，可通过短按方向盘上1键，激活Pilot；</p>
+<p>此时车辆优先进入自适应巡航功能并开始搜寻车道线，如果两侧车道线清晰且车辆处于车道中央，同时触发进入转向辅助功能。</p>
+<p>有前车时，车速处于0-130km/h内时均可成功激活；无前车时，车速处于15-130km/h内可成功激活。激活时车速若低于30km/h，巡航车速将设置为30km/h；车速若高于30km/h，将设置当前车速为初始巡航车速。</p>
+<p>Pilot进入转向辅助功能后，系统将会主动控制方向，但请保持双手轻握方向盘。</p>
+<p>重新激活：</p>
+<p>如果ACC之前被激活过，但中途退出后，可以通过“Resume/+”按键（即2键）再次激活，并恢复之前设定的巡航车速；</p>
+<p>ACC跟停前车约5秒后，需通过“Resume/+”按键（即2键）或踩加速踏板的方式再次激活，并恢复之前设定的巡航车速。</p>
+<p>调整巡航速度：</p>
+<p>在ACC激活的情况下：</p>
+<p>短按“Resume/+”按键（即2键）或者“-”（即3键），可以将巡航速度增加或者减少1km/h；</p>
+<p>长按“Resume/+”按键（即2键）或者“-”（即3键），可以连续将巡航速度增加或者减少5km/h；</p>
+<p>调整跟车距离：</p>
+<p>通过“TG+”（即4键）可以将跟车距离设置为更远的一档；</p>
+<p>通过“TG-”（即5键）可以将跟车距离设置为更近的一档；</p>
+<p>退出：</p>
+<p>在Pilot激活情况下，通过短按1键，或踩制动探班即可退出。Pilot退出后，请及时接管制动踏板、加速踏板及方向盘，控制车辆的速度和方向。</p>
+<p>Pilot可能在不符合工作条件的情况下退出转向辅助功能至待命状态，仅保留ACC的车速控制及保持车距功能，并在条件满足后自动回复转向辅助功能。驾驶员需要保持注意力随时接管方向盘控制车辆。</p>
+<p>随时准备<em>接管</em>车辆的情况：</p>
+<p>当通过曲率过大的弯道、车道线不清晰、无车道线、车道线划分不清晰、特殊车道线路段、路面存在边缘或其他高对比度线条，而非车道线，譬如路面接缝、路缘等；车辆处于上坡或者下坡时可能导致车道线识别不正确的情况；路面反光、夜晚及光线不足的情况。</p>
+<h3 id="514-highway-pilot功能逻辑"><strong>5.1.4 Highway Pilot功能逻辑</strong><a hidden class="anchor" aria-hidden="true" href="#514-highway-pilot功能逻辑">#</a></h3>
+<p><strong>当满足Highway Pilot功能的ODC，用户开启功能开关后，Highway Pilot会先尝试进入ACC功能，档系统识别到两侧清晰的车道线且本车处于车道中央，系统才会再进入LCC功能的转向辅助功能。</strong></p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%209.png"></p>
+<p>异常与降级策略：</p>
+<table>
+  <thead>
+      <tr>
+          <th>异常触发场景</th>
+          <th>系统行为</th>
+          <th>用户提示</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>车道线丢失</td>
+          <td>LCC退出，保留ACC</td>
+          <td>“车道线丢失，请手动控制方向”</td>
+      </tr>
+      <tr>
+          <td>摄像头/雷达遮挡</td>
+          <td>NOP功能整体退出</td>
+          <td>“感知受阻，导航辅助已退出”</td>
+      </tr>
+      <tr>
+          <td>转向角过大</td>
+          <td>LCC暂停</td>
+          <td>“方向盘角度过大，辅助暂时中止”</td>
+      </tr>
+      <tr>
+          <td>地图缺失 / 匹配失败</td>
+          <td>NOP暂停，仅保留ACC+LCC</td>
+          <td>“导航数据缺失，辅助功能受限”</td>
+      </tr>
+      <tr>
+          <td>用户长时间超驰（&gt;13s）</td>
+          <td>NOP退出</td>
+          <td>“介入时间过长，辅助功能退出”</td>
+      </tr>
+      <tr>
+          <td>停车超时（&gt;5s）</td>
+          <td>Stop&amp;Go退出，提示用户手动起步</td>
+          <td>“停车过久，请踩油门继续前行”</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="515-功能定义">5.1.5 功能定义<a hidden class="anchor" aria-hidden="true" href="#515-功能定义">#</a></h3>
+<p><strong>信息交互 &amp; 子功能显示</strong>：当开启功能开关后，系统会先尝试搜寻车道线以先进入子功能ACC。</p>
+<p>Pilot转向辅助的功能依赖于三目摄像头对车道线的识别。在开启Pilot之后，需要先保持一段时间对车辆的主动控制，并注意观察系统是否已经识别道车道并激活转向辅助功能。</p>
+<p><strong>如系统无法识别到两侧清晰的车道线</strong>，则Pilot功能将仅具有ACC的车速控制及保持车距的功能（此时仪表界面上车辆两圈圆圈为灰色，如下图）。</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2010.png"></p>
+<p>此时，驾驶员仍需要自主控制方向。</p>
+<p>如系统<strong>识别到两侧清晰的车道线</strong>，且处于车道中央，转向辅助功能才开始正常工作（此时车辆将发出“嘭”的一声提示音，且仪表界面上车辆两侧圆圈变为蓝色），如下图：</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2011.png"></p>
+<p>此外，若当前<strong>路况不满足Pilot工作条件（如突然失去车道线），Pilot的转向辅助功能将从激活状态推出至待命状态（此时车辆将发出“滴嘟”一声提示音，且仪表界面上车辆两侧圆圈由蓝色变为灰色，时距显示有蓝色变为白色），仅保留ACC的车速控制及保持车距功能。此时驾驶员需要立刻接管方向盘控制方向。</strong></p>
+<p>驾驶时需要握住方向盘：处于安全考虑，Pilot功能仅可在驾驶员握住方向盘额情况下持续工作。系统会继续检测驾驶员是否握住方向盘。</p>
+<p>如果系统检测到用户在一段时间内未握住方向盘，将通过数字仪表、抬头显示、提示音等方式进行首次及二次提醒。当系统检测到你双手握住方向盘后，报警会消失。若你长时间仍未按要求握住方向盘，Pilot将自动完全退出，需要你立即接管车辆。</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2012.png"></p>
+<table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>信息提示方式</th>
+          <th>提示内容</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>功能激活</td>
+          <td>HUD+TSI图标+语音</td>
+          <td>“导航辅助驾驶已激活” → 蓝色方向盘图标亮起</td>
+      </tr>
+      <tr>
+          <td>功能待机</td>
+          <td>灰色图标，提示“请确认车道线” / “握好方向盘”</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>功能退出</td>
+          <td>图标消失 + 语音播报“导航辅助驾驶已退出，请注意接管”</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Stop&amp;Go中</td>
+          <td>停车状态提示“已停止，等待前车起步”，必要时语音提示“轻踩油门”</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>超驰状态</td>
+          <td>显示“用户已介入，系统暂时退出辅助控制”，提示剩余恢复时间</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>弯道减速</td>
+          <td>显示“正在减速通过弯道”，转速表/速度表同步变化，配合语音</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>LCC居中控制中</td>
+          <td>蓝色车道线高亮显示，位置微调有缓动动画</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>用户干预提示</td>
+          <td>操控介入时弹窗提示“车辆控制权已切换，请注意手动驾驶”</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>接管提示</td>
+          <td>红色警示图标 + 弹窗 + 警示音 + 震动（多模态）：“请立即接管方向盘！”</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Pilot操作方式</strong></p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%208.png"></p>
+<p>中键：激活或推出功能</p>
+<p>上键：增加或恢复巡航车速</p>
+<p>下键：减小巡航车速</p>
+<p>左键：减小跟车距离</p>
+<p>右键：增加跟车距离</p>
+<p>激活：</p>
+<p>当： 当前导航路径在高精地图覆盖范围内，道路结构为高速/高架/封闭道路，当前车速满足ODC要求（如无前车 ≥15km/h，有前车 ≥0km/h），驾驶员已开启NOP功能（短按拨杆/按键），当前系统状态正常（感知、控制、V2X、地图模块无故障），保证驾驶员在主驾就位、安全带系好、所有车门关闭、车辆为D档且未踩制动踏板</p>
+<p>的条件都满足的情况下，可通过短按方向盘上1键，激活Pilot；</p>
+<p>此时车辆优先进入自适应巡航功能并开始搜寻车道线，如果两侧车道线清晰且车辆处于车道中央，同时触发进入转向辅助功能。</p>
+<p>有前车时，车速处于0-130km/h内时均可成功激活；无前车时，车速处于15-130km/h内可成功激活。激活时车速若低于30km/h，巡航车速将设置为30km/h；车速若高于30km/h，将设置当前车速为初始巡航车速。</p>
+<p>Pilot进入转向辅助功能后，系统将会主动控制方向，但请保持双手轻握方向盘。</p>
+<p>重新激活：</p>
+<p>如果ACC之前被激活过，但中途退出后，可以通过“Resume/+”按键（即2键）再次激活，并恢复之前设定的巡航车速；</p>
+<p>ACC跟停前车约5秒后，需通过“Resume/+”按键（即2键）或踩加速踏板的方式再次激活，并恢复之前设定的巡航车速。</p>
+<p>调整巡航速度：</p>
+<p>在ACC激活的情况下：</p>
+<p>短按“Resume/+”按键（即2键）或者“-”（即3键），可以将巡航速度增加或者减少1km/h；</p>
+<p>长按“Resume/+”按键（即2键）或者“-”（即3键），可以连续将巡航速度增加或者减少5km/h；</p>
+<p>调整跟车距离：</p>
+<p>通过“TG+”（即4键）可以将跟车距离设置为更远的一档；</p>
+<p>通过“TG-”（即5键）可以将跟车距离设置为更近的一档；</p>
+<p>退出：</p>
+<p>在Pilot激活情况下，通过短按1键，或踩制动探班即可退出。Pilot退出后，请及时接管制动踏板、加速踏板及方向盘，控制车辆的速度和方向。</p>
+<p>Pilot可能在不符合工作条件的情况下退出转向辅助功能至待命状态，仅保留ACC的车速控制及保持车距功能，并在条件满足后自动回复转向辅助功能。驾驶员需要保持注意力随时接管方向盘控制车辆。</p>
+<p>随时准备接管车辆的情况：</p>
+<p>当通过曲率过大的弯道、车道线不清晰、无车道线、车道线划分不清晰、特殊车道线路段、路面存在边缘或其他高对比度线条，而非车道线，譬如路面接缝、路缘等；车辆处于上坡或者下坡时可能导致车道线识别不正确的情况；路面反光、夜晚及光线不足的情况。</p>
+<h2 id="52增强车道居中辅助pilot">5.2<strong>增强车道居中辅助Pilot+</strong><a hidden class="anchor" aria-hidden="true" href="#52增强车道居中辅助pilot">#</a></h2>
+<p><strong>增强车道居中辅助Pilot+  是在实现自适应巡航车速控制 及保持车距功能的基础上，增加了对车道线的识别能力，增强了车辆保持在车道内的转向辅助功能。</strong></p>
+<p><strong>Pilot+</strong> 是一个舒适性功能，而非防碰撞功能，其减速度小于紧急制动和手动驾驶时的最大减速度。</p>
+<p><strong>增强车道居中辅助pilot+ 工作条件</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>odd</th>
+          <th></th>
+          <th>odc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td><code>半开放道路、全开放道路、封闭场地道路</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>道路曲率半径不小于250m</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td><code>车道线清晰，车道宽度适中</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td><code>地面无明显反光，不会大幅降低摄像头的检测效果</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>非雨雾极端天气</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>正常日间光照</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动</td>
+          <td>车辆启动，增强车道居中辅助功能的所有组件都没有故障</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖</td>
+          <td>所有车门均关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动</td>
+          <td>驾驶员未踩制动踏板</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>0-130km/h</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>车辆处于D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>满足“增强车道居中辅助”功能的工作条件及限制条件；摄像头、雷达工作正常，视野清晰；方向盘转向角度不能过大；防抱死系统、牵引力控制系统、车辆稳定性控制系统未被触发</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>未在ota升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>增强车道居中辅助</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td><strong>驾驶员就座，系好安全带，并双手握方向盘</strong></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>驾驶中状态</td>
+      </tr>
+  </tbody>
+</table>
+<p>开启“增强车道居中辅助”功能：</p>
+<p>在中控屏幕下方控制蓝进入设置页面，“辅助驾驶”→”轻松驾驶“，驾驶模式选择”<strong>增强车道居中</strong>“，开启该功能。</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2013.png"></p>
+<p>中键：激活或推出”增强车道居中“</p>
+<p>上键：增加或恢复巡航车速</p>
+<p>下键：减小巡航车速</p>
+<p>左键：减小跟车距离</p>
+<p>右键：增加跟车距离</p>
+<p><strong>增强车道居中odd，odc</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>odd</th>
+          <th></th>
+          <th><strong>odc</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td><code>半开放道路、全开放道路、封闭场地道路</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>道路曲率半径不小于250m，不可曲率过大的弯道路段、不可在过宽过窄车道线路段、上下坡路段情况下使用</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td><code>车道线清晰，车道宽度适中</code>，不可在车道线不清晰情况下使用、不可在无车道、特殊车道线、</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td><code>地面无明显反光，不会大幅降低摄像头的检测效果</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>不可以在行人、自行车或者动物较多</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>非雨雾极端天气、不可在特殊路况或者雨天等情况下；不可恶劣天气情况下使用</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>正常日间光照、不可在夜晚或者光线不良下使用</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动</td>
+          <td>车辆启动</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖</td>
+          <td>关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动</td>
+          <td>未踩制动踏板</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>5-130km/h</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>车辆处于D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>满足“增强车道居中辅助”功能的工作条件及限制条件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>未在OTA升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>增强车道居中辅助</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td>驾驶员就座，系好安全带，并双手握方向盘</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>驾驶中状态</td>
+      </tr>
+  </tbody>
+</table>
+<p>当满足上述工作条件时，按下方向盘左侧中键，</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2014.png"></p>
+<p>，激活“增强车道居中辅助”功能。</p>
+<p>功能逻辑：和Pilot一致</p>
+<p>功能定义：和Pilot一致</p>
+<h2 id="53-全域领航辅助nop">5.3 <strong>全域领航辅助NOP+</strong><a hidden class="anchor" aria-hidden="true" href="#53-全域领航辅助nop">#</a></h2>
+<p>蔚来NIO Pilot+ 是指蔚来汽车的智能驾驶辅助系统，其中“+”代表增强功能和更高级的自动驾驶体验。NIO Pilot+ 包括以下主要功能：</p>
+<ul>
+<li>
+<p>**自动辅助导航驾驶（NOP）:**可以在导航路径上实现自动辅助驾驶，包括自动切换车道、自动驶入/驶出匝道等。</p>
+</li>
+<li>
+<p>**高速自动辅助驾驶（Highway Pilot）:**在高速公路上，系统可以自动控制车辆，包括自动巡航、车道保持、自动跟车等。</p>
+</li>
+<li>
+<p>**拥堵自动辅助驾驶（Traffic Jam Pilot）:**在拥堵路况下，系统可以自动控制车辆，包括自动跟车、启停等，减轻驾驶员的疲劳。</p>
+</li>
+<li>
+<p>**转向灯控制变道（ALC）:**在开启转向灯后，系统会自动判断周围环境，并在安全条件下自动完成变道操作。</p>
+</li>
+<li>
+<p>**增强车道居中辅助（LKA+）:**在车道保持的基础上，增强了对车道的识别和保持能力，使得车辆在车道内更加稳定。</p>
+</li>
+<li>
+<p>**道路自动保持（LKA）:**帮助车辆保持在车道中央行驶，提供更稳定的驾驶体验。</p>
+</li>
+<li>
+<p>**自适应巡航（ACC）:**根据前方车辆的速度和距离，自动调整车速，保持安全距离。</p>
+</li>
+<li>
+<p>**自动泊车（APA）:**可以实现自动泊车入位，包括垂直泊车、平行泊车等。</p>
+</li>
+<li>
+<p>**疲劳驾驶预警（DDW）:**通过摄像头监测驾驶员的注意力，及时发出预警，提醒驾驶员注意安全。</p>
+</li>
+<li>
+<p>**道路标识识别（TSR）:**识别道路上的交通标志，并在仪表盘上显示，提醒驾驶员注意。</p>
+</li>
+<li>
+<p><strong>自动限速调节（ISA）:</strong></p>
+<p>根据道路标识识别的结果，自动调整车辆的最高速度。</p>
+</li>
+</ul>
+<p><strong>5.3.1 开启全域领航辅助</strong></p>
+<p>在中控屏幕下方控制蓝进入设置页面，电机辅助驾驶→轻松驾驶，驾驶模式选择<strong>全域领航辅助，开启该功能。</strong></p>
+<p>全域领航工作条件：</p>
+<p>满足增强车道居中辅助功能的工作条件及限制条件</p>
+<p>导航正常工作</p>
+<p>导航页面的全域领航辅助功能快捷开关没有关闭</p>
+<p>爱车定位精度和信号良好</p>
+<p>爱车驶入支持全域领航辅助功能路段</p>
+<p>危险警告灯未开</p>
+<p>转向灯无故障</p>
+<p>方向盘转向角度不能过大</p>
+<p>摄像头、雷达功能正常，视野清晰</p>
+<p>车辆满足所有安全条件，包括：</p>
+<p>驾驶员手握方向盘</p>
+<p>驾驶员就座状态</p>
+<p>驾驶员系好安全带</p>
+<p>驾驶员未踩制动踏板</p>
+<p>所有车门均关闭</p>
+<p>爱车处于D档</p>
+<p>防抱死系统、牵引力系统、车辆稳定性控制系统未被触发</p>
+<p><strong>5.3.2 全域领航odc</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>odd</th>
+          <th></th>
+          <th><strong>odc</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>道路</td>
+          <td>地理区域</td>
+          <td>驶入支持全域领航辅助功能路段</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>道路结构</td>
+          <td>道路曲率半径不小于250m</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车道特征</td>
+          <td><code>车道线清晰，车道宽度适中</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>地面特征</td>
+          <td><code>地面无明显反光，不会大幅降低摄像头的检测效果</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>附属物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>障碍物</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通设施</td>
+          <td>固定交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>可变交通设施</td>
+          <td>无要求</td>
+      </tr>
+      <tr>
+          <td>交通参与者</td>
+          <td>种类、数量、属性</td>
+          <td>对于低速/静止的物体（包括车辆、行人、非机动车、事故车辆、施工锥筒或其他相关标识物、其他杂物如散落的各尺寸异物等）的减速避让与绕行</td>
+      </tr>
+      <tr>
+          <td>气象条件</td>
+          <td>天气条件</td>
+          <td>非雨雾极端天气</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>光照条件</td>
+          <td>正常日间光照</td>
+      </tr>
+      <tr>
+          <td>车辆状态</td>
+          <td>启动</td>
+          <td>车辆启动</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>门盖</td>
+          <td>所有车门关闭</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>制动</td>
+          <td>未踩制动踏板</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>车速</td>
+          <td>5-130km/h</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>档位</td>
+          <td>车辆处于D档</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>系统状态</td>
+          <td>满足“增强车道居中辅助”功能的工作条件及限制条件；车定位精度和信号良好；导航正常工作</td>
+      </tr>
+      <tr>
+          <td>导航页面的全域领航辅助功能快捷开关没有关闭；危险警告灯未开；</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>转向灯无故障；</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>方向盘转向角度不能过大；</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>摄像头、雷达功能正常，视野清晰；</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>防抱死系统、牵引力系统、车辆稳定性控制系统未被触发</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>OTA状态</td>
+          <td>未在OTA升级状态</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>关联功能</td>
+          <td>增强车道居中辅助</td>
+      </tr>
+      <tr>
+          <td>驾驶员状态</td>
+          <td>生理状态</td>
+          <td>驾驶员就座，系好安全带，并双手握方向盘</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>驾驶行为</td>
+          <td>驾驶中状态；</td>
+      </tr>
+      <tr>
+          <td>车辆满足所有安全条件，包括：</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>驾驶员手握方向盘</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>驾驶员就座状态</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>驾驶员系好安全带</td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>当车辆驶入支持全域领航辅助功能路段时，按下按下方向盘左侧中键，</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2014.png"></p>
+<p>在满足条件的情况下“全域领航辅助功能”将会自动激活。</p>
+<p>存在4种功能状态：</p>
+<p>关闭状态：用户未开启NOP+</p>
+<p>待机状态：用户开启了NOP\NOP+，但是当前条件不满足ODC, 或没有变道、上下匝道等指令</p>
+<p>激活状态：用户开启NOP+开关，并且满足“增强车道居中辅助”功能的工作条件及限制条件，以及其他NOP+功能所需要的系统要求</p>
+<p>故障状态：系统软件故障或硬件故障，导致ACC、pilot、nop、nop+不可用</p>
+<p>NOP+功能</p>
+<table>
+  <thead>
+      <tr>
+          <th>序号</th>
+          <th>功能</th>
+          <th>子功能</th>
+          <th></th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1.</td>
+          <td><strong>自动辅助导航驾驶（NOP）</strong></td>
+          <td>自动切换车道</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>自动驶入匝道</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>自动驶出匝道</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>2.</td>
+          <td><strong>高速自动辅助驾驶（Highway Pilot）</strong></td>
+          <td>ACC</td>
+          <td>定速巡航</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>跟随行驶</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>起停stop&amp;go</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>超驰override</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>LCC</td>
+          <td>ACC</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>车道居中保持</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>减速过弯</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>3.</td>
+          <td><strong>拥堵自动辅助驾驶（Traffic Jam Pilot）</strong></td>
+          <td>Stop&amp;Go（起停逻辑）</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>驾驶员持续监测（握手检测）</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>TJP激活条件判定</td>
+          <td>（低速+主路+车道线）</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>自动起步管理</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>前车移动检测</td>
+          <td>偏向于低速封闭道路策略</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>4.</td>
+          <td><strong>转向灯控制变道（ALC）—转向灯触发判定</strong></td>
+          <td>LCC</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td>自动变道</td>
+          <td>盲点监测与变道辅助</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>转向灯控制变道</td>
+          <td>横向轨迹生成</td>
+      </tr>
+      <tr>
+          <td>横向安全余量计算</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>用户接管退出机制</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>多次变道抑制，与LCC和感知模块紧密耦合</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>5.</td>
+          <td><strong>增强车道居中辅助（LKA+）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>6.</td>
+          <td><strong>道路自动保持（LKA）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>7.</td>
+          <td><strong>自适应巡航（ACC）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>8.</td>
+          <td><strong>自动泊车（APA）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>9.</td>
+          <td><strong>疲劳驾驶预警（DDW）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>10.</td>
+          <td><strong>道路标识识别（TSR）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>11.</td>
+          <td><strong>自动限速调节（ISA）</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>功能逻辑</p>
+<p>功能需求：</p>
+<p>典型场景</p>
+<p>人机交互</p>
+<p><img alt="image.png" loading="lazy" src="/images/nop_image%2015.png"></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/nop/">NOP</a></li>
+      <li><a href="//localhost:1313/tags/adas%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">ADAS系统设计</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<script src="/js/cursor-effects.js"></script>
+<script>
+  new CursorEffects({
+    size: 2,
+    shape: 'star',
+    zIndex: 9999,
+  });
+</script>
+</body>
+
+</html>

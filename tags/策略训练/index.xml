@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>策略训练 on </title>
-    <link>//localhost:1313/tags/%E7%AD%96%E7%95%A5%E8%AE%AD%E7%BB%83/</link>
+    <link>/tags/%E7%AD%96%E7%95%A5%E8%AE%AD%E7%BB%83/</link>
     <description>Recent content in 策略训练 on </description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/%E7%AD%96%E7%95%A5%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/%E7%AD%96%E7%95%A5%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何训练用于狭窄通道规划的 DRL 策略？</title>
-      <link>//localhost:1313/posts/narrow_exploration/</link>
+      <link>/posts/narrow_exploration/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/narrow_exploration/</guid>
+      <guid>/posts/narrow_exploration/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;狭窄通道&#34;&gt;在这个混合路径规划系统中，DRL 策略负责接管那些局部空间极端受限、传统 MPC 难以生效的区域，特别是“狭窄通道（narrow passage）”问题。为此，我们构建了一个专门应对该类场景的 DRL 策略，并通过 TD3 或 DDPG 算法进行训练。
-&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
+&lt;img alt=&#34;狭窄通道&#34; loading=&#34;lazy&#34; src=&#34;/images/hybrid_image_result.png&#34;&gt;&lt;/h2&gt;
 &lt;h2 id=&#34;1-使用的算法与损失函数&#34;&gt;1. 使用的算法与损失函数&lt;/h2&gt;
 &lt;p&gt;我们使用 &lt;strong&gt;TD3 或 DDPG&lt;/strong&gt; 算法，分别训练策略网络（Actor）和价值网络（Critic）。&lt;/p&gt;
 &lt;h3 id=&#34;ddpg&#34;&gt;DDPG&lt;/h3&gt;
@@ -53,7 +53,7 @@ TD3通过 均方bellman误差最小化的同时 学习两个Q函数Q_phi_1和Q_p
 &lt;li&gt;
 &lt;p&gt;第一：目标策略平滑
 用于构成Q学习目标的动作 基于目标策略/mu_theta_targ , 但在动作的每个维度上添加了截断噪声。添加阶段噪声后，目标动作将被阶段， 使其位于有效动作范围内（所有有效动作，都满足alpha_low &amp;lt;= alpha &amp;lt;= alpha_high）。因此，目标动作如下：
-&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;//localhost:1313/images/td3_target_action.png&#34;&gt;
+&lt;img alt=&#34;目标动作方程&#34; loading=&#34;lazy&#34; src=&#34;/images/td3_target_action.png&#34;&gt;
 目标策略平滑本质上充当了算法的正则化器（正则化是一组用于减少机器学习模型中过拟合的方法。正则化会用训练准确性的边际下降来换取泛化性的提高。 正则化包含一系列用于纠正机器学习模型过拟合问题的方法。）
 它解决了DDPG中可能出现的一种特殊故障模式：如果Q函数逼近器针对某些动作产生了错误的尖峰，策略就会迅速利用改封至，从而导致脆弱或错误的行为。
 这种情况可以通过平滑类似动作的Q函数来避免，
