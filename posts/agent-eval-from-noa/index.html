@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>为什么Agent Eval不是一张排行榜｜薛凤翔</title>
+  <meta name="description" content="从智驾场景化评测迁移到Agent Eval：Task、Metric、Trace、Bad Case、Root Cause与Regression六步闭环。">
+  <link rel="stylesheet" href="/assets/css/article.css?v=20260824-2">
+  <style>body{margin:0;background:#0f1115;color:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}.article-shell{width:min(900px,calc(100% - 40px));margin:auto}</style>
+</head>
+<body>
+  <header class="article-header"><a class="brand" href="/">薛凤翔</a><nav class="article-nav"><a href="/posts/">全部文章</a><a href="/projects/noa-product-diagnosis/">NOA案例</a><a href="/">作品集</a></nav></header>
+  <main class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta">AGENT EVAL · SCENARIO · METHOD TRANSFER</div>
+      <h1>为什么Agent Eval不是一张排行榜</h1>
+      <p class="article-dek">我从智驾场景化评测中迁移出的六步闭环：先定义任务和风险，再观察过程、解释失败，并把Bad Case沉淀为持续回归资产。</p>
+      <div class="article-info"><span>2026.08.24</span><span>AI PM方法论</span><span>NOA产品诊断 × Agent Eval</span></div>
+    </header>
+
+    <article class="article-body">
+      <div class="thesis"><strong>核心观点：</strong>排行榜回答“谁的平均表现更好”，产品评测要回答“在什么任务和约束下，为什么失败，应该先改哪里”。Agent能否进入真实工作流，取决于后一个问题。</div>
+
+      <h2>我为什么开始怀疑排行榜</h2>
+      <p>在智驾竞品项目中，团队覆盖8款车型、47个测试场景和112项指标。真正有价值的结论并不是某款车总分领先，而是同一套系统在高速、城区和泊车中的产品阶段并不相同：有的安全底线尚未稳定，有的主链路可用但策略偏保守，有的能力上限很高却缺少全场景一致性。</p>
+      <p>这让我意识到，平均分会压平场景差异。迁移到Agent也是一样：一个Agent在摘要任务中表现优秀，不代表它能安全地修改日程、发送消息或调用支付工具。模型榜单、一次Demo和总体成功率，都不能代替产品场景中的诊断。</p>
+
+      <h2>六步闭环：从比较产品到改进产品</h2>
+      <div class="framework">
+        <div class="framework-step"><span>01</span><div><h3>从业务任务开始</h3><p>先问用户要完成什么、成功意味着什么、失败代价是什么，再决定测哪个Agent或模型。</p></div></div>
+        <div class="framework-step"><span>02</span><div><h3>建立场景化Task Set</h3><p>覆盖黄金任务、高频变体、数据缺失、工具异常、权限冲突与高风险边界，而不是只改写Prompt。</p></div></div>
+        <div class="framework-step"><span>03</span><div><h3>分层定义Metric</h3><p>同时看任务结果、执行过程和安全治理；严重越权设置闸门，不让语言质量的高分掩盖风险。</p></div></div>
+        <div class="framework-step"><span>04</span><div><h3>保留完整Trace</h3><p>记录上下文、工具选择、参数、返回结果、决策和最终状态，避免只看最后一句回答。</p></div></div>
+        <div class="framework-step"><span>05</span><div><h3>聚类Bad Case并提出根因假设</h3><p>区分意图、上下文、工具、决策、权限和恢复问题；证据不足时只提出假设，不把相关性写成因果。</p></div></div>
+        <div class="framework-step"><span>06</span><div><h3>形成产品动作与Regression</h3><p>把问题转成策略、交互、工具或权限改动，再将典型案例纳入版本化回归集，验证修复且防止复发。</p></div></div>
+      </div>
+
+      <h2>同一个方法，如何从Drive Trace迁移到Agent Trace</h2>
+      <p>智驾项目中，我们先定义场景与安全、效率、舒适指标，再通过固定路线、统一记录口径和车辆行为记录形成可比较证据。没有内部算法日志时，分析停留在“可观察行为 → 根因假设”，随后给出产品优先级。</p>
+      <div class="callout"><p><strong>方法映射：</strong>Scenario → Metric → Drive Trace → Bad Case → Root Cause Hypothesis → Product Optimization<br>迁移为：Task → Metric → Agent Trace → Bad Case → Root Cause → Regression</p></div>
+      <p>可以迁移的是问题拆解方式，不是直接照搬指标。智驾的风险来自道路环境和控制行为；Agent还要处理上下文污染、工具误用、权限越界、重复执行和失败恢复。</p>
+
+      <h2>什么可以自动测，什么必须保留人工判断</h2>
+      <h3>确定性规则：验证“有没有按约束执行”</h3>
+      <ul>
+        <li>工具是否选对，参数、顺序和调用次数是否符合预期；</li>
+        <li>高影响操作前是否获得确认，失败后最终状态是否一致；</li>
+        <li>结果中的距离、金额、时间等是否能与结构化证据对齐；</li>
+        <li>延迟、Token、工具成本和限流是否越过预算。</li>
+      </ul>
+
+      <h3>LLM Eval：评估开放但可定义Rubric的质量</h3>
+      <p>例如方案是否覆盖关键约束、推荐理由是否与证据一致、资料不足时是否表达不确定性。LLM Judge必须看到清晰评分标准和必要证据，并通过人工抽查校准，不能把“模型觉得不错”当作客观事实。</p>
+
+      <h3>人工评审：发现尚未被指标定义的问题</h3>
+      <p>用户是否理解系统正在做什么，方案是否增加认知负担，风险灰区应不应该确认，以及新的Bad Case属于产品取舍还是模型缺陷，这些仍需要产品、领域专家和真实用户判断。</p>
+      <p>理想的演进路径不是消灭人工，而是：<strong>Human Discovery → Bad Case → Dataset → Automated Regression</strong>。人负责发现新问题和做取舍，机器负责稳定地防止旧问题复发。</p>
+
+      <h2>对AI产品经理而言，评测的终点是产品决策</h2>
+      <p>如果一次评测只能给出总分，它更像内容榜单；如果它能定位失败节点、区分风险等级、提出可验证改动，并沉淀回归资产，它才开始成为产品研发系统的一部分。</p>
+      <p>因此我把评测看作AI PM的一种产品判断能力：它既帮助我们判断模型是否适合某个任务，也帮助我们决定哪些能力可以自动执行、哪些需要确认，以及下一版本最值得投入在哪里。</p>
+
+      <p class="boundary">证据边界：8款车型、47个场景和112项指标是智驾团队项目范围，不代表全部由我个人独立设计；原智驾项目完成了场景评测、问题归因与产品建议，但没有采用今天Agent项目中的正式版本化Regression机制。本文明确区分项目事实与后续迁移的方法。</p>
+    </article>
+    <section class="next-reading"><a href="/projects/noa-product-diagnosis/">查看案例：NOA产品诊断｜从真实道路体验到产品优化优先级 →</a></section>
+    <footer class="article-footer"><span>AI PM Notes</span><a href="/posts/">返回全部文章 ↑</a></footer>
+  </main>
+</body>
+</html>
