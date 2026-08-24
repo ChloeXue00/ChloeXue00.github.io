@@ -1,7 +1,158 @@
-<!DOCTYPE html>
-<html>
-  <head>
-	<meta name="generator" content="Hugo 0.147.0">
-    <meta http-equiv="refresh" content="0; url=/posts/" />
-  </head>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>薛凤翔｜AI 产品经理 · Agent 应用</title>
+  <meta name="description" content="薛凤翔的 AI 产品作品集，聚焦 Agent 应用、RAG、智能座舱与场景化评测。">
+  <meta property="og:title" content="薛凤翔｜AI 产品经理 · Agent 应用">
+  <meta property="og:description" content="从用户任务出发，把 AI 能力转化为可执行、可评测、可控制风险的产品。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chloexue00.github.io/">
+  <link rel="stylesheet" href="/assets/css/portfolio.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">薛凤翔</a>
+    <nav aria-label="主导航">
+      <a href="#work">项目</a>
+      <a href="#approach">方法</a>
+      <a href="/posts/">技术文章</a>
+      <a class="nav-cta" href="https://github.com/ChloeXue00" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="eyebrow">XUE FENGXIANG · PORTFOLIO</div>
+      <h1 id="hero-title">AI 产品经理<br><span>Agent 应用</span></h1>
+      <p class="hero-copy">关注 Agent 在真实任务中的产品设计、评测与风险边界。具备 AI 产品实习、Agent / RAG 项目及智能汽车复杂系统经验。</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#work">查看项目</a>
+        <a class="button secondary" href="https://chargeflow-agent-client.vercel.app/" target="_blank" rel="noreferrer">体验 ChargeFlow ↗</a>
+      </div>
+      <div class="proof-strip" aria-label="核心能力">
+        <div><strong>0—1</strong><span>Agent 产品设计</span></div>
+        <div><strong>Eval</strong><span>场景化评测与 Bad Case</span></div>
+        <div><strong>7 年</strong><span>智能汽车复杂系统经验</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-index">01 · SELECTED WORK</p>
+          <h2 id="work-title">代表项目</h2>
+        </div>
+        <p>不只展示功能，更说明为什么这样设计、如何验证，以及系统出错后怎么办。</p>
+      </div>
+
+      <article class="project project-featured">
+        <div class="project-number">01</div>
+        <div class="project-main">
+          <div class="project-meta"><span>AGENT</span><span>INTERACTIVE DEMO</span></div>
+          <h3>ChargeFlow｜补能决策 Agent</h3>
+          <p class="project-lead">把“找附近充电站”升级为基于电量、路线、任务与偏好的主动补能决策，将复杂比较收敛为一个主方案和一个备选方案。</p>
+          <ul class="project-points">
+            <li>任务识别 → 动态工具选择 → 状态取数 → 方案生成 → 用户确认 → 执行监控 → 动态重规划</li>
+            <li>为地图可信度、限流、记忆、工具调用和 Agent 决策建立评测与失败兜底</li>
+          </ul>
+          <div class="project-links">
+            <a href="https://chargeflow-agent-client.vercel.app/" target="_blank" rel="noreferrer">在线体验 ↗</a>
+            <a href="https://github.com/ChloeXue00/chargeflow-agent" target="_blank" rel="noreferrer">查看代码 ↗</a>
+          </div>
+        </div>
+        <aside class="decision-card" aria-label="ChargeFlow 核心产品判断">
+          <span>核心判断</span>
+          <p>用户缺少的不是更多充电站信息，而是任务约束下更低的决策成本。</p>
+          <div class="mini-flow"><i></i><i></i><i></i><i></i><i></i></div>
+          <small>感知 · 决策 · 确认 · 执行 · 重规划</small>
+        </aside>
+      </article>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-meta"><span>HYBRID GRAPHRAG</span><span>LIVE</span></div>
+          <h3>AnalystCopilot｜研报分析助手</h3>
+          <p>面向多文档案头研究，通过语义检索与两跳证据扩展发现跨文档关系，并用原文引用和资料不足拒答降低结论核验成本。</p>
+          <div class="card-tags"><span>多文档检索</span><span>证据链</span><span>可信回答</span></div>
+          <div class="project-links">
+            <a href="https://analystcopilot-turbo.streamlit.app/" target="_blank" rel="noreferrer">在线体验 ↗</a>
+            <a href="https://github.com/ChloeXue00/AnalystCopilot" target="_blank" rel="noreferrer">查看代码 ↗</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-meta"><span>ENTERPRISE AGENT</span><span>0—1</span></div>
+          <h3>Elo｜AI Native 工作平台</h3>
+          <p>主导 Automation、Search、Settings 三个模块产品设计；围绕任务状态、运行证据、权限确认和失败恢复，让用户知道 Agent 在做什么、结果是否可信。</p>
+          <div class="card-tags"><span>Automation</span><span>Search</span><span>Settings</span></div>
+          <div class="project-links">
+            <a href="https://github.com/ChloeXue00/elo-demo" target="_blank" rel="noreferrer">查看项目 ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section evidence" aria-labelledby="evidence-title">
+      <div class="section-heading compact">
+        <div>
+          <p class="section-index">02 · EVIDENCE</p>
+          <h2 id="evidence-title">研究与评测</h2>
+        </div>
+        <p>从模糊体验到结构化结论，为产品决策提供可复核证据。</p>
+      </div>
+      <div class="evidence-list">
+        <article>
+          <div class="evidence-type">产品评测</div>
+          <div>
+            <h3>NOA 智驾多场景测评</h3>
+            <p>围绕安全、效率、舒适建立指标体系，通过统一路线、人员和 MOS 评分，把体验差异拆解为场景、指标与 Bad Case。</p>
+          </div>
+          <a href="/documents/2025年吉利汽车NOA智驾测评项目报告.pdf" target="_blank">查看报告 ↗</a>
+        </article>
+        <article>
+          <div class="evidence-type">战略研究</div>
+          <div>
+            <h3>小米智能家居战略咨询</h3>
+            <p>从行业、产业链与竞争格局出发，识别生态规模领先但场景价值与持续变现不足的矛盾，并提出从设备连接向 AI 主动服务升级的路径。</p>
+          </div>
+          <div class="split-links">
+            <a href="/documents/小米智能家居战略决策报告_EY.pptx">PPTX ↗</a>
+            <a href="/documents/小米集团智能家居业务战略决策报告_EY.docx">DOCX ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section approach" id="approach" aria-labelledby="approach-title">
+      <div class="section-heading compact">
+        <div>
+          <p class="section-index">03 · APPROACH</p>
+          <h2 id="approach-title">我的工作方式</h2>
+        </div>
+      </div>
+      <ol class="method-list">
+        <li><span>01</span><div><h3>找准任务</h3><p>从用户场景和真实反馈出发，判断 AI 适合解决什么，而不是先堆模型能力。</p></div></li>
+        <li><span>02</span><div><h3>做出取舍</h3><p>结合竞品、技术边界与业务目标，明确自动化程度、交互成本和风险边界。</p></div></li>
+        <li><span>03</span><div><h3>验证闭环</h3><p>把体验拆成场景、指标、Trace 与 Bad Case，通过回归验证持续迭代。</p></div></li>
+      </ol>
+    </section>
+
+    <section class="contact" aria-labelledby="contact-title">
+      <p class="section-index">04 · CONTACT</p>
+      <h2 id="contact-title">查看完整经历与技术文章</h2>
+      <p>这里保留可运行 Demo、项目代码、研究报告与技术笔记，便于进一步核验项目细节。</p>
+      <div class="hero-actions">
+        <a class="button primary" href="https://github.com/ChloeXue00" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a class="button secondary" href="/posts/">阅读技术文章</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Xue Fengxiang</span>
+    <a href="#top">返回顶部 ↑</a>
+  </footer>
+</body>
 </html>
