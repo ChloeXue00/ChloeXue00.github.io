@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent评测不应只看回答对不对｜薛凤翔</title>
+  <meta name="description" content="从任务结果、节点Trace、Bad Case到回归验证，建立可定位的Agent评测闭环。">
+  <link rel="stylesheet" href="/assets/css/article.css?v=20260824-1">
+  <style>body{margin:0;background:#0f1115;color:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}.article-shell{width:min(900px,calc(100% - 40px));margin:auto}</style>
+</head>
+<body>
+  <header class="article-header"><a class="brand" href="/">薛凤翔</a><nav class="article-nav"><a href="/posts/">全部文章</a><a href="/">作品集</a></nav></header>
+  <main class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta">AGENT EVAL · BAD CASE · REGRESSION</div>
+      <h1>Agent评测不应只看“回答对不对”</h1>
+      <p class="article-dek">Agent是多节点、可执行的非确定性系统。只看最后一句话，会掩盖错误路由、工具误用和高风险执行。</p>
+      <div class="article-info"><span>2026.08.24</span><span>方法论</span><span>ChargeFlow × 智驾评测</span></div>
+    </header>
+    <article class="article-body">
+      <div class="thesis"><strong>核心观点：</strong>一套有用的Agent评测，既要判断任务有没有完成，也要解释失败发生在哪个节点，并阻止严重错误被平均分掩盖。</div>
+
+      <h2>为什么“最终答案正确”仍然不够</h2>
+      <p>Agent的输出不是一次独立生成，而是一条执行链：理解意图、装配上下文、选择工具、填写参数、读取结果、形成判断，必要时还会改变外部状态。最终文字看似正确，过程仍可能存在风险。</p>
+      <p>例如，系统可能调用了错误站点接口，但恰好生成了一个听起来合理的充电建议；也可能方案本身正确，却在没有确认的情况下直接修改导航。前者是证据不可信，后者是执行边界错误。只给最终回答打分，两类问题都会漏掉。</p>
+
+      <h2>我会把评测拆成三层</h2>
+      <div class="framework">
+        <div class="framework-step"><span>L1</span><div><h3>任务结果</h3><p>用户目标是否完成，关键约束是否满足，输出是否可理解、可执行。</p></div></div>
+        <div class="framework-step"><span>L2</span><div><h3>链路质量</h3><p>意图、上下文、路由、工具、参数、证据和决策节点是否正确，失败能否定位。</p></div></div>
+        <div class="framework-step"><span>L3</span><div><h3>安全与治理</h3><p>权限、确认、隐私、限流、撤销、人工接管与严重错误是否越过底线。</p></div></div>
+      </div>
+      <p>三层不能用一个平均分替代。高风险操作越权，即使语言质量很好，也应该直接判定不通过；同样，平均任务成功率不错，也不能掩盖某个关键场景持续失败。</p>
+
+      <h2>评测集从哪里来</h2>
+      <p>评测集不是Prompt同义改写集合。它应来自真实任务和已知风险，并同时覆盖高频场景、长尾边界、简单与复杂任务。</p>
+      <ul>
+        <li><strong>黄金任务：</strong>最能代表核心价值的完整用户旅程。</li>
+        <li><strong>关键切片：</strong>不同用户、噪声、数据缺失、权限和工具可用性。</li>
+        <li><strong>历史Bad Case：</strong>已经发生过、修复后不能再次出现的问题。</li>
+        <li><strong>对抗与边界：</strong>冲突指令、过期数据、工具超时、不可逆操作。</li>
+      </ul>
+      <p>每条用例至少需要任务、输入条件、期望结果、允许差异、风险等级和失败标签。对于客观项，优先使用规则或确定性校验；对于建议质量、表达清晰度等开放项，再使用带评分标准的LLM Eval，并保留人工抽查。</p>
+
+      <h2>从Bad Case到可行动的根因</h2>
+      <p>“Agent答错了”不是一个能推动修复的结论。我更倾向于按链路进行归因：</p>
+      <div class="framework">
+        <div class="framework-step"><span>01</span><div><h3>任务理解</h3><p>意图识别错误、指代没有解析、应该澄清却直接执行。</p></div></div>
+        <div class="framework-step"><span>02</span><div><h3>上下文与记忆</h3><p>缺字段、使用过期信息、错误召回偏好或跨会话数据污染。</p></div></div>
+        <div class="framework-step"><span>03</span><div><h3>工具调用</h3><p>选错工具、参数错误、重复调用、忽略超时或错误返回。</p></div></div>
+        <div class="framework-step"><span>04</span><div><h3>决策与表达</h3><p>约束计算错误、证据不足仍强答、推荐理由与数据不一致。</p></div></div>
+        <div class="framework-step"><span>05</span><div><h3>执行与恢复</h3><p>越权执行、缺少确认、重复写入、失败后无法重试或接管。</p></div></div>
+      </div>
+
+      <h2>为什么我的汽车验证经历与Agent Eval有关</h2>
+      <p>智驾和整车验证让我形成了一种反向验证视角：用户看到的是一次完整体验，但问题可能来自多个模块、状态和环境条件。评测的价值不是证明系统“平均可用”，而是找到主链路和异常边界中尚未成立的产品假设。</p>
+      <p>这种方法可以迁移到Agent：把驾驶任务换成用户任务，把系统信号换成Trace，把实车问题换成Agent Bad Case，再通过版本回归防止旧问题复发。但二者不是同一个系统，指标和风险等级仍需按具体业务重新定义。</p>
+
+      <div class="callout"><p><strong>最小闭环：</strong>Task → Metric → Trace → Bad Case → Root Cause → Fix → Regression。没有版本化回归，评测就只是一次性验收；没有节点归因，Bad Case就只是问题截图。</p></div>
+      <p class="boundary">证据边界：ChargeFlow目前采用规则校验、LLM Eval与人工抽查组合验证地图可信度、限流、记忆、工具调用和决策质量。本文介绍的是评测设计方法，不宣称已经获得生产流量下的显著性结论。</p>
+    </article>
+    <section class="next-reading"><a href="/posts/agent-control-and-recovery/">下一篇：AI能力越强，越需要状态、权限、证据和失败恢复 →</a></section>
+    <footer class="article-footer"><span>AI PM Notes</span><a href="/posts/">返回全部文章 ↑</a></footer>
+  </main>
+</body>
+</html>

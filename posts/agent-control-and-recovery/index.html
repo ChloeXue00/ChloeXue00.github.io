@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>企业Agent为什么需要状态、权限、证据和失败恢复｜薛凤翔</title>
+  <meta name="description" content="从Elo Automation复盘企业Agent的任务状态、权限确认、运行证据和失败恢复设计。">
+  <link rel="stylesheet" href="/assets/css/article.css?v=20260824-1">
+  <style>body{margin:0;background:#0f1115;color:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}.article-shell{width:min(900px,calc(100% - 40px));margin:auto}</style>
+</head>
+<body>
+  <header class="article-header"><a class="brand" href="/">薛凤翔</a><nav class="article-nav"><a href="/posts/">全部文章</a><a href="/">作品集</a></nav></header>
+  <main class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta">ENTERPRISE AGENT · PRODUCT GOVERNANCE</div>
+      <h1>AI能力越强，产品越需要状态、权限、证据和失败恢复</h1>
+      <p class="article-dek">企业Agent的信任不来自“它看起来很聪明”，而来自用户始终知道它正在做什么、用了什么权限、结果从哪里来，以及失败后怎么办。</p>
+      <div class="article-info"><span>2026.08.24</span><span>项目复盘：Elo Automation</span><span>企业Agent</span></div>
+    </header>
+    <article class="article-body">
+      <div class="thesis"><strong>核心观点：</strong>当AI从生成内容走向持续执行，产品设计的重点会从“输入和输出”扩展到整个运行过程。模型能力越强，越不能把控制权藏在聊天框背后。</div>
+
+      <h2>为什么聊天记录不能代表任务状态</h2>
+      <p>用户在对话里说“每天早上整理行业新闻并发到群里”，这句话并不等于一个已经可运行的Automation。系统仍需明确来源、时间、筛选规则、交付位置、权限、失败策略和成本限制。</p>
+      <p>同样，“我已经帮你创建”也不能证明任务真的会持续运行。企业用户需要区分可复用的Automation与某一次Run：前者可能处于已启用或已暂停，后者则有等待、执行中、成功、失败或取消等状态。把两类状态混在一起，用户无法判断该修改任务定义，还是只需要重试本次运行。</p>
+
+      <h2>四类能力不是后台工程细节，而是产品界面</h2>
+      <div class="framework">
+        <div class="framework-step"><span>STATE</span><div><h3>任务与运行状态</h3><p>用户能区分“自动化是否启用”和“这一次执行到哪一步”，并看到下一次触发时间。</p></div></div>
+        <div class="framework-step"><span>PERMISSION</span><div><h3>权限与关键确认</h3><p>读取、写入、发送和删除分级处理；高影响动作说明对象、范围和后果后再确认。</p></div></div>
+        <div class="framework-step"><span>EVIDENCE</span><div><h3>运行证据</h3><p>保留run_id、触发方式、数据来源、执行步骤、工具结果和最终交付物，支持核验与审计。</p></div></div>
+        <div class="framework-step"><span>RECOVERY</span><div><h3>失败恢复</h3><p>告诉用户失败节点和原因，并提供检查点重试、重新授权、修改输入或人工接管。</p></div></div>
+      </div>
+
+      <h2>自动化程度不是越高越好</h2>
+      <p>产品经理需要根据失败成本分配自动化权。低风险、可逆、重复操作可以默认执行；对外发送、覆盖数据和改变权限等动作应提高确认门槛。判断依据不是“模型置信度很高”，而是操作后果、可逆性、权限范围和用户预期。</p>
+      <p>因此，我更倾向于把Agent主流程设计成“确定性骨架＋受控智能分支”：触发、权限、持久化和写入保持确定性；需求澄清、内容理解、工具选择或异常重规划可以使用模型，但每个节点都要有最小上下文、结构化输出和缺失兜底。</p>
+
+      <h2>失败提示为什么必须可行动</h2>
+      <p>“执行失败，请稍后重试”只描述了结果，没有帮助用户恢复。一个可行动的失败状态至少回答四个问题：</p>
+      <ol>
+        <li>失败发生在哪个步骤？</li>
+        <li>已经完成的步骤和数据是否保留？</li>
+        <li>需要用户补充信息、重新授权，还是系统可以自动重试？</li>
+        <li>再次执行是否会造成重复发送或重复写入？</li>
+      </ol>
+      <p>这也是为什么幂等、检查点和人工接管最终会成为用户体验问题：它们决定用户是否敢把重要任务交给Agent。</p>
+
+      <div class="callout"><p><strong>验收企业Agent时，我会问：</strong>用户能否看见目标、状态和证据？高风险动作是否经过授权？失败是否可恢复？历史运行是否可追溯？如果这些问题没有答案，再自然的对话也不能构成可信的Automation。</p></div>
+      <p class="boundary">证据边界：本文来自Elo Automation、Search和Settings模块的产品设计复盘，覆盖原型、PRD、评测与功能验收思路；不将尚未完成端到端生产验证的Runtime能力表述为已规模化上线结果。</p>
+    </article>
+    <section class="next-reading"><a href="/posts/when-to-use-graphrag/">下一篇：什么时候需要GraphRAG？ →</a></section>
+    <footer class="article-footer"><span>AI PM Notes</span><a href="/posts/">返回全部文章 ↑</a></footer>
+  </main>
+</body>
+</html>

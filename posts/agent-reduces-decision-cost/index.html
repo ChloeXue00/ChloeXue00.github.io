@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent的价值，是降低复杂决策成本｜薛凤翔</title>
+  <meta name="description" content="从ChargeFlow补能决策Agent复盘：什么时候需要Agent，以及如何把信息供给升级为可确认的决策。">
+  <link rel="stylesheet" href="/assets/css/article.css?v=20260824-1">
+  <style>body{margin:0;background:#0f1115;color:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}.article-shell{width:min(900px,calc(100% - 40px));margin:auto}</style>
+</head>
+<body>
+  <header class="article-header"><a class="brand" href="/">薛凤翔</a><nav class="article-nav"><a href="/posts/">全部文章</a><a href="/">作品集</a></nav></header>
+  <main class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta">AGENT · PRODUCT JUDGMENT</div>
+      <h1>Agent的价值，不是替用户做更多，而是让用户少做一次复杂决策</h1>
+      <p class="article-dek">“能调用工具”只是技术能力。产品价值来自它是否减少了用户在信息、约束和行动之间反复切换的成本。</p>
+      <div class="article-info"><span>2026.08.24</span><span>项目复盘：ChargeFlow</span><span>AI产品判断</span></div>
+    </header>
+    <article class="article-body">
+      <div class="thesis"><strong>核心观点：</strong>找附近充电站是一次检索；判断现在是否需要充、在哪里充、会不会耽误后续行程，才是一个可能值得Agent介入的决策任务。</div>
+
+      <h2>先区分“信息不足”和“决策负担”</h2>
+      <p>很多产品会把“用户需要做决定”误判成“用户需要更多信息”。以新能源车补能为例，地图已经能提供位置、距离、价格、功率和空闲情况，但用户仍然要自己完成一组权衡：当前电量能否覆盖往返、是否需要绕路、排队会不会迟到、充多久合适，以及这个站是否符合个人偏好。</p>
+      <p>如果产品继续增加筛选项，信息更完整了，决策却未必更轻松。此时Agent的机会不是再展示十个站点，而是理解用户正在完成什么任务，把约束组合起来，给出一个可解释、可确认的主方案，必要时再提供一个备选方案。</p>
+
+      <h2>为什么不是固定工作流</h2>
+      <p>固定工作流适合输入明确、规则稳定、步骤有限的任务。补能决策的特殊之处在于：不同问题需要的数据不同，途中状态还会变化。</p>
+      <div class="framework">
+        <div class="framework-step"><span>01</span><div><h3>识别任务</h3><p>用户是在问“现在够不够用”，还是在规划后天的机场往返？两者需要的上下文不同。</p></div></div>
+        <div class="framework-step"><span>02</span><div><h3>选择必要工具</h3><p>按任务读取SOC、路线、能耗、站点、日程或历史偏好，而不是每次调用全部数据。</p></div></div>
+        <div class="framework-step"><span>03</span><div><h3>形成有限选项</h3><p>把多目标比较收敛为主方案和备选方案，并解释时间、电量与绕行代价。</p></div></div>
+        <div class="framework-step"><span>04</span><div><h3>确认后执行</h3><p>导航、创建任务或发送消息属于高影响动作，需要用户确认并保留撤销与失败恢复。</p></div></div>
+        <div class="framework-step"><span>05</span><div><h3>监控与重规划</h3><p>排队、故障或电量变化破坏原方案时，系统应说明变化并重新给出选择。</p></div></div>
+      </div>
+
+      <h2>产品经理真正要设计的是“决策接口”</h2>
+      <p>Agent页面不能只是聊天框。用户需要知道：系统依据了哪些事实、推荐方案满足了哪些约束、哪些数据缺失、接下来要执行什么，以及如果判断错误如何退出。</p>
+      <p>在ChargeFlow中，我把结果收敛成决策卡而不是长文本：先展示建议，再展示关键依据和风险，最后只要求用户确认或拒绝。这里的目标不是让模型说得更像人，而是让用户在低注意力场景中更快做出安全决定。</p>
+
+      <h2>什么时候不应该用Agent</h2>
+      <ul>
+        <li>用户只是查询一个确定事实，搜索或RAG已经足够。</li>
+        <li>流程路径固定且没有动态分支，普通workflow更稳定、更便宜。</li>
+        <li>关键数据拿不到，系统无法形成可信判断。</li>
+        <li>执行不可逆且缺少确认、撤销和人工接管机制。</li>
+      </ul>
+      <div class="callout"><p><strong>我的判断标准：</strong>Agent不是功能升级的默认答案。只有当任务需要多约束判断、动态取数和基于中间结果调整，并且增量价值能够被评测时，Agent才比检索或workflow更合理。</p></div>
+
+      <h2>如何验证它真的降低了决策成本</h2>
+      <p>验证不能只看“模型是否回复”。更重要的是：是否正确识别任务、是否调用了必要工具、方案是否满足电量与时间约束、是否把高风险动作留在确认节点，以及数据变化后能否恢复。对应到产品指标，可以观察任务成功率、关键约束满足率、用户确认率、严重错误和完成决策所需交互轮次。</p>
+
+      <p class="boundary">证据边界：本文基于个人项目ChargeFlow的产品设计与可交互Demo复盘。Demo使用模拟车辆和站点数据，用于展示Agent决策、工具编排和评测方法，不代表已接入真实车端或充电服务生产系统。</p>
+    </article>
+    <section class="next-reading"><a href="/posts/agent-eval-loop/">下一篇：Agent评测不应只看“回答对不对” →</a></section>
+    <footer class="article-footer"><span>AI PM Notes</span><a href="/posts/">返回全部文章 ↑</a></footer>
+  </main>
+</body>
+</html>

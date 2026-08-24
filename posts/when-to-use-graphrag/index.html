@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>什么时候需要GraphRAG｜薛凤翔</title>
+  <meta name="description" content="从AnalystCopilot复盘Hybrid GraphRAG的产品判断：事实问题走语义检索，关系问题触发两跳证据扩展。">
+  <link rel="stylesheet" href="/assets/css/article.css?v=20260824-1">
+  <style>body{margin:0;background:#0f1115;color:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}.article-shell{width:min(900px,calc(100% - 40px));margin:auto}</style>
+</head>
+<body>
+  <header class="article-header"><a class="brand" href="/">薛凤翔</a><nav class="article-nav"><a href="/posts/">全部文章</a><a href="/">作品集</a></nav></header>
+  <main class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta">RAG · GRAPHRAG · EVIDENCE</div>
+      <h1>什么时候需要GraphRAG？先问问题需要什么证据</h1>
+      <p class="article-dek">GraphRAG不是传统RAG的默认升级包。是否需要图扩展，取决于用户问题是否跨越多个实体和文档片段。</p>
+      <div class="article-info"><span>2026.08.24</span><span>项目复盘：AnalystCopilot</span><span>Hybrid RAG</span></div>
+    </header>
+    <article class="article-body">
+      <div class="thesis"><strong>核心观点：</strong>事实问题通常需要找到最相关的原文；关系问题则需要把分散在不同片段中的实体与证据连接起来。两类问题不应该强制走同一条检索链。</div>
+
+      <h2>Top-K检索的问题，不一定是“召回不够多”</h2>
+      <p>分析师做案头研究时，常见任务不仅是查一个数字，还包括追问：某家公司的供应链变化如何影响毛利率？一个行业趋势在哪些公司报告中得到相互印证？</p>
+      <p>语义检索擅长找到与问题表述最接近的片段，但关系链上的第二段证据可能与原问题并不相似。例如，问题提到公司A和经营指标，而关键中间证据出现在供应商B的文档中。继续提高Top-K可能带来更多噪声，却仍然没有解释两段材料为什么相关。</p>
+
+      <h2>先路由问题，再选择检索方式</h2>
+      <div class="framework">
+        <div class="framework-step"><span>FACT</span><div><h3>事实与定位问题</h3><p>“2025年研发费用是多少？”优先走语义检索，返回最相关片段及原文出处。</p></div></div>
+        <div class="framework-step"><span>RELATION</span><div><h3>关系与跨文档问题</h3><p>“供应链变化如何影响利润？”在初始召回后，沿实体共现关系做有限两跳扩展。</p></div></div>
+        <div class="framework-step"><span>REFUSE</span><div><h3>证据不足问题</h3><p>如果路径没有足够原文支持，不用图结构补出一个看似完整的故事，而是明确拒答或提示缺口。</p></div></div>
+      </div>
+
+      <h2>轻量GraphRAG如何形成证据链</h2>
+      <p>在AnalystCopilot中，我采用的是会话级实体共现证据图，而不是预先构建一个庞大的行业知识图谱：</p>
+      <ol>
+        <li>上传PDF后保留正文、表格结构和chunk来源。</li>
+        <li>从片段中识别公司、产品、供应链和经营指标等实体。</li>
+        <li>同一证据片段中共同出现的实体建立关系，并保留source、chunk_id和原始文本。</li>
+        <li>关系类问题先做语义召回，再通过最多两跳BFS补充相邻证据。</li>
+        <li>生成答案时展示引用与证据路径，资料不足则拒答。</li>
+      </ol>
+      <p>“最多两跳”不是普适最佳参数，而是对个人Demo的复杂度、噪声和响应成本做出的限制。生产场景仍需要用真实问题集校准跳数、阈值、图更新与权限隔离。</p>
+
+      <h2>GraphRAG带来的不是免费提升</h2>
+      <ul>
+        <li><strong>实体抽取误差：</strong>别名、缩写和同名实体会制造错误关系。</li>
+        <li><strong>关系不等于因果：</strong>共现只能说明材料中存在连接，不能自动证明影响方向。</li>
+        <li><strong>路径噪声：</strong>图越大、跳数越多，越容易引入与问题无关的证据。</li>
+        <li><strong>时效与权限：</strong>旧文档和无权限资料不能因为进入图中就被继续召回。</li>
+        <li><strong>成本与延迟：</strong>解析、建图、扩展和重排都增加链路复杂度。</li>
+      </ul>
+
+      <h2>产品经理如何判断该不该做</h2>
+      <p>我会先用一组真实任务回答四个问题：普通RAG失败是否主要来自跨片段关系缺失？关系问题在目标任务中占比是否足够高？新增路径能否绑定原文并被用户核验？提升是否值得额外的延迟、成本和维护复杂度？</p>
+      <p>如果用户只是查制度、找字段或总结单篇文档，做好解析、metadata、语义检索和引用，通常比引入图更重要。只有当跨实体、跨文档推理是稳定需求，且两跳证据能提高可核验性时，GraphRAG才有明确的产品价值。</p>
+
+      <div class="callout"><p><strong>我的设计原则：</strong>先定义答案需要什么证据，再决定检索结构。GraphRAG的价值不是让架构更高级，而是让原本分散的证据关系变得可发现、可展示、可复核。</p></div>
+      <p class="boundary">证据边界：AnalystCopilot使用轻量实体共现图和两跳证据扩展，不将其包装为成熟行业知识图谱。当前单元测试覆盖路由、两跳溯源和删除同步；真实研报对照评测仍是继续迭代的门槛。</p>
+    </article>
+    <section class="next-reading"><a href="/posts/agent-reduces-decision-cost/">回到系列第一篇：Agent如何降低决策成本 →</a></section>
+    <footer class="article-footer"><span>AI PM Notes</span><a href="/posts/">返回全部文章 ↑</a></footer>
+  </main>
+</body>
+</html>
